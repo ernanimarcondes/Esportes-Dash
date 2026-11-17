@@ -72,3 +72,9 @@ python tools/privacy_check.py
 ```
 
 Somente código, assets licenciados e exemplos de dados públicos são versionados. Não publique configurações locais, capturas reais da TV, caches, sessões, chaves ou APKs pessoais.
+
+
+<img width="1280" height="720" alt="image" src="https://github.com/user-attachments/assets/5be0990f-3354-4f3f-879f-32b61d77b690" />
+
+
+
