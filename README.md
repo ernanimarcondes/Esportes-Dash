@@ -9,14 +9,30 @@ Este é o projeto independente do painel esportivo. Para a base com Dash Pessoal
 ## O painel
 
 - Classificações: Brasileirão Série A e B, Premier League, Ligue 1, LaLiga, Liga Portugal e Bundesliga. Troca a cada 30 segundos.
-- Jogos do dia: dois confrontos por página, escudos e horários de Brasília. Troca a cada 10 segundos.
-- Resultados: partidas encerradas nas últimas 72 horas, dois confrontos por página e troca a cada 10 segundos.
+- Jogos do dia: dois confrontos por página, escudos e horários de Brasília, em ordem de horário. Troca a cada 10 segundos.
+- Resultados: partidas encerradas nas últimas 72 horas em ordem de data e horário, dois confrontos por página e troca a cada 10 segundos.
 - Futebol de clubes e seleções: ligas selecionadas, Libertadores, Sul-Americana, Champions, Europa League, Conference League, copas nacionais e outras competições importantes disponíveis na fonte. Nas copas nacionais, prioriza os clubes das ligas acompanhadas; amistosos priorizam seleções de maior destaque.
 - Fórmula 1: programação e traçado do próximo GP por 30 segundos; classificação de pilotos em páginas consecutivas de dez nomes, com 15 segundos por página; construtores por 15 segundos. A próxima sessão permanece visível.
 - NBA e NFL: conferências alternadas a cada 15 segundos. NHL e MLB compartilham o quadro e alternam as conferências/ligas a cada 15 segundos. Tabelas menores têm páginas de oito times; OK abre a lista completa.
 - Relógio, data, clima da cidade configurada e atalhos para aplicativos, TV/HDMI e ajustes.
 
 Os tempos acima controlam a rotação visual. As consultas de dados são periódicas, com cache local e conservação da última resposta válida. Não é um serviço de placar em tempo real. Não há grade de transmissão de TV. A cobertura depende das fontes e pode ter jogos ausentes, dados indisponíveis ou programação alterada.
+
+## Novo painel exclusivo de Fórmula 1
+
+Na tela principal, selecione o quadro **Fórmula 1** e pressione **OK** no controle: ele abre um painel de F1 em tela cheia. O botão **Voltar** retorna ao Esportes Dash e mantém o quadro selecionado.
+
+![Painel de F1: circuito, programação, pilotos e construtores](docs/images/f1-dashboard.png)
+
+- **Visão geral:** próximo GP, programação dos treinos, Qualy e Race, próxima sessão, classificações e próximas corridas.
+- **Pilotos:** classificação completa, logo da equipe, pontos, vitórias e pódios da temporada.
+- **Construtores:** logos, pontos, vitórias, pódios e comparação de pontos.
+- **Calendário:** datas e horários de Brasília para as corridas da temporada.
+- **26 circuitos preparados:** traçados com linhas contínuas, curvas numeradas, largada e setores em vermelho, azul e amarelo. O mapa muda automaticamente conforme o próximo GP. A imagem intermediária é renderizada com três vezes a resolução de exibição e reduzida com alta qualidade para o tamanho real da tela. Os nomes dos setores aparecem somente na legenda abaixo do desenho.
+
+O painel de F1 usa fundo preto, grafite e vermelho. Os pódios são calculados pelos resultados dos Grandes Prêmios da temporada; sprints não entram nessa contagem. Logos e mapas têm suas fontes indicadas nos assets e nos créditos.
+
+**Continuaremos melhorando os demais quadros do Esportes Dash**, com novos painéis de detalhes e ajustes de visualização e navegação. Nesta versão, o painel exclusivo está implementado para a F1; os demais quadros continuam com seus detalhes atuais.
 
 ## Compilar
 
@@ -54,7 +70,8 @@ adb shell "appops set io.freemytv AUTO_START allow || appops set io.freemytv APP
 - [Free My TV](https://github.com/simbasjungles/free-my-tv): código-base, troca de tela inicial e recuperação; MIT.
 - [TV-Dashboard](https://github.com/ernanimarcondes/TV-Dashboard): origem desta adaptação esportiva.
 - ESPN: tabelas, jogos e escudos públicos. Seus endpoints e a cobertura podem mudar.
-- [Jolpica F1](https://github.com/jolpica/jolpica-f1): calendário e classificações de Fórmula 1.
+- [Jolpica F1](https://github.com/jolpica/jolpica-f1): calendário, classificações e resultados usados na contagem de pódios de F1.
+- [Formula 1](https://www.formula1.com/): referências oficiais dos circuitos e logos. Esses materiais pertencem aos respectivos titulares e não são abrangidos pela licença MIT do código.
 - [Open-Meteo](https://open-meteo.com/): clima das coordenadas configuradas pelo usuário.
 - [bacinger/f1-circuits](https://github.com/bacinger/f1-circuits): geometria dos circuitos; MIT, aviso preservado nos assets.
 - Inter e Rajdhani: SIL Open Font License, arquivos OFL preservados. Material Symbols: aviso de licença preservado.
@@ -68,10 +85,11 @@ O painel não usa login de YouTube ou Spotify, não mostra músicas nem consulta
 Antes de publicar:
 
 ```text
+python tools/check_circuit_data.py
 python tools/privacy_check.py
 ```
 
-Somente código, assets licenciados e exemplos de dados públicos são versionados. Não publique configurações locais, capturas reais da TV, caches, sessões, chaves ou APKs pessoais.
+Somente código, assets licenciados e exemplos de dados públicos são versionados. Não publique configurações locais, capturas com dados pessoais, caches, sessões, chaves ou APKs pessoais. O print de documentação foi revisado e mostra apenas dados públicos de F1, relógio e data, sem localização pessoal, contas ou credenciais.
 
 
 <img width="1280" height="720" alt="image" src="https://github.com/user-attachments/assets/5be0990f-3354-4f3f-879f-32b61d77b690" />

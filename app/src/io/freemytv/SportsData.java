@@ -41,11 +41,13 @@ final class SportsData {
         @Override protected boolean removeEldestEntry(Map.Entry<String,Bitmap> e){return size()>256;}
     });
     private volatile boolean closed,cacheLoaded;
+    volatile F1SeasonStats f1Stats;
     volatile float[] track;
     volatile String trackId="vegas",trackLength="6,201 km";
     SportsData(Context c,Runnable changed){
         context=c.getApplicationContext();this.changed=changed;
         try{load(new JSONObject(read(context.getAssets().open("sports/seed.json"))));}catch(Exception ignored){}
+        try{f1Stats=new F1SeasonStats(new JSONObject(read(context.getAssets().open("sports/f1/stats-seed.json"))));}catch(Exception ignored){}
         try{track=CircuitGeometry.parseTrack(read(context.getAssets().open("racing/vegas.geojson")));}catch(Exception ignored){}
         feeds.execute(()->{
             try{load(new JSONObject(read(new FileInputStream(file()))));}catch(Exception ignored){}
@@ -54,6 +56,8 @@ final class SportsData {
     }
     private void load(JSONObject root){
         if(root.optInt("schema")!=2)return;
+        JSONObject stats=root.optJSONObject("f1Stats");
+        if(stats!=null)try{F1SeasonStats incoming=new F1SeasonStats(stats);if(f1Stats==null||incoming.at>f1Stats.at)f1Stats=incoming;}catch(Exception ignored){}
         JSONArray ts=root.optJSONArray("tables");Map<String,List<SportsFeedParser.Table>> incoming=new LinkedHashMap<>();
         for(int i=0;ts!=null&&i<ts.length();i++){SportsFeedParser.Table t=SportsFeedParser.Table.read(ts.optJSONObject(i));
             incoming.computeIfAbsent(t.key,k->new ArrayList<>()).add(t);}
@@ -76,25 +80,22 @@ final class SportsData {
             if(!include)continue;SportsFeedParser.Game old=unique.get(g.id);if(old==null||g.fetched>old.fetched)unique.put(g.id,g);
         }
         List<SportsFeedParser.Game> sorted=new ArrayList<>(unique.values());
-        sorted.sort((a,b)->{
-            if(recent)return Long.compare(b.at,a.at);
-            int ap=a.state.equals("in")?0:!a.complete&&a.at>=now?1:!a.complete?2:3;
-            int bp=b.state.equals("in")?0:!b.complete&&b.at>=now?1:!b.complete?2:3;
-            return ap!=bp?Integer.compare(ap,bp):Long.compare(a.at,b.at);
-        });
-        // Interleave competitions, so a large NBA/NHL slate cannot hide football or the other leagues for minutes.
-        Map<String,ArrayDeque<SportsFeedParser.Game>> leagues=new LinkedHashMap<>();
-        for(SportsFeedParser.Game g:sorted)leagues.computeIfAbsent(g.league,k->new ArrayDeque<>()).add(g);
-        List<SportsFeedParser.Game> out=new ArrayList<>();boolean more=true;
-        while(more){more=false;for(ArrayDeque<SportsFeedParser.Game> q:leagues.values())if(!q.isEmpty()){out.add(q.remove());more=true;}}
-        return out;
+        // Stable chronological order across every competition, including completed games.
+        sorted.sort(Comparator.comparingLong((SportsFeedParser.Game g)->g.at).thenComparing(g->g.id));
+        return sorted;
     }
+
     void refresh(){
         if(closed||!cacheLoaded)return;long now=System.currentTimeMillis();LocalDate today=LocalDate.now(ZONE);
         for(String key:SportsFeedParser.TABLE_KEYS){List<SportsFeedParser.Table> list=tables(key);long at=list.isEmpty()?0:list.get(0).at;
             if(now-at>6*3600000L)fetchTable(key);}
         for(String kind:new String[]{"driver","constructor"}){List<SportsFeedParser.Table> list=tables("f1-"+kind+"s");
             if(list.isEmpty()||now-list.get(0).at>15*60000L)fetchF1(kind);}
+        List<SportsFeedParser.Table> driverTables=tables("f1-drivers");
+        if(!driverTables.isEmpty()){
+            String season=driverTables.get(0).season;
+            if(f1Stats==null||!f1Stats.season.equals(season)||now-f1Stats.at>15*60000L)fetchF1Stats(season);
+        }
         for(int offset=-3;offset<=1;offset++){
             String date=today.plusDays(offset).format(DateTimeFormatter.BASIC_ISO_DATE);long ttl=offset>=0?5*60000L:30*60000L;
             for(String source:SportsFeedParser.SCORE_KEYS){String key=source+"-"+date;Snapshot s=snapshots.get(key);
@@ -120,6 +121,16 @@ final class SportsData {
         }catch(Exception e){failed.add(task);android.util.Log.w("SportsData","F1 standings unavailable: "+kind);}
             finally{pending.remove(task);notifyChanged();}});
     }
+    String f1Podiums(String season,String id,boolean driver){F1SeasonStats stats=f1Stats;return stats==null?"—":stats.podiums(season,id,driver);}
+    private void fetchF1Stats(String season){
+        if(!season.matches("[0-9]{4}"))return;String task="f1-podiums";if(!begin(task))return;
+        feeds.execute(()->{try{
+            F1SeasonStats.Builder builder=new F1SeasonStats.Builder(season);
+            for(int page=0;page<30&&!builder.complete();page++)builder.add(get("https://api.jolpi.ca/ergast/f1/"+season+"/results.json?limit=100&offset="+builder.count));
+            f1Stats=builder.finish(System.currentTimeMillis());failed.remove(task);save();
+        }catch(Exception e){failed.add(task);android.util.Log.w("SportsData","F1 podium totals unavailable");}
+            finally{pending.remove(task);notifyChanged();}});
+    }
     private void fetchGames(String source,String date,String key){if(!begin(key))return;
         feeds.execute(()->{try{
             String url="https://site.api.espn.com/apis/site/v2/sports/"+(source.equals("soccer")?"soccer/all":path(source))
@@ -133,7 +144,7 @@ final class SportsData {
         case "nhl":return "hockey/nhl";case "mlb":return "baseball/mlb";default:return "soccer/"+key;}}
     private synchronized void save(){if(closed)return;try{
         JSONArray ts=new JSONArray(),ss=new JSONArray();for(List<SportsFeedParser.Table> list:tables.values())for(SportsFeedParser.Table t:list)ts.put(t.json());
-        for(Snapshot s:snapshots.values())ss.put(s.json());byte[] body=new JSONObject().put("schema",2).put("tables",ts).put("snapshots",ss).toString().getBytes(StandardCharsets.UTF_8);
+        for(Snapshot s:snapshots.values())ss.put(s.json());byte[] body=new JSONObject().put("schema",2).put("tables",ts).put("snapshots",ss).put("f1Stats",f1Stats==null?JSONObject.NULL:f1Stats.json()).toString().getBytes(StandardCharsets.UTF_8);
         File temp=new File(context.getFilesDir(),"sports-dashboard.tmp");try(FileOutputStream out=new FileOutputStream(temp)){out.write(body);}temp.renameTo(file());
     }catch(Exception ignored){}}
     private File file(){return new File(context.getFilesDir(),"sports-dashboard.json");}
@@ -193,7 +204,7 @@ final class SportsData {
     private static String hash(String value) throws Exception {byte[] d=MessageDigest.getInstance("SHA-256").digest(value.getBytes(StandardCharsets.UTF_8));StringBuilder out=new StringBuilder();for(int i=0;i<12;i++)out.append(String.format(Locale.ROOT,"%02x",d[i]&255));return out.toString();}
     private static String get(String url) throws Exception {return new String(bytes(url,5000000),StandardCharsets.UTF_8);}
     private static byte[] bytes(String address,int limit) throws Exception {HttpURLConnection conn=(HttpURLConnection)new URL(address).openConnection();
-        conn.setConnectTimeout(10000);conn.setReadTimeout(12000);conn.setRequestProperty("User-Agent","Esportes-Dash/1.0");
+        conn.setConnectTimeout(10000);conn.setReadTimeout(12000);conn.setRequestProperty("User-Agent","TV-Dashboard/1.5 sports profile");
         try{if(conn.getResponseCode()!=200)throw new IOException("Feed unavailable");return all(conn.getInputStream(),limit);}finally{conn.disconnect();}}
     private static String read(InputStream in)throws Exception{return new String(all(in,10000000),StandardCharsets.UTF_8);}
     private static byte[] all(InputStream input,int limit)throws Exception{try(InputStream in=input;ByteArrayOutputStream out=new ByteArrayOutputStream()){

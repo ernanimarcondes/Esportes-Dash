@@ -8,4 +8,6 @@ A cidade e as coordenadas escolhidas no aplicativo ficam no dispositivo. As coor
 
 A infraestrutura herdada do Free My TV mantém recursos opcionais, como TMDB, Plex e Home Assistant, mas nenhuma chave ou servidor pessoal é fornecido. Qualquer configuração local dessas integrações deve permanecer privada.
 
-`config.properties`, arquivos de ambiente, chaves, `.local/`, APKs, logs, capturas e caches não são versionados. O script `tools/privacy_check.py` verifica os arquivos rastreados por padrões conhecidos e arquivos proibidos. Isso é uma revisão preventiva, não uma auditoria formal de segurança nem uma garantia sobre futuras alterações.
+`config.properties`, arquivos de ambiente, chaves, `.local/`, APKs, logs, capturas pessoais e caches não são versionados. O script `tools/privacy_check.py` verifica os arquivos rastreados por padrões conhecidos e arquivos proibidos. Isso é uma revisão preventiva, não uma auditoria formal de segurança nem uma garantia sobre futuras alterações.
+
+`docs/images/f1-dashboard.png` é uma captura de documentação revisada e destinada à publicação. Ela mostra apenas a tela de F1, com dados esportivos públicos, relógio e data; não contém cidade configurada, contas, músicas, inscrições, IPs, chaves ou credenciais. Nenhuma outra captura local foi incluída.

@@ -1,5 +1,14 @@
 # Alterações
 
+## 1.1.0 — 2026-11-17
+
+- OK no quadro de F1 abre um painel dedicado; Voltar retorna ao quadro selecionado.
+- Abas Visão geral, Pilotos, Construtores e Calendário; logos em alta qualidade, vitórias e pódios de GPs.
+- Diagramas de 26 circuitos com números nativos, setores vermelho/azul/amarelo, linhas contínuas e redução de alta qualidade.
+- Jogos do dia em ordem de horário e resultados em ordem de data/horário.
+- Print de F1 revisado, créditos e documentação das próximas melhorias dos demais quadros.
+
+
 ## 1.0.0
 
 - Projeto esportivo independente, derivado de TV-Dashboard e Free My TV.

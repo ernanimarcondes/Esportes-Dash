@@ -1,0 +1,291 @@
+{
+  "credit": "Circuit diagrams: Formula 1 / respective circuit owners. Unofficial fan dashboard.",
+  "circuits": [
+    {
+      "id": "albert_park",
+      "slug": "australia",
+      "length": "5.278km",
+      "laps": "58",
+      "corners": 14,
+      "source": {
+        "page": "https://www.formula1.com/en/racing/2026/australia",
+        "image": "https://media.formula1.com/image/upload/f_png,q_100/v1751632426/common/f1/2026/track/2026trackmelbournedetailed.png"
+      }
+    },
+    {
+      "id": "shanghai",
+      "slug": "china",
+      "length": "5.451km",
+      "laps": "56",
+      "corners": 16,
+      "source": {
+        "page": "https://www.formula1.com/en/racing/2026/china",
+        "image": "https://media.formula1.com/image/upload/f_png,q_100/v1751632455/common/f1/2026/track/2026trackshanghaidetailed.png"
+      }
+    },
+    {
+      "id": "suzuka",
+      "slug": "japan",
+      "length": "5.807km",
+      "laps": "53",
+      "corners": 18,
+      "source": {
+        "page": "https://www.formula1.com/en/racing/2026/japan",
+        "image": "https://media.formula1.com/image/upload/f_png,q_100/v1751632474/common/f1/2026/track/2026tracksuzukadetailed.png"
+      }
+    },
+    {
+      "id": "miami",
+      "slug": "miami",
+      "length": "5.412km",
+      "laps": "57",
+      "corners": 19,
+      "source": {
+        "page": "https://www.formula1.com/en/racing/2026/miami",
+        "image": "https://media.formula1.com/image/upload/f_png,q_100/v1751632433/common/f1/2026/track/2026trackmiamidetailed.png"
+      }
+    },
+    {
+      "id": "villeneuve",
+      "slug": "canada",
+      "length": "4.361km",
+      "laps": "70",
+      "corners": 14,
+      "source": {
+        "page": "https://www.formula1.com/en/racing/2026/canada",
+        "image": "https://media.formula1.com/image/upload/f_png,q_100/v1751632441/common/f1/2026/track/2026trackmontrealdetailed.png"
+      }
+    },
+    {
+      "id": "monaco",
+      "slug": "monaco",
+      "length": "3.337km",
+      "laps": "78",
+      "corners": 19,
+      "source": {
+        "page": "https://www.formula1.com/en/racing/2026/monaco",
+        "image": "https://media.formula1.com/image/upload/f_png,q_100/v1751632437/common/f1/2026/track/2026trackmontecarlodetailed.png"
+      }
+    },
+    {
+      "id": "catalunya",
+      "slug": "barcelona-catalunya",
+      "length": "4.657km",
+      "laps": "66",
+      "corners": 14,
+      "source": {
+        "page": "https://www.formula1.com/en/racing/2026/barcelona-catalunya",
+        "image": "https://media.formula1.com/image/upload/f_png,q_100/v1751632398/common/f1/2026/track/2026trackcatalunyadetailed.png"
+      }
+    },
+    {
+      "id": "red_bull_ring",
+      "slug": "austria",
+      "length": "4.326km",
+      "laps": "71",
+      "corners": 10,
+      "source": {
+        "page": "https://www.formula1.com/en/racing/2026/austria",
+        "image": "https://media.formula1.com/image/upload/f_png,q_100/v1751632470/common/f1/2026/track/2026trackspielbergdetailed.png"
+      }
+    },
+    {
+      "id": "silverstone",
+      "slug": "great-britain",
+      "length": "5.891km",
+      "laps": "52",
+      "corners": 18,
+      "source": {
+        "page": "https://www.formula1.com/en/racing/2026/great-britain",
+        "image": "https://media.formula1.com/image/upload/f_png,q_100/v1751632458/common/f1/2026/track/2026tracksilverstonedetailed.png"
+      }
+    },
+    {
+      "id": "spa",
+      "slug": "belgium",
+      "length": "7.004km",
+      "laps": "44",
+      "corners": 19,
+      "source": {
+        "page": "https://www.formula1.com/en/racing/2026/belgium",
+        "image": "https://media.formula1.com/image/upload/f_png,q_100/v1751632465/common/f1/2026/track/2026trackspafrancorchampsdetailed.png"
+      }
+    },
+    {
+      "id": "hungaroring",
+      "slug": "hungary",
+      "length": "4.381km",
+      "laps": "70",
+      "corners": 14,
+      "source": {
+        "page": "https://www.formula1.com/en/racing/2026/hungary",
+        "image": "https://media.formula1.com/image/upload/f_png,q_100/v1751632402/common/f1/2026/track/2026trackhungaroringdetailed.png"
+      }
+    },
+    {
+      "id": "zandvoort",
+      "slug": "netherlands",
+      "length": "4.259km",
+      "laps": "72",
+      "corners": 14,
+      "source": {
+        "page": "https://www.formula1.com/en/racing/2026/netherlands",
+        "image": "https://media.formula1.com/image/upload/f_png,q_100/v1751632488/common/f1/2026/track/2026trackzandvoortdetailed.png"
+      }
+    },
+    {
+      "id": "monza",
+      "slug": "italy",
+      "length": "5.793km",
+      "laps": "53",
+      "corners": 11,
+      "source": {
+        "page": "https://www.formula1.com/en/racing/2026/italy",
+        "image": "https://media.formula1.com/image/upload/f_png,q_100/v1751632445/common/f1/2026/track/2026trackmonzadetailed.png"
+      }
+    },
+    {
+      "id": "madring",
+      "slug": "spain",
+      "length": "5.414km",
+      "laps": "57",
+      "corners": 22,
+      "source": {
+        "page": "https://www.formula1.com/en/racing/2026/spain",
+        "image": "https://media.formula1.com/image/upload/f_png,q_100/v1756285390/common/f1/2026/track/2026trackmadringdetailed.png"
+      }
+    },
+    {
+      "id": "baku",
+      "slug": "azerbaijan",
+      "length": "6.003km",
+      "laps": "51",
+      "corners": 20,
+      "source": {
+        "page": "https://www.formula1.com/en/racing/2026/azerbaijan",
+        "image": "https://media.formula1.com/image/upload/f_png,q_100/v1751632392/common/f1/2026/track/2026trackbakudetailed.png"
+      }
+    },
+    {
+      "id": "sepang",
+      "slug": "sepang",
+      "length": "5.543km",
+      "laps": "56",
+      "corners": 15,
+      "source": {
+        "page": "https://www.formula1.com/en/latest/article/circuit-guide-everything-you-need-to-know-about-the-sepang-international-circuit.2KTLvyxBXmwVftSJxmYeZ2",
+        "image": "https://media.formula1.com/image/upload/f_png,q_100/v1740000001/fom-website/2026/Bahrain%20(Malaysia)/2026trackkualalumpurdetailed.webp"
+      }
+    },
+    {
+      "id": "bahrain",
+      "slug": "bahrain",
+      "length": "5.412km",
+      "laps": "57",
+      "corners": 15,
+      "source": {
+        "page": "https://www.formula1.com/en/racing/2025/bahrain",
+        "image": "https://media.formula1.com/image/upload/f_png,q_100/v1677244985/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Bahrain_Circuit.png"
+      }
+    },
+    {
+      "id": "marina_bay",
+      "slug": "singapore",
+      "length": "4.927km",
+      "laps": "62",
+      "corners": 19,
+      "source": {
+        "page": "https://www.formula1.com/en/racing/2026/singapore",
+        "image": "https://media.formula1.com/image/upload/f_png,q_100/v1751632462/common/f1/2026/track/2026tracksingaporedetailed.png"
+      }
+    },
+    {
+      "id": "americas",
+      "slug": "united-states",
+      "length": "5.513km",
+      "laps": "56",
+      "corners": 20,
+      "source": {
+        "page": "https://www.formula1.com/en/racing/2026/united-states",
+        "image": "https://media.formula1.com/image/upload/f_png,q_100/v1751632388/common/f1/2026/track/2026trackaustindetailed.png"
+      }
+    },
+    {
+      "id": "rodriguez",
+      "slug": "mexico",
+      "length": "4.304km",
+      "laps": "71",
+      "corners": 17,
+      "source": {
+        "page": "https://www.formula1.com/en/racing/2026/mexico",
+        "image": "https://media.formula1.com/image/upload/f_png,q_100/v1751632430/common/f1/2026/track/2026trackmexicocitydetailed.png"
+      }
+    },
+    {
+      "id": "interlagos",
+      "slug": "brazil",
+      "length": "4.309km",
+      "laps": "71",
+      "corners": 15,
+      "source": {
+        "page": "https://www.formula1.com/en/racing/2026/brazil",
+        "image": "https://media.formula1.com/image/upload/f_png,q_100/v1751632409/common/f1/2026/track/2026trackinterlagosdetailed.png"
+      }
+    },
+    {
+      "id": "vegas",
+      "slug": "las-vegas",
+      "length": "6.201km",
+      "laps": "50",
+      "corners": 17,
+      "source": {
+        "page": "https://www.formula1.com/en/racing/2026/las-vegas",
+        "image": "https://media.formula1.com/image/upload/f_png,q_100/v1751632417/common/f1/2026/track/2026tracklasvegasdetailed.png"
+      }
+    },
+    {
+      "id": "losail",
+      "slug": "qatar",
+      "length": "5.419km",
+      "laps": "57",
+      "corners": 16,
+      "source": {
+        "page": "https://www.formula1.com/en/racing/2026/qatar",
+        "image": "https://media.formula1.com/image/upload/f_png,q_100/v1751632421/common/f1/2026/track/2026tracklusaildetailed.png"
+      }
+    },
+    {
+      "id": "yas_marina",
+      "slug": "united-arab-emirates",
+      "length": "5.281km",
+      "laps": "58",
+      "corners": 16,
+      "source": {
+        "page": "https://www.formula1.com/en/racing/2026/united-arab-emirates",
+        "image": "https://media.formula1.com/image/upload/f_png,q_100/v1751632483/common/f1/2026/track/2026trackyasmarinacircuitdetailed.png"
+      }
+    },
+    {
+      "id": "jeddah",
+      "slug": "saudi-arabia",
+      "length": "6.175km",
+      "laps": "50",
+      "corners": 27,
+      "source": {
+        "page": "https://www.formula1.com/en/racing/2027/saudi-arabia",
+        "image": "https://media.formula1.com/image/upload/f_png,q_100/v1789978020/common/f1/2027/track/2027trackjeddahdetailed.png"
+      }
+    },
+    {
+      "id": "imola",
+      "slug": "emilia-romagna",
+      "length": "4.909km",
+      "laps": "63",
+      "corners": 19,
+      "source": {
+        "page": "https://www.formula1.com/en/racing/2025/emiliaromagna",
+        "image": "https://media.formula1.com/image/upload/f_png,q_100/v1677244984/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Emilia_Romagna_Circuit.png"
+      }
+    }
+  ]
+}

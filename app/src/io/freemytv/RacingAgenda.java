@@ -61,6 +61,12 @@ final class RacingAgenda {
         out.sort(Comparator.comparingLong(event->event.at));
         return out;
     }
+    synchronized List<Event> seasonRaces() {
+        List<Event> races=new ArrayList<>();
+        for(Event event:events.get(0))if(event.title.equals("Corrida"))races.add(event);
+        races.sort(Comparator.comparingLong(event->event.at));
+        return races;
+    }
     synchronized String status(int i) {
         if(i==3) return "Agenda oficial · revisão 16/11/2026";
         if(fetched[i]==0) return failed[i]?"Fonte indisponível · tentar mais tarde":"Consultando agenda…";

@@ -18,3 +18,11 @@ A licença MIT original é preservada integralmente em LICENSE. A adaptação es
 ESPN fornece tabelas, jogos e escudos; Jolpica F1 fornece programação e classificações de F1; Open-Meteo fornece clima. Esses serviços têm seus próprios termos e políticas. O aplicativo conserva exemplos públicos para inicialização e respostas válidas em cache local.
 
 A licença de software não transfere direitos sobre marcas, escudos, calendários, dados ou imagens dos titulares. Não há afiliação nem endosso dos serviços, fabricantes, ligas ou equipes mencionados.
+
+## Mapas e marcas de Fórmula 1
+
+Traçados esquemáticos, marca F1 e logos de equipes usam referências publicadas no site oficial [Formula 1](https://www.formula1.com/). As URLs de origem são preservadas em `app/assets/sports/circuits/index.json`, em cada diagrama e em `app/assets/sports/f1/SOURCES.json`.
+
+Mapas, logos, marcas, nomes e demais materiais dos titulares não são relicenciados sob a licença MIT do código. Este projeto de fãs é independente, sem afiliação nem endosso de Formula 1, FIA, circuitos ou equipes. Os diagramas são esquemáticos e refletem a revisão indicada nas fontes; mudanças de traçado ou de calendário podem exigir atualização dos assets.
+
+Os pódios são agregados dos resultados públicos de GPs fornecidos por Jolpica F1. O snapshot inicial contém apenas dados esportivos públicos, sem sprints, contas ou informações de usuários.

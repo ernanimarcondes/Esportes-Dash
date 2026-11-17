@@ -1,0 +1,18 @@
+{
+  "source": "https://www.formula1.com/en/teams",
+  "note": "Official Formula 1 and team marks belong to their respective owners. Local fan dashboard, not affiliated with Formula 1.",
+  "images": {
+    "mercedes": "https://media.formula1.com/image/upload/c_fit,w_1024,h_1024,f_png,q_100/v1740000001/common/f1/2026/mercedes/2026mercedeslogowhite.webp",
+    "ferrari": "https://media.formula1.com/image/upload/c_fit,w_1024,h_1024,f_png,q_100/v1740000001/common/f1/2026/ferrari/2026ferrarilogowhite.webp",
+    "redbullracing": "https://media.formula1.com/image/upload/c_fit,w_1024,h_1024,f_png,q_100/v1740000001/common/f1/2026/redbullracing/2026redbullracinglogowhite.webp",
+    "mclaren": "https://media.formula1.com/image/upload/c_fit,w_1024,h_1024,f_png,q_100/v1740000001/common/f1/2026/mclaren/2026mclarenlogowhite.webp",
+    "racingbulls": "https://media.formula1.com/image/upload/c_fit,w_1024,h_1024,f_png,q_100/v1740000001/common/f1/2026/racingbulls/2026racingbullslogowhite.webp",
+    "alpine": "https://media.formula1.com/image/upload/c_fit,w_1024,h_1024,f_png,q_100/v1740000001/common/f1/2026/alpine/2026alpinelogowhite.webp",
+    "haasf1team": "https://media.formula1.com/image/upload/c_fit,w_1024,h_1024,f_png,q_100/v1740000001/common/f1/2026/haasf1team/2026haasf1teamlogowhite.webp",
+    "audi": "https://media.formula1.com/image/upload/c_fit,w_1024,h_1024,f_png,q_100/v1740000001/common/f1/2026/audi/2026audilogowhite.webp",
+    "williams": "https://media.formula1.com/image/upload/c_fit,w_1024,h_1024,f_png,q_100/v1740000001/common/f1/2026/williams/2026williamslogowhite.webp",
+    "astonmartin": "https://media.formula1.com/image/upload/c_fit,w_1024,h_1024,f_png,q_100/v1740000001/common/f1/2026/astonmartin/2026astonmartinlogowhite.webp",
+    "cadillac": "https://media.formula1.com/image/upload/c_fit,w_1024,h_1024,f_png,q_100/v1740000001/common/f1/2026/cadillac/2026cadillaclogowhite.webp",
+    "f1": "https://media.formula1.com/image/upload/w_1024,f_png,q_100/v1677237319/etc/designs/fom-website/images/f1_logo.svg"
+  }
+}
