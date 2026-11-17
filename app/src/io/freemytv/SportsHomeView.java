@@ -12,7 +12,7 @@ import java.util.*;
 /** Eight-zone sports dashboard, with independent rotation clocks and a shared app dock. */
 final class SportsHomeView extends RacingHomeView {
     private static final int ACCENT=0xFF59C7FF,AMBER=0xFFFFCA5C,WHITE=0xFFE8EDF2,MUTED=0xFFA7B1BE,PANEL=0xFF151A21,BORDER=0xFF64748B;
-    private static final long FOOTBALL_INTERVAL=30000L, GAME_INTERVAL=10000L, AMERICAN_INTERVAL=15000L;
+    private static final long FOOTBALL_INTERVAL=30000L, GAME_INTERVAL=10000L;
     private final Paint p=new Paint(Paint.ANTI_ALIAS_FLAG|Paint.FILTER_BITMAP_FLAG);
     private final RectF box=new RectF();
     private final Typeface normal,bold;
@@ -70,11 +70,10 @@ final class SportsHomeView extends RacingHomeView {
                 SportsFeedParser.Game g=list.get(i);sports.logo(g.homeLogo,matchPixels);sports.logo(g.awayLogo,matchPixels);
             }
         }
-        int phase=(int)(elapsed()/AMERICAN_INTERVAL)+1;
         for(int id=4;id<=6;id++){
-            SportsFeedParser.Table t=narrowTable(id,phase);if(t==null)continue;
-            int pages=Math.max(1,(t.rows.size()+7)/8),page=(phase/(id==6?4:2))%pages;
-            for(int i=page*8;i<Math.min(page*8+8,t.rows.size());i++)sports.logo(t.rows.get(i).logo,Math.max(8,Math.round(28*zoom)));
+            NarrowPage next=narrowPage(id,elapsed()+StandingsRotation.INTERVAL);SportsFeedParser.Table t=next.table;
+            int from=next.page*StandingsRotation.ROWS_PER_PAGE;
+            for(int i=from;i<Math.min(from+StandingsRotation.ROWS_PER_PAGE,t.rows.size());i++)sports.logo(t.rows.get(i).logo,Math.max(8,Math.round(28*zoom)));
         }
         int football=((int)(elapsed()/FOOTBALL_INTERVAL)+1)%SportsFeedParser.FOOTBALL_COUNT;
         for(SportsFeedParser.Table t:sports.tables(SportsFeedParser.TABLE_KEYS[football]))for(SportsFeedParser.Row r:t.rows)sports.logo(r.logo,Math.max(8,Math.round(28*zoom)));
@@ -112,28 +111,37 @@ final class SportsHomeView extends RacingHomeView {
             text(c,"Atual. "+stamp.format(new Date(t.at)),b.left+22,b.bottom-20,15,MUTED,false);
         }else empty(c,b,"Fonte ainda não disponível");
     }
-    private SportsFeedParser.Table narrowTable(int id,int phase){
-        String key=id==4?"nba":id==5?"nfl":phase%4<2?"nhl":"mlb";
-        List<SportsFeedParser.Table> groups=sports.tables(key);int index=phase%2;
-        return groups.size()>index?groups.get(index):null;
+    private static final class NarrowPage {
+        final SportsFeedParser.Table table;final int page;
+        NarrowPage(SportsFeedParser.Table table,int page){this.table=table;this.page=page;}
+    }
+    private NarrowPage narrowPage(int id,long elapsed){
+        String[] keys=id==4?new String[]{"nba"}:id==5?new String[]{"nfl"}:new String[]{"nhl","mlb"};
+        List<SportsFeedParser.Table> tables=new ArrayList<>();
+        for(String key:keys){List<SportsFeedParser.Table> groups=sports.tables(key);
+            if(groups.isEmpty()){SportsFeedParser.Table pending=new SportsFeedParser.Table();pending.key=key;tables.add(pending);}
+            else tables.addAll(groups);
+        }
+        int[] counts=new int[tables.size()];for(int i=0;i<counts.length;i++)counts[i]=tables.get(i).rows.size();
+        StandingsRotation.Frame frame=StandingsRotation.at(elapsed,counts);return new NarrowPage(tables.get(frame.table),frame.page);
     }
     private void narrow(Canvas c,int id){
-        RectF b=areas[id];panel(c,id);int phase=(int)(elapsed()/AMERICAN_INTERVAL);SportsFeedParser.Table t=narrowTable(id,phase);
-        String league=id==4?"NBA":id==5?"NFL":phase%4<2?"NHL":"MLB";
-        String group=t==null?(league.equals("NFL")?(phase%2==0?"AFC":"NFC"):league.equals("MLB")?(phase%2==0?"Americana":"Nacional"):(phase%2==0?"Leste":"Oeste")):t.group;
+        RectF b=areas[id];panel(c,id);NarrowPage current=narrowPage(id,elapsed());SportsFeedParser.Table t=current.table;
+        String league=t.key.toUpperCase(Locale.ROOT),group=t.group.isEmpty()?"Classificação":t.group;
         text(c,league,b.left+17,b.top+39,28,ACCENT,true);text(c,group,b.left+17,b.top+73,23,WHITE,true);
-        if(t==null){text(c,"Consultando…",b.left+17,b.top+153,19,MUTED,false);return;}
-        int pages=Math.max(1,(t.rows.size()+7)/8);int page=(phase/(id==6?4:2))%pages;int from=page*8,to=Math.min(from+8,t.rows.size());
+        if(t.rows.isEmpty()){text(c,"Consultando…",b.left+17,b.top+153,19,MUTED,false);return;}
+        int from=current.page*StandingsRotation.ROWS_PER_PAGE,to=Math.min(from+StandingsRotation.ROWS_PER_PAGE,t.rows.size());
         right(c,"#",b.left+32,b.top+106,14,MUTED,false);center(c,"TIME",b.left+94,b.top+106,14,MUTED,false);
         right(c,league.equals("NHL")?"PTS":league.equals("NFL")?"V-D-E":"V-D",b.right-15,b.top+106,14,MUTED,false);
         for(int i=from;i<to;i++){
-            SportsFeedParser.Row r=t.rows.get(i);float y=b.top+134+(i-from)*31;
-            if(i%2==0)fill(c,b.left+9,y-20,b.right-9,y+6,0xFF1E2732,4);
+            SportsFeedParser.Row r=t.rows.get(i);float y=b.top+132+(i-from)*30;
+            if(i%2==0)fill(c,b.left+9,y-21,b.right-9,y+6,0xFF1E2732,4);
             right(c,String.valueOf(r.rank),b.left+32,y,17,MUTED,false);logo(c,r.logo,r.abbr,b.left+49,y-21,28);
             center(c,fit(r.abbr,18,46,true),b.left+114,y,18,WHITE,true);
             right(c,league.equals("NHL")?r.points:r.record,b.right-15,y,league.equals("NFL")?17:19,WHITE,true);
         }
-        text(c,season(t.season),b.left+17,b.bottom-16,15,MUTED,false);
+        line(c,b.left+15,b.bottom-34,b.right-15,b.bottom-34,0xFF2F3B49,1);
+        text(c,season(t.season),b.left+17,b.bottom-12,15,MUTED,false);
     }
     private void games(Canvas c,int id,boolean completed){
         RectF b=areas[id];panel(c,id);List<SportsFeedParser.Game> all=completed?recent:today;
@@ -284,7 +292,7 @@ final class SportsHomeView extends RacingHomeView {
         if(focus==0){List<SportsFeedParser.Table> ts=sports.tables(SportsFeedParser.TABLE_KEYS[(int)(elapsed()/FOOTBALL_INTERVAL)%SportsFeedParser.FOOTBALL_COUNT]);if(!ts.isEmpty())tableDetails(ts.get(0));}
         else if(focus==1||focus==2)gameDetails(focus==2);
         else if(focus==3){if(f1Details==null)f1Details=new F1DetailsScreen(getContext(),sports,agenda,normal,bold,()->invalidate());f1Details.reset();f1Open=true;invalidate();}
-        else if(focus>=4&&focus<=6){SportsFeedParser.Table t=narrowTable(focus,(int)(elapsed()/AMERICAN_INTERVAL));if(t!=null)tableDetails(t);}
+        else if(focus>=4&&focus<=6){SportsFeedParser.Table t=narrowPage(focus,elapsed()).table;if(!t.rows.isEmpty())tableDetails(t);}
         else if(focus<10)openApp(focus-7);else if(focus==10)showAllApps();else if(focus==11)showInputs();else settings();
     }
     private void tableDetails(SportsFeedParser.Table t){StringBuilder message=new StringBuilder("Temporada "+t.season+"\nAtualizado: "+stamp.format(new Date(t.at))+"\n\n");

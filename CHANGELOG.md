@@ -1,5 +1,12 @@
 # Alterações
 
+## 1.2.2 — 2026-11-17
+
+- NBA, NFL, NHL e MLB exibem todas as páginas de uma conferência antes de trocar para a próxima.
+- Oito times por página, mantendo 15 segundos e reservando mais espaço entre a tabela e a temporada no rodapé.
+- Pré-carregamento dos escudos e abertura dos detalhes acompanham a mesma sequência.
+- Testes de paginação, limites de tempo, conferências com tamanhos diferentes e reinício do ciclo.
+
 ## 1.2.1 — 2026-11-17
 
 - Os 26 mapas do quadro de F1 na tela principal usam o novo desenho compacto: proporção preservada, traços vetoriais nítidos e setores coloridos, sem números de curvas sobrepostos.
