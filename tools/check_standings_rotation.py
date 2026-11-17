@@ -1,4 +1,4 @@
-"""Check complete-conference rotation and seven-team pages with JDK 17+, no Android SDK required."""
+"""Check complete-conference rotation and eight-team pages with JDK 17+, no Android SDK required."""
 from pathlib import Path
 import os,subprocess,tempfile
 root=Path(__file__).resolve().parent.parent

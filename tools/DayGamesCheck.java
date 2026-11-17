@@ -1,0 +1,19 @@
+package io.freemytv;
+import java.util.*;
+public final class DayGamesCheck {
+ static void check(boolean ok,String label){if(!ok)throw new AssertionError(label);}
+ static SportsFeedParser.Game game(String id,long at,String state,boolean complete){SportsFeedParser.Game g=new SportsFeedParser.Game();g.id=id;g.at=at;g.state=state;g.complete=complete;return g;}
+ public static void main(String[] args){
+  SportsFeedParser.Game ended=game("ended",1000,"post",true),live=game("live",2000,"in",false),next=game("next",3000,"pre",false),unknown=game("unknown",500,"pre",false),cancel=game("cancel",4000,"pre",false);
+  unknown.timeValid=false;cancel.status="STATUS_CANCELED";
+  List<SportsFeedParser.Game> input=Arrays.asList(next,unknown,cancel,ended,live);
+  List<SportsFeedParser.Game> all=DayGames.select(input,0);check(all.size()==5&&all.get(0)==ended&&all.get(1)==live&&all.get(4)==unknown,"Known start times first, unknown last");check(input.get(0)==next,"Source must not be reordered");
+  List<SportsFeedParser.Game> upcoming=DayGames.select(input,1);check(upcoming.size()==2&&upcoming.get(0)==next&&upcoming.get(1)==unknown,"Upcoming excludes live, finished and canceled");
+  check(DayGames.select(input,2).size()==1&&DayGames.select(input,2).get(0)==live,"Live filter");check(DayGames.select(input,3).size()==1&&DayGames.select(input,3).get(0)==ended,"Finished filter");
+  check(DayGames.pages(0)==1&&DayGames.pages(6)==1&&DayGames.pages(7)==2&&DayGames.pages(13)==3,"Six fixtures per page");check(DayGames.clamp(8,13)==2&&DayGames.clamp(-1,13)==0&&DayGames.clamp(3,0)==0,"Clamp after filtering or refreshing");
+  check(DayGames.status(ended,1000).equals("Encerrado")&&DayGames.status(live,1000).equals("Em andamento")&&DayGames.status(unknown,1000).equals("Horário a confirmar")&&DayGames.status(cancel,1000).equals("Cancelado"),"Game statuses");
+  DayGamesRotation rotation=new DayGamesRotation();rotation.enter(0);rotation.tick(13,0);rotation.tick(13,19999);check(rotation.page==0,"First page must remain 20 seconds");rotation.tick(13,20000);check(rotation.page==1,"Advance after 20 seconds");rotation.tick(13,39999);check(rotation.page==1,"Refresh must not restart or advance the timer");rotation.tick(13,40000);check(rotation.page==2,"Last partial page");rotation.tick(13,60000);check(rotation.page==0,"Automatic cycle restart");
+  rotation.enter(70000);rotation.tick(7,70000);rotation.tick(7,89999);check(rotation.page==0,"Changing filter grants 20 seconds");rotation.tick(7,90000);check(rotation.page==1,"Selected filter rotation");rotation.tick(0,91000);check(rotation.page==0,"Empty filter clamps page");rotation.tick(1,200000);check(rotation.page==0,"Single-page filters do not advance");rotation.tick(13,201000);rotation.tick(13,220999);check(rotation.page==0,"New pages after a refresh grant 20 seconds");rotation.tick(13,221000);check(rotation.page==1,"Newly available pages rotate");
+  System.out.println("PASS: chronological mixed-sport schedule, filters, unknown times, canceled games, six-card pages, 20-second rotation, filter resets, wrap and clamps after updates.");
+ }
+}

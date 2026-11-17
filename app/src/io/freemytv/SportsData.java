@@ -27,10 +27,14 @@ final class SportsData {
     }
     private final Context context;
     private final Runnable changed;
+    private final java.util.concurrent.atomic.AtomicLong modelVersion=new java.util.concurrent.atomic.AtomicLong();
+    long modelVersion(){return modelVersion.get();}
     private final Handler main=new Handler(Looper.getMainLooper());
     private final ExecutorService feeds=Executors.newFixedThreadPool(3),pictures=Executors.newFixedThreadPool(2);
     private final Map<String,List<SportsFeedParser.Table>> tables=new ConcurrentHashMap<>();
     private final Map<String,Snapshot> snapshots=new ConcurrentHashMap<>();
+    private static final class GoalSnapshot {final long at;final SportsFeedParser.Game game;GoalSnapshot(long at,SportsFeedParser.Game game){this.at=at;this.game=game;}}
+    private final Map<String,GoalSnapshot> matchGoals=new ConcurrentHashMap<>();
     private final Map<String,Long> attempts=new ConcurrentHashMap<>();
     private final Map<String,Bitmap> sourceLogos=Collections.synchronizedMap(new LinkedHashMap<String,Bitmap>(24,.75f,true){
         @Override protected boolean removeEldestEntry(Map.Entry<String,Bitmap> e){return size()>24;}
@@ -53,7 +57,7 @@ final class SportsData {
         try{track=CircuitGeometry.parseTrack(read(context.getAssets().open("racing/vegas.geojson")));}catch(Exception ignored){}
         feeds.execute(()->{
             try{load(new JSONObject(read(new FileInputStream(file()))));}catch(Exception ignored){}
-            cacheLoaded=true;notifyChanged();refresh();
+            loadGoalCache();cacheLoaded=true;notifyDataChanged();refresh();
         });
     }
     private void load(JSONObject root){
@@ -103,7 +107,7 @@ final class SportsData {
         for(int offset=-3;offset<=1;offset++){
             String date=today.plusDays(offset).format(DateTimeFormatter.BASIC_ISO_DATE);long ttl=offset>=0?5*60000L:30*60000L;
             for(String source:SportsFeedParser.SCORE_KEYS){String key=source+"-"+date;Snapshot s=snapshots.get(key);
-                if(s==null||now-s.at>ttl)fetchGames(source,date,key);}
+                if(s==null||now-s.at>ttl||(source.equals("soccer")&&s.games.stream().anyMatch(g->!g.goalDetailsParsed)))fetchGames(source,date,key);}
         }
         snapshots.keySet().removeIf(k->{try{return LocalDate.parse(k.substring(k.lastIndexOf('-')+1),DateTimeFormatter.BASIC_ISO_DATE).isBefore(today.minusDays(3));}catch(Exception e){return true;}});
     }
@@ -116,7 +120,7 @@ final class SportsData {
             List<SportsFeedParser.Table> parsed=SportsFeedParser.standings(key,get(url),System.currentTimeMillis());
             tables.put(key,parsed);failed.remove(task);save();
         }catch(Exception e){failed.add(task);android.util.Log.w("SportsData","Table unavailable: "+key);}
-            finally{pending.remove(task);notifyChanged();}});
+            finally{pending.remove(task);notifyDataChanged();}});
     }
     private void fetchF1(String kind){String task="table-f1-"+kind;if(!begin(task))return;
         feeds.execute(()->{try{
@@ -135,6 +139,39 @@ final class SportsData {
         }catch(Exception e){failed.add(task);android.util.Log.w("SportsData","F1 podium totals unavailable");}
             finally{pending.remove(task);notifyChanged();}});
     }
+    List<String> goalLines(SportsFeedParser.Game game,boolean home){
+        if(!game.source.equals("soccer")&&!game.source.equals("nhl"))return Collections.emptyList();
+        if(FootballGoals.complete(game))return FootballGoals.lines(game,home);
+        GoalSnapshot cached=matchGoals.get(game.id);boolean valid=cached!=null&&MatchGoalsSummary.sameScore(game,cached.game);
+        long ttl=game.complete?30*60000L:5*60000L;
+        if(!valid||System.currentTimeMillis()-cached.at>ttl||!FootballGoals.complete(cached.game))fetchGoalDetails(game);
+        if(valid&&cached.game.goals.size()>=game.goals.size())return FootballGoals.lines(cached.game,home);
+        String score=home?game.homeScore:game.awayScore;
+        if(game.goals.isEmpty()&&!score.equals("0")&&pending.contains("goal-details:"+game.id))return Collections.singletonList("Carregando autores…");
+        return FootballGoals.lines(game,home);
+    }
+    private void fetchGoalDetails(SportsFeedParser.Game game){
+        String event=game.id.substring(game.id.indexOf(':')+1);if(!event.matches("[0-9]+"))return;
+        String task="goal-details:"+game.id;if(!begin(task))return;
+        feeds.execute(()->{try{
+            String path=game.source.equals("nhl")?"hockey/nhl":"soccer/all";
+            SportsFeedParser.Game detailed=MatchGoalsSummary.read(game,get("https://site.api.espn.com/apis/site/v2/sports/"+path+"/summary?event="+event));
+            if(!closed){matchGoals.put(game.id,new GoalSnapshot(System.currentTimeMillis(),detailed));saveGoalCache();}
+        }catch(Exception ignored){android.util.Log.w("SportsData","Goal summary unavailable: "+game.source);}
+            finally{pending.remove(task);notifyChanged();}});
+    }
+    private void loadGoalCache(){try{
+        JSONObject root=new JSONObject(read(new FileInputStream(new File(context.getFilesDir(),"match-goals-cache.json"))));if(root.optInt("schema")!=1)return;
+        JSONArray rows=root.getJSONArray("matches");long oldest=System.currentTimeMillis()-4*86400000L;
+        for(int i=0;i<Math.min(rows.length(),96);i++)try{JSONObject row=rows.getJSONObject(i);SportsFeedParser.Game game=SportsFeedParser.Game.read(row.getJSONObject("game"));if(game.at>=oldest)matchGoals.put(game.id,new GoalSnapshot(row.getLong("at"),game));}catch(Exception ignored){}
+    }catch(Exception ignored){}}
+    private synchronized void saveGoalCache(){if(closed)return;try{
+        long oldest=System.currentTimeMillis()-4*86400000L;matchGoals.entrySet().removeIf(e->e.getValue().game.at<oldest);
+        List<GoalSnapshot> rows=new ArrayList<>(matchGoals.values());rows.sort((a,b)->Long.compare(b.at,a.at));JSONArray matches=new JSONArray();
+        for(int i=0;i<Math.min(rows.size(),96);i++){GoalSnapshot row=rows.get(i);matches.put(new JSONObject().put("at",row.at).put("game",row.game.json()));}
+        File temp=new File(context.getFilesDir(),"match-goals-cache.tmp");try(FileOutputStream out=new FileOutputStream(temp)){out.write(new JSONObject().put("schema",1).put("matches",matches).toString().getBytes(StandardCharsets.UTF_8));}
+        temp.renameTo(new File(context.getFilesDir(),"match-goals-cache.json"));
+    }catch(Exception ignored){}}
     private void fetchGames(String source,String date,String key){if(!begin(key))return;
         feeds.execute(()->{try{
             String url="https://site.api.espn.com/apis/site/v2/sports/"+(source.equals("soccer")?"soccer/all":path(source))
@@ -142,7 +179,7 @@ final class SportsData {
             Snapshot s=new Snapshot();s.key=key;s.at=System.currentTimeMillis();s.games=SportsFeedParser.scoreboard(source,get(url),s.at);
             snapshots.put(key,s);failed.remove(key);save();
         }catch(Exception e){failed.add(key);android.util.Log.w("SportsData","Schedule unavailable: "+key);}
-            finally{pending.remove(key);notifyChanged();}});
+            finally{pending.remove(key);notifyDataChanged();}});
     }
     private static String path(String key){switch(key){case "nba":return "basketball/nba";case "nfl":return "football/nfl";
         case "nhl":return "hockey/nhl";case "mlb":return "baseball/mlb";default:return "soccer/"+key;}}
@@ -173,6 +210,7 @@ final class SportsData {
         pictures.execute(()->{try{
             File dir=new File(context.getCacheDir(),"sports-shields-hq-v2");dir.mkdirs();String name=hash(url);
             File rasterFile=new File(dir,name+"-"+target+".png");Bitmap ready=rasterFile.exists()?BitmapFactory.decodeFile(rasterFile.getPath()):null;
+            if(ready!=null)rasterFile.setLastModified(System.currentTimeMillis());
             if(ready==null){
                 Bitmap original=null;
                 for(String candidate:candidates){
@@ -198,7 +236,7 @@ final class SportsData {
             original=BitmapFactory.decodeByteArray(raw,0,raw.length,options);
             if(original!=null){original=cropShield(original);try(FileOutputStream out=new FileOutputStream(originalFile)){original.compress(Bitmap.CompressFormat.PNG,100,out);}}
         }
-        if(original!=null)sourceLogos.put(url,original);return original;
+        if(original!=null){sourceLogos.put(url,original);originalFile.setLastModified(System.currentTimeMillis());}return original;
     }
     private static Bitmap cropShield(Bitmap original){
         int w=original.getWidth(),h=original.getHeight(),left=w,top=h,right=-1,bottom=-1;int[] colors=new int[w*h];original.getPixels(colors,0,w,0,0,w,h);
@@ -222,6 +260,7 @@ final class SportsData {
     private static String read(InputStream in)throws Exception{return new String(all(in,10000000),StandardCharsets.UTF_8);}
     private static byte[] all(InputStream input,int limit)throws Exception{try(InputStream in=input;ByteArrayOutputStream out=new ByteArrayOutputStream()){
         byte[] buffer=new byte[8192];int n;while((n=in.read(buffer))!=-1){if(out.size()+n>limit)throw new IOException("Response limit");out.write(buffer,0,n);}return out.toByteArray();}}
+    private void notifyDataChanged(){modelVersion.incrementAndGet();notifyChanged();}
     private void notifyChanged(){main.post(()->{if(!closed)changed.run();});}
-    void close(){closed=true;feeds.shutdownNow();pictures.shutdownNow();logos.clear();sourceLogos.clear();}
+    void close(){closed=true;feeds.shutdownNow();pictures.shutdownNow();logos.clear();sourceLogos.clear();matchGoals.clear();}
 }

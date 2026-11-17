@@ -1,5 +1,15 @@
 # Alterações
 
+## 1.3.0 — 2026-11-18
+
+- Painel exclusivo de Jogos do dia, verde-esmeralda, seis cartões, filtros de estado e páginas automáticas a cada 20 segundos.
+- Painel exclusivo de Resultados recentes, roxo, aba Todos em lista cronológica e abas por data do mais antigo ao mais novo, sem aba Hoje.
+- Autores e momentos dos gols de futebol e NHL nos detalhes, agrupados por jogador, com rotação de cinco segundos quando excedem quatro linhas. Consulta de resumos históricos, tratamento de gols contra, pênaltis e shootouts, e cache local validado por partida, equipes e placar.
+- Tela principal conserva a apresentação compacta sem autores dos gols.
+- Menos redesenhos ociosos, reaproveitamento dos endereços dos escudos e atualização das listas somente quando os modelos mudam; escudos de uso recente permanecem priorizados no cache de disco.
+- Testes determinísticos de filtros, cronologia, janela de 72 horas, paginação, temporizadores e cobertura dos gols, com exemplos públicos mínimos.
+- Documentação e capturas atualizadas; configurações pessoais, contas, chaves e caches continuam fora do projeto.
+
 ## 1.2.3 — 2026-11-17
 
 - Programação do GP com título um pouco maior e aparência uniforme no quadro principal; destaque da Próxima sessão preservado.

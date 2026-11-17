@@ -40,7 +40,25 @@ Novos resultados entram automaticamente após a publicação pela fonte, sem rec
 
 O painel de F1 usa fundo preto, grafite e vermelho. Os pódios são calculados pelos resultados dos Grandes Prêmios da temporada; sprints não entram nessa contagem. Logos e mapas têm suas fontes indicadas nos assets e nos créditos.
 
-**Continuaremos melhorando os demais quadros do Esportes Dash**, com novos painéis de detalhes e ajustes de visualização e navegação. Nesta versão, o painel exclusivo está implementado para a F1; os demais quadros continuam com seus detalhes atuais.
+## Painéis de jogos e resultados
+
+Selecione **Jogos do dia** ou **Resultados recentes** na tela principal e pressione **OK**. **Voltar** retorna ao mesmo quadro do Esportes Dash.
+
+![Jogos do dia: seis confrontos com escudos, placares e autores dos gols](docs/images/jogos-do-dia.png)
+
+- **Jogos do dia:** fundo preto e verde-esmeralda, seis confrontos por página e filtros Todos, A seguir, Em andamento e Encerrados. Os jogos seguem a ordem de horário; horários desconhecidos ficam no final. As páginas mudam automaticamente a cada 20 segundos, sem controles de próxima página.
+- **Autores dos gols:** os cartões de futebol e NHL mostram os autores e os momentos dos gols quando a fonte oferece esses dados. No futebol, inclui acréscimos, pênaltis e gols contra; na NHL, período e tempo. Assistências e cobranças de shootout não são apresentadas como gols. Mais de quatro linhas por time alternam a cada cinco segundos. Sem cobertura, informa a indisponibilidade em vez de completar com dados estimados.
+- **Resultados recentes:** identidade roxa e aba **Todos** primeiro, seguida pelas datas do mais antigo para o mais novo, sem aba exclusiva para hoje. A janela de resultados é móvel de 72 horas e pode alcançar partes de quatro datas. Todos inclui também os jogos de hoje já encerrados dentro dessa janela.
+- **Todos em lista:** até 48 partidas por página, distribuídas em duas colunas, em ordem de data e horário. Quando necessário, muda a página a cada 20 segundos. As abas por data usam os seis cartões com detalhes dos gols.
+- **Tela principal compacta:** conserva dois confrontos por quadro e não exibe autores dos gols; eles ficam nos painéis de detalhes.
+
+![Resultados recentes com cartões e detalhes dos gols](docs/images/resultados-recentes.png)
+
+![Todos os resultados em lista cronológica](docs/images/resultados-lista.png)
+
+Os novos painéis compartilham os dados e o carregador de escudos da tela principal. As consultas e o processamento de imagens ocorrem em segundo plano, com limites de concorrência e cache local. A tela principal evita redesenhos repetidos quando não há mudança; comandos do controle, imagens e dados novos continuam provocando atualização imediata. Nos detalhes, os temporizadores mantêm as transições de cinco e vinte segundos.
+
+**Continuaremos melhorando os demais quadros do Esportes Dash**, com novos painéis de detalhes e ajustes de visualização e navegação.
 
 ## Compilar
 
@@ -96,7 +114,10 @@ Antes de publicar:
 python tools/check_circuit_data.py
 python tools/check_standings_rotation.py
 python tools/check_team_logos.py
+python tools/check_match_panels.py --json-jar CAMINHO/DO/json.jar
 python tools/privacy_check.py
 ```
+
+Os testes de jogos precisam do JDK 17+ e de um JAR [JSON-Java (org.json)](https://github.com/stleary/JSON-java) fornecido localmente; não fazem consultas de rede nem usam contas. Verificam filtros, ordem cronológica, datas brasileiras, paginação, rotações, autores/minutos, persistência e identidade dos resumos. Os exemplos em `tools/fixtures` contêm somente campos esportivos públicos.
 
 Somente código, assets licenciados e exemplos de dados públicos são versionados. Não publique configurações locais, capturas com dados pessoais, caches, sessões, chaves ou APKs pessoais. Os prints de F1 mostram dados esportivos públicos, relógio e data. O print principal do Esportes Dash foi atualizado a pedido do autor e inclui o clima com a cidade exibida no painel. Nenhuma imagem contém contas ou credenciais.

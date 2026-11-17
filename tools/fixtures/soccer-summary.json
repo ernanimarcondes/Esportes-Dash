@@ -1,0 +1,156 @@
+{
+  "header": {
+    "id": "401861189",
+    "competitions": [
+      {
+        "id": "401861189",
+        "date": "2026-11-17T19:45Z",
+        "status": {
+          "type": {
+            "id": "28",
+            "name": "STATUS_FULL_TIME",
+            "state": "post",
+            "completed": true,
+            "description": "Full Time",
+            "detail": "FT",
+            "shortDetail": "FT"
+          }
+        },
+        "competitors": [
+          {
+            "id": "578",
+            "homeAway": "home",
+            "score": "2",
+            "team": {
+              "id": "578",
+              "displayName": "Wales",
+              "shortDisplayName": "Wales",
+              "abbreviation": "WAL"
+            }
+          },
+          {
+            "id": "482",
+            "homeAway": "away",
+            "score": "3",
+            "team": {
+              "id": "482",
+              "displayName": "Portugal",
+              "shortDisplayName": "Portugal",
+              "abbreviation": "POR"
+            }
+          }
+        ],
+        "details": [
+          {
+            "clock": {
+              "value": 604.0,
+              "displayValue": "11'"
+            },
+            "team": {
+              "id": "482",
+              "uid": "s:600~t:482",
+              "location": "Portugal",
+              "name": "Portugal",
+              "abbreviation": "POR",
+              "displayName": "Portugal"
+            },
+            "scoringPlay": true,
+            "redCard": false,
+            "penaltyKick": false,
+            "ownGoal": false
+          },
+          {
+            "clock": {
+              "value": 734.0,
+              "displayValue": "13'"
+            },
+            "team": {
+              "id": "578",
+              "uid": "s:600~t:578",
+              "location": "Wales",
+              "name": "Wales",
+              "abbreviation": "WAL",
+              "displayName": "Wales"
+            },
+            "scoringPlay": true,
+            "redCard": false,
+            "penaltyKick": false,
+            "ownGoal": false
+          },
+          {
+            "clock": {
+              "value": 2399.0,
+              "displayValue": "40'"
+            },
+            "team": {
+              "id": "578",
+              "uid": "s:600~t:578",
+              "location": "Wales",
+              "name": "Wales",
+              "abbreviation": "WAL",
+              "displayName": "Wales"
+            },
+            "scoringPlay": true,
+            "redCard": false,
+            "penaltyKick": false,
+            "ownGoal": false
+          },
+          {
+            "clock": {
+              "value": 2550.0,
+              "displayValue": "43'"
+            },
+            "team": {
+              "id": "482",
+              "uid": "s:600~t:482",
+              "location": "Portugal",
+              "name": "Portugal",
+              "abbreviation": "POR",
+              "displayName": "Portugal"
+            },
+            "scoringPlay": true,
+            "redCard": false,
+            "penaltyKick": false,
+            "ownGoal": false
+          },
+          {
+            "clock": {
+              "value": 4156.0,
+              "displayValue": "70'"
+            },
+            "team": {
+              "id": "482",
+              "uid": "s:600~t:482",
+              "location": "Portugal",
+              "name": "Portugal",
+              "abbreviation": "POR",
+              "displayName": "Portugal"
+            },
+            "scoringPlay": true,
+            "redCard": false,
+            "penaltyKick": false,
+            "ownGoal": false
+          },
+          {
+            "clock": {
+              "value": 4393.0,
+              "displayValue": "74'"
+            },
+            "team": {
+              "id": "482",
+              "uid": "s:600~t:482",
+              "location": "Portugal",
+              "name": "Portugal",
+              "abbreviation": "POR",
+              "displayName": "Portugal"
+            },
+            "scoringPlay": false,
+            "redCard": true,
+            "penaltyKick": false,
+            "ownGoal": false
+          }
+        ]
+      }
+    ]
+  }
+}

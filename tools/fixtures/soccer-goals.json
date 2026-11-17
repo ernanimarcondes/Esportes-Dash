@@ -1,0 +1,1079 @@
+{
+  "events": [
+    {
+      "id": "401861194",
+      "uid": "s:600~l:2395~e:401861194",
+      "date": "2026-11-17T19:45Z",
+      "name": "Norway at Denmark",
+      "status": {
+        "clock": 5400.0,
+        "displayClock": "90'+9'",
+        "period": 2,
+        "type": {
+          "id": "28",
+          "name": "STATUS_FULL_TIME",
+          "state": "post",
+          "completed": true,
+          "description": "Full Time",
+          "detail": "FT",
+          "shortDetail": "FT"
+        }
+      },
+      "competitions": [
+        {
+          "id": "401861194",
+          "date": "2026-11-17T19:45Z",
+          "timeValid": true,
+          "status": {
+            "clock": 5400.0,
+            "displayClock": "90'+9'",
+            "period": 2,
+            "type": {
+              "id": "28",
+              "name": "STATUS_FULL_TIME",
+              "state": "post",
+              "completed": true,
+              "description": "Full Time",
+              "detail": "FT",
+              "shortDetail": "FT"
+            }
+          },
+          "competitors": [
+            {
+              "id": "479",
+              "homeAway": "home",
+              "score": "2",
+              "team": {
+                "id": "479",
+                "displayName": "Denmark",
+                "shortDisplayName": "Denmark",
+                "abbreviation": "DEN",
+                "logo": "https://a.espncdn.com/i/teamlogos/countries/500/den.png"
+              }
+            },
+            {
+              "id": "464",
+              "homeAway": "away",
+              "score": "3",
+              "team": {
+                "id": "464",
+                "displayName": "Norway",
+                "shortDisplayName": "Norway",
+                "abbreviation": "NOR",
+                "logo": "https://a.espncdn.com/i/teamlogos/countries/500/nor.png"
+              }
+            }
+          ],
+          "details": [
+            {
+              "type": {
+                "id": "70",
+                "text": "Goal"
+              },
+              "clock": {
+                "value": 611.0,
+                "displayValue": "11'"
+              },
+              "team": {
+                "id": "479"
+              },
+              "scoreValue": 1,
+              "scoringPlay": true,
+              "redCard": false,
+              "yellowCard": false,
+              "penaltyKick": false,
+              "ownGoal": false,
+              "shootout": false,
+              "athletesInvolved": [
+                {
+                  "id": "309273",
+                  "displayName": "Rasmus Højlund",
+                  "shortName": "R. Højlund",
+                  "fullName": "Rasmus Højlund",
+                  "team": {
+                    "id": "479"
+                  }
+                }
+              ]
+            },
+            {
+              "type": {
+                "id": "137",
+                "text": "Goal - Header"
+              },
+              "clock": {
+                "value": 837.0,
+                "displayValue": "14'"
+              },
+              "team": {
+                "id": "479"
+              },
+              "scoreValue": 1,
+              "scoringPlay": true,
+              "redCard": false,
+              "yellowCard": false,
+              "penaltyKick": false,
+              "ownGoal": false,
+              "shootout": false,
+              "athletesInvolved": [
+                {
+                  "id": "159543",
+                  "displayName": "Pierre-Emile Højbjerg",
+                  "shortName": "P. Højbjerg",
+                  "fullName": "Pierre-Emile Højbjerg",
+                  "team": {
+                    "id": "479"
+                  }
+                }
+              ]
+            },
+            {
+              "type": {
+                "id": "70",
+                "text": "Goal"
+              },
+              "clock": {
+                "value": 2196.0,
+                "displayValue": "37'"
+              },
+              "team": {
+                "id": "464"
+              },
+              "scoreValue": 1,
+              "scoringPlay": true,
+              "redCard": false,
+              "yellowCard": false,
+              "penaltyKick": false,
+              "ownGoal": false,
+              "shootout": false,
+              "athletesInvolved": [
+                {
+                  "id": "253989",
+                  "displayName": "Erling Haaland",
+                  "shortName": "E. Haaland",
+                  "fullName": "Erling Haaland",
+                  "team": {
+                    "id": "464"
+                  }
+                }
+              ]
+            },
+            {
+              "type": {
+                "id": "94",
+                "text": "Yellow Card"
+              },
+              "clock": {
+                "value": 2700.0,
+                "displayValue": "45'+2'"
+              },
+              "team": {
+                "id": "464"
+              },
+              "scoreValue": 0,
+              "scoringPlay": false,
+              "redCard": false,
+              "yellowCard": true,
+              "penaltyKick": false,
+              "ownGoal": false,
+              "shootout": false,
+              "athletesInvolved": [
+                {
+                  "id": "281736",
+                  "displayName": "Leo Østigard",
+                  "shortName": "L. Østigard",
+                  "fullName": "Leo Østigard",
+                  "team": {
+                    "id": "464"
+                  }
+                }
+              ]
+            },
+            {
+              "type": {
+                "id": "94",
+                "text": "Yellow Card"
+              },
+              "clock": {
+                "value": 2748.0,
+                "displayValue": "46'"
+              },
+              "team": {
+                "id": "479"
+              },
+              "scoreValue": 0,
+              "scoringPlay": false,
+              "redCard": false,
+              "yellowCard": true,
+              "penaltyKick": false,
+              "ownGoal": false,
+              "shootout": false,
+              "athletesInvolved": [
+                {
+                  "id": "234787",
+                  "displayName": "Rasmus Kristensen",
+                  "shortName": "R. Kristensen",
+                  "fullName": "Rasmus Kristensen",
+                  "team": {
+                    "id": "479"
+                  }
+                }
+              ]
+            },
+            {
+              "type": {
+                "id": "94",
+                "text": "Yellow Card"
+              },
+              "clock": {
+                "value": 4713.0,
+                "displayValue": "79'"
+              },
+              "team": {
+                "id": "464"
+              },
+              "scoreValue": 0,
+              "scoringPlay": false,
+              "redCard": false,
+              "yellowCard": true,
+              "penaltyKick": false,
+              "ownGoal": false,
+              "shootout": false,
+              "athletesInvolved": [
+                {
+                  "id": "222991",
+                  "displayName": "Julian Ryerson",
+                  "shortName": "J. Ryerson",
+                  "fullName": "Julian Ryerson",
+                  "team": {
+                    "id": "464"
+                  }
+                }
+              ]
+            },
+            {
+              "type": {
+                "id": "70",
+                "text": "Goal"
+              },
+              "clock": {
+                "value": 4976.0,
+                "displayValue": "83'"
+              },
+              "team": {
+                "id": "464"
+              },
+              "scoreValue": 1,
+              "scoringPlay": true,
+              "redCard": false,
+              "yellowCard": false,
+              "penaltyKick": false,
+              "ownGoal": false,
+              "shootout": false,
+              "athletesInvolved": [
+                {
+                  "id": "203669",
+                  "displayName": "Martin Ødegaard",
+                  "shortName": "M. Ødegaard",
+                  "fullName": "Martin Ødegaard",
+                  "team": {
+                    "id": "464"
+                  }
+                }
+              ]
+            },
+            {
+              "type": {
+                "id": "98",
+                "text": "Penalty - Scored"
+              },
+              "clock": {
+                "value": 5400.0,
+                "displayValue": "90'+6'"
+              },
+              "team": {
+                "id": "464"
+              },
+              "scoreValue": 1,
+              "scoringPlay": true,
+              "redCard": false,
+              "yellowCard": false,
+              "penaltyKick": true,
+              "ownGoal": false,
+              "shootout": false,
+              "athletesInvolved": [
+                {
+                  "id": "253989",
+                  "displayName": "Erling Haaland",
+                  "shortName": "E. Haaland",
+                  "fullName": "Erling Haaland",
+                  "team": {
+                    "id": "464"
+                  }
+                }
+              ]
+            },
+            {
+              "type": {
+                "id": "94",
+                "text": "Yellow Card"
+              },
+              "clock": {
+                "value": 5400.0,
+                "displayValue": "90'+7'"
+              },
+              "team": {
+                "id": "464"
+              },
+              "scoreValue": 0,
+              "scoringPlay": false,
+              "redCard": false,
+              "yellowCard": true,
+              "penaltyKick": false,
+              "ownGoal": false,
+              "shootout": false,
+              "athletesInvolved": [
+                {
+                  "id": "253989",
+                  "displayName": "Erling Haaland",
+                  "shortName": "E. Haaland",
+                  "fullName": "Erling Haaland",
+                  "team": {
+                    "id": "464"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "401861189",
+      "uid": "s:600~l:2395~e:401861189",
+      "date": "2026-11-17T19:45Z",
+      "name": "Portugal at Wales",
+      "status": {
+        "clock": 5400.0,
+        "displayClock": "90'+4'",
+        "period": 2,
+        "type": {
+          "id": "28",
+          "name": "STATUS_FULL_TIME",
+          "state": "post",
+          "completed": true,
+          "description": "Full Time",
+          "detail": "FT",
+          "shortDetail": "FT"
+        }
+      },
+      "competitions": [
+        {
+          "id": "401861189",
+          "date": "2026-11-17T19:45Z",
+          "timeValid": true,
+          "status": {
+            "clock": 5400.0,
+            "displayClock": "90'+4'",
+            "period": 2,
+            "type": {
+              "id": "28",
+              "name": "STATUS_FULL_TIME",
+              "state": "post",
+              "completed": true,
+              "description": "Full Time",
+              "detail": "FT",
+              "shortDetail": "FT"
+            }
+          },
+          "competitors": [
+            {
+              "id": "578",
+              "homeAway": "home",
+              "score": "2",
+              "team": {
+                "id": "578",
+                "displayName": "Wales",
+                "shortDisplayName": "Wales",
+                "abbreviation": "WAL",
+                "logo": "https://a.espncdn.com/i/teamlogos/countries/500/wal.png"
+              }
+            },
+            {
+              "id": "482",
+              "homeAway": "away",
+              "score": "3",
+              "team": {
+                "id": "482",
+                "displayName": "Portugal",
+                "shortDisplayName": "Portugal",
+                "abbreviation": "POR",
+                "logo": "https://a.espncdn.com/i/teamlogos/countries/500/por.png"
+              }
+            }
+          ],
+          "details": [
+            {
+              "type": {
+                "id": "70",
+                "text": "Goal"
+              },
+              "clock": {
+                "value": 604.0,
+                "displayValue": "11'"
+              },
+              "team": {
+                "id": "482"
+              },
+              "scoreValue": 1,
+              "scoringPlay": true,
+              "redCard": false,
+              "yellowCard": false,
+              "penaltyKick": false,
+              "ownGoal": false,
+              "shootout": false,
+              "athletesInvolved": [
+                {
+                  "id": "124091",
+                  "displayName": "Bruno Fernandes",
+                  "shortName": "B. Fernandes",
+                  "fullName": "Bruno Fernandes",
+                  "team": {
+                    "id": "482"
+                  }
+                }
+              ]
+            },
+            {
+              "type": {
+                "id": "70",
+                "text": "Goal"
+              },
+              "clock": {
+                "value": 734.0,
+                "displayValue": "13'"
+              },
+              "team": {
+                "id": "578"
+              },
+              "scoreValue": 1,
+              "scoringPlay": true,
+              "redCard": false,
+              "yellowCard": false,
+              "penaltyKick": false,
+              "ownGoal": false,
+              "shootout": false,
+              "athletesInvolved": [
+                {
+                  "id": "72487",
+                  "displayName": "David Brooks",
+                  "shortName": "D. Brooks",
+                  "fullName": "David Brooks",
+                  "team": {
+                    "id": "578"
+                  }
+                }
+              ]
+            },
+            {
+              "type": {
+                "id": "70",
+                "text": "Goal"
+              },
+              "clock": {
+                "value": 2399.0,
+                "displayValue": "40'"
+              },
+              "team": {
+                "id": "578"
+              },
+              "scoreValue": 1,
+              "scoringPlay": true,
+              "redCard": false,
+              "yellowCard": false,
+              "penaltyKick": false,
+              "ownGoal": false,
+              "shootout": false,
+              "athletesInvolved": [
+                {
+                  "id": "250478",
+                  "displayName": "Sorba Thomas",
+                  "shortName": "S. Thomas",
+                  "fullName": "Sorba Thomas",
+                  "team": {
+                    "id": "578"
+                  }
+                }
+              ]
+            },
+            {
+              "type": {
+                "id": "70",
+                "text": "Goal"
+              },
+              "clock": {
+                "value": 2550.0,
+                "displayValue": "43'"
+              },
+              "team": {
+                "id": "482"
+              },
+              "scoreValue": 1,
+              "scoringPlay": true,
+              "redCard": false,
+              "yellowCard": false,
+              "penaltyKick": false,
+              "ownGoal": false,
+              "shootout": false,
+              "athletesInvolved": [
+                {
+                  "id": "256115",
+                  "displayName": "Pedro Neto",
+                  "shortName": "P. Neto",
+                  "fullName": "Pedro Neto",
+                  "team": {
+                    "id": "482"
+                  }
+                }
+              ]
+            },
+            {
+              "type": {
+                "id": "94",
+                "text": "Yellow Card"
+              },
+              "clock": {
+                "value": 3025.0,
+                "displayValue": "51'"
+              },
+              "team": {
+                "id": "578"
+              },
+              "scoreValue": 0,
+              "scoringPlay": false,
+              "redCard": false,
+              "yellowCard": true,
+              "penaltyKick": false,
+              "ownGoal": false,
+              "shootout": false,
+              "athletesInvolved": [
+                {
+                  "id": "275596",
+                  "displayName": "Ben Cabango",
+                  "shortName": "B. Cabango",
+                  "fullName": "Ben Cabango",
+                  "team": {
+                    "id": "578"
+                  }
+                }
+              ]
+            },
+            {
+              "type": {
+                "id": "94",
+                "text": "Yellow Card"
+              },
+              "clock": {
+                "value": 3142.0,
+                "displayValue": "53'"
+              },
+              "team": {
+                "id": "482"
+              },
+              "scoreValue": 0,
+              "scoringPlay": false,
+              "redCard": false,
+              "yellowCard": true,
+              "penaltyKick": false,
+              "ownGoal": false,
+              "shootout": false,
+              "athletesInvolved": [
+                {
+                  "id": "274159",
+                  "displayName": "Francisco Trincão",
+                  "shortName": "F. Trincão",
+                  "fullName": "Francisco Trincão",
+                  "team": {
+                    "id": "482"
+                  }
+                }
+              ]
+            },
+            {
+              "type": {
+                "id": "94",
+                "text": "Yellow Card"
+              },
+              "clock": {
+                "value": 3695.0,
+                "displayValue": "62'"
+              },
+              "team": {
+                "id": "578"
+              },
+              "scoreValue": 0,
+              "scoringPlay": false,
+              "redCard": false,
+              "yellowCard": true,
+              "penaltyKick": false,
+              "ownGoal": false,
+              "shootout": false,
+              "athletesInvolved": [
+                {
+                  "id": "187177",
+                  "displayName": "Josh Sheehan",
+                  "shortName": "J. Sheehan",
+                  "fullName": "Josh Sheehan",
+                  "team": {
+                    "id": "578"
+                  }
+                }
+              ]
+            },
+            {
+              "type": {
+                "id": "70",
+                "text": "Goal"
+              },
+              "clock": {
+                "value": 4156.0,
+                "displayValue": "70'"
+              },
+              "team": {
+                "id": "482"
+              },
+              "scoreValue": 1,
+              "scoringPlay": true,
+              "redCard": false,
+              "yellowCard": false,
+              "penaltyKick": false,
+              "ownGoal": false,
+              "shootout": false,
+              "athletesInvolved": [
+                {
+                  "id": "78836",
+                  "displayName": "Carlos Forbs",
+                  "shortName": "C. Forbs",
+                  "fullName": "Carlos Forbs",
+                  "team": {
+                    "id": "482"
+                  }
+                }
+              ]
+            },
+            {
+              "type": {
+                "id": "94",
+                "text": "Yellow Card"
+              },
+              "clock": {
+                "value": 4266.0,
+                "displayValue": "72'"
+              },
+              "team": {
+                "id": "482"
+              },
+              "scoreValue": 0,
+              "scoringPlay": false,
+              "redCard": false,
+              "yellowCard": true,
+              "penaltyKick": false,
+              "ownGoal": false,
+              "shootout": false,
+              "athletesInvolved": [
+                {
+                  "id": "256115",
+                  "displayName": "Pedro Neto",
+                  "shortName": "P. Neto",
+                  "fullName": "Pedro Neto",
+                  "team": {
+                    "id": "482"
+                  }
+                }
+              ]
+            },
+            {
+              "type": {
+                "id": "93",
+                "text": "Red Card"
+              },
+              "clock": {
+                "value": 4393.0,
+                "displayValue": "74'"
+              },
+              "team": {
+                "id": "482"
+              },
+              "scoreValue": 0,
+              "scoringPlay": false,
+              "redCard": true,
+              "yellowCard": false,
+              "penaltyKick": false,
+              "ownGoal": false,
+              "shootout": false,
+              "athletesInvolved": [
+                {
+                  "id": "256115",
+                  "displayName": "Pedro Neto",
+                  "shortName": "P. Neto",
+                  "fullName": "Pedro Neto",
+                  "team": {
+                    "id": "482"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "401916335",
+      "uid": "s:600~l:3922~e:401916335",
+      "date": "2026-11-17T10:00Z",
+      "name": "Brazil at Singapore",
+      "status": {
+        "clock": 5400.0,
+        "displayClock": "90'+4'",
+        "period": 2,
+        "type": {
+          "id": "28",
+          "name": "STATUS_FULL_TIME",
+          "state": "post",
+          "completed": true,
+          "description": "Full Time",
+          "detail": "FT",
+          "shortDetail": "FT"
+        }
+      },
+      "competitions": [
+        {
+          "id": "401916335",
+          "date": "2026-11-17T10:00Z",
+          "timeValid": true,
+          "status": {
+            "clock": 5400.0,
+            "displayClock": "90'+4'",
+            "period": 2,
+            "type": {
+              "id": "28",
+              "name": "STATUS_FULL_TIME",
+              "state": "post",
+              "completed": true,
+              "description": "Full Time",
+              "detail": "FT",
+              "shortDetail": "FT"
+            }
+          },
+          "competitors": [
+            {
+              "id": "4384",
+              "homeAway": "home",
+              "score": "0",
+              "team": {
+                "id": "4384",
+                "displayName": "Singapore",
+                "shortDisplayName": "Singapore",
+                "abbreviation": "SIN",
+                "logo": "https://a.espncdn.com/i/teamlogos/countries/500/sin.png"
+              }
+            },
+            {
+              "id": "205",
+              "homeAway": "away",
+              "score": "7",
+              "team": {
+                "id": "205",
+                "displayName": "Brazil",
+                "shortDisplayName": "Brazil",
+                "abbreviation": "BRA",
+                "logo": "https://a.espncdn.com/i/teamlogos/countries/500/bra.png"
+              }
+            }
+          ],
+          "details": [
+            {
+              "type": {
+                "id": "70",
+                "text": "Goal"
+              },
+              "clock": {
+                "value": 505.0,
+                "displayValue": "9'"
+              },
+              "team": {
+                "id": "205"
+              },
+              "scoreValue": 1,
+              "scoringPlay": true,
+              "redCard": false,
+              "yellowCard": false,
+              "penaltyKick": false,
+              "ownGoal": false,
+              "shootout": false,
+              "athletesInvolved": [
+                {
+                  "id": "252107",
+                  "displayName": "Vinícius Júnior",
+                  "shortName": "Vinícius Júnior",
+                  "fullName": "Vinícius Júnior",
+                  "team": {
+                    "id": "205"
+                  }
+                }
+              ]
+            },
+            {
+              "type": {
+                "id": "70",
+                "text": "Goal"
+              },
+              "clock": {
+                "value": 845.0,
+                "displayValue": "15'"
+              },
+              "team": {
+                "id": "205"
+              },
+              "scoreValue": 1,
+              "scoringPlay": true,
+              "redCard": false,
+              "yellowCard": false,
+              "penaltyKick": false,
+              "ownGoal": false,
+              "shootout": false,
+              "athletesInvolved": [
+                {
+                  "id": "252107",
+                  "displayName": "Vinícius Júnior",
+                  "shortName": "Vinícius Júnior",
+                  "fullName": "Vinícius Júnior",
+                  "team": {
+                    "id": "205"
+                  }
+                }
+              ]
+            },
+            {
+              "type": {
+                "id": "70",
+                "text": "Goal"
+              },
+              "clock": {
+                "value": 1211.0,
+                "displayValue": "21'"
+              },
+              "team": {
+                "id": "205"
+              },
+              "scoreValue": 1,
+              "scoringPlay": true,
+              "redCard": false,
+              "yellowCard": false,
+              "penaltyKick": false,
+              "ownGoal": false,
+              "shootout": false,
+              "athletesInvolved": [
+                {
+                  "id": "252107",
+                  "displayName": "Vinícius Júnior",
+                  "shortName": "Vinícius Júnior",
+                  "fullName": "Vinícius Júnior",
+                  "team": {
+                    "id": "205"
+                  }
+                }
+              ]
+            },
+            {
+              "type": {
+                "id": "70",
+                "text": "Goal"
+              },
+              "clock": {
+                "value": 1842.0,
+                "displayValue": "31'"
+              },
+              "team": {
+                "id": "205"
+              },
+              "scoreValue": 1,
+              "scoringPlay": true,
+              "redCard": false,
+              "yellowCard": false,
+              "penaltyKick": false,
+              "ownGoal": false,
+              "shootout": false,
+              "athletesInvolved": [
+                {
+                  "id": "346612",
+                  "displayName": "Endrick",
+                  "shortName": "Endrick",
+                  "fullName": "Endrick",
+                  "team": {
+                    "id": "205"
+                  }
+                }
+              ]
+            },
+            {
+              "type": {
+                "id": "94",
+                "text": "Yellow Card"
+              },
+              "clock": {
+                "value": 2680.0,
+                "displayValue": "45'"
+              },
+              "team": {
+                "id": "4384"
+              },
+              "scoreValue": 0,
+              "scoringPlay": false,
+              "redCard": false,
+              "yellowCard": true,
+              "penaltyKick": false,
+              "ownGoal": false,
+              "shootout": false,
+              "athletesInvolved": [
+                {
+                  "id": "216075",
+                  "displayName": "Safuwan Baharudin",
+                  "shortName": "S. Baharudin",
+                  "fullName": "Safuwan Baharudin",
+                  "team": {
+                    "id": "4384"
+                  }
+                }
+              ]
+            },
+            {
+              "type": {
+                "id": "94",
+                "text": "Yellow Card"
+              },
+              "clock": {
+                "value": 2971.0,
+                "displayValue": "50'"
+              },
+              "team": {
+                "id": "4384"
+              },
+              "scoreValue": 0,
+              "scoringPlay": false,
+              "redCard": false,
+              "yellowCard": true,
+              "penaltyKick": false,
+              "ownGoal": false,
+              "shootout": false,
+              "athletesInvolved": [
+                {
+                  "id": "282251",
+                  "displayName": "Jacob Mahler",
+                  "shortName": "J. Mahler",
+                  "fullName": "Jacob Mahler",
+                  "team": {
+                    "id": "4384"
+                  }
+                }
+              ]
+            },
+            {
+              "type": {
+                "id": "70",
+                "text": "Goal"
+              },
+              "clock": {
+                "value": 3009.0,
+                "displayValue": "51'"
+              },
+              "team": {
+                "id": "205"
+              },
+              "scoreValue": 1,
+              "scoringPlay": true,
+              "redCard": false,
+              "yellowCard": false,
+              "penaltyKick": false,
+              "ownGoal": false,
+              "shootout": false,
+              "athletesInvolved": [
+                {
+                  "id": "376481",
+                  "displayName": "Estêvão",
+                  "shortName": "Estêvão",
+                  "fullName": "Estêvão",
+                  "team": {
+                    "id": "205"
+                  }
+                }
+              ]
+            },
+            {
+              "type": {
+                "id": "70",
+                "text": "Goal"
+              },
+              "clock": {
+                "value": 3894.0,
+                "displayValue": "65'"
+              },
+              "team": {
+                "id": "205"
+              },
+              "scoreValue": 1,
+              "scoringPlay": true,
+              "redCard": false,
+              "yellowCard": false,
+              "penaltyKick": false,
+              "ownGoal": false,
+              "shootout": false,
+              "athletesInvolved": [
+                {
+                  "id": "357719",
+                  "displayName": "Rayan",
+                  "shortName": "Rayan",
+                  "fullName": "Rayan",
+                  "team": {
+                    "id": "205"
+                  }
+                }
+              ]
+            },
+            {
+              "type": {
+                "id": "97",
+                "text": "Own Goal"
+              },
+              "clock": {
+                "value": 4392.0,
+                "displayValue": "74'"
+              },
+              "team": {
+                "id": "205"
+              },
+              "scoreValue": 1,
+              "scoringPlay": true,
+              "redCard": false,
+              "yellowCard": false,
+              "penaltyKick": false,
+              "ownGoal": true,
+              "shootout": false,
+              "athletesInvolved": [
+                {
+                  "id": "385197",
+                  "displayName": "Raoul Bin Suhaimi",
+                  "shortName": "R. Bin Suhaimi",
+                  "fullName": "Raoul Bin Suhaimi",
+                  "team": {
+                    "id": "4384"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -47,20 +47,22 @@ final class SportsFeedParser {
         String id="", source="", league="", home="", away="", homeAbbr="", awayAbbr="", homeLogo="", awayLogo="";
         String homeScore="—", awayScore="—", state="pre", status="", broadcast="", note="", homeId="", awayId="";
         long at, fetched;
-        boolean complete, timeValid=true, clubFilter, friendly;
-        JSONObject json() throws Exception { return new JSONObject().put("id",id).put("source",source).put("league",league)
+        boolean complete, timeValid=true, clubFilter, friendly, goalDetailsParsed;
+        List<FootballGoals.Goal> goals=new ArrayList<>();
+        JSONObject json() throws Exception { JSONObject result=new JSONObject().put("id",id).put("source",source).put("league",league)
                 .put("home",home).put("away",away).put("homeAbbr",homeAbbr).put("awayAbbr",awayAbbr)
                 .put("homeLogo",homeLogo).put("awayLogo",awayLogo).put("homeScore",homeScore).put("awayScore",awayScore)
                 .put("state",state).put("status",status).put("broadcast",broadcast).put("note",note)
                 .put("at",at).put("fetched",fetched).put("complete",complete).put("timeValid",timeValid)
-                .put("homeId",homeId).put("awayId",awayId).put("clubFilter",clubFilter).put("friendly",friendly); }
+                .put("homeId",homeId).put("awayId",awayId).put("clubFilter",clubFilter).put("friendly",friendly);
+            if(source.equals("soccer")||source.equals("nhl")){JSONArray events=new JSONArray();for(FootballGoals.Goal goal:goals)events.put(goal.json());result.put("goalDetailsParsed",goalDetailsParsed).put("goals",events);}return result; }
         static Game read(JSONObject o) { Game g=new Game();g.id=o.optString("id");g.source=o.optString("source");g.league=o.optString("league");
             g.home=o.optString("home");g.away=o.optString("away");g.homeAbbr=o.optString("homeAbbr");g.awayAbbr=o.optString("awayAbbr");
             g.homeLogo=o.optString("homeLogo");g.awayLogo=o.optString("awayLogo");g.homeScore=o.optString("homeScore","—");
             g.awayScore=o.optString("awayScore","—");g.state=o.optString("state");g.status=o.optString("status");
             g.broadcast=o.optString("broadcast");g.note=o.optString("note");g.at=o.optLong("at");g.fetched=o.optLong("fetched");
             g.complete=o.optBoolean("complete");g.timeValid=o.optBoolean("timeValid",true);g.homeId=o.optString("homeId");g.awayId=o.optString("awayId");
-            g.clubFilter=o.optBoolean("clubFilter");g.friendly=o.optBoolean("friendly");return g; }
+            g.clubFilter=o.optBoolean("clubFilter");g.friendly=o.optBoolean("friendly");g.goalDetailsParsed=o.optBoolean("goalDetailsParsed");JSONArray goals=o.optJSONArray("goals");for(int i=0;goals!=null&&i<goals.length();i++){JSONObject goal=goals.optJSONObject(i);if(goal!=null)g.goals.add(new FootballGoals.Goal(goal));}return g; }
     }
 
     static List<Table> standings(String key,String body,long at) throws Exception {
@@ -146,6 +148,7 @@ final class SportsFeedParser {
             g.awayAbbr=at.optString("abbreviation",g.away);g.homeLogo=logo(ht);g.awayLogo=logo(at);
             g.homeScore=score(home.opt("score"));g.awayScore=score(away.opt("score"));
             if(home.has("shootoutScore")&&away.has("shootoutScore"))g.note="Pênaltis "+home.optString("shootoutScore")+"–"+away.optString("shootoutScore");
+            if(source.equals("soccer"))FootballGoals.read(g,c);
             g.broadcast=broadcastBrazil(c);out.add(g);
         }catch(Exception ignored){} // A malformed event must not suppress other leagues' games.
         return out;

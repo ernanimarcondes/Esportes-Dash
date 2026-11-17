@@ -15,7 +15,7 @@ A licença MIT original é preservada integralmente em LICENSE. A adaptação es
 
 ## Dados e serviços
 
-ESPN fornece tabelas, jogos e escudos, incluindo suas variantes para fundos escuros; Jolpica F1 fornece programação, classificações, resultados de GPs e voltas mais rápidas de F1; Open-Meteo fornece clima. Esses serviços têm seus próprios termos e políticas. O aplicativo conserva exemplos públicos para inicialização e respostas válidas em cache local.
+ESPN fornece tabelas, jogos, eventos públicos de gols e escudos, incluindo suas variantes para fundos escuros; Jolpica F1 fornece programação, classificações, resultados de GPs e voltas mais rápidas de F1; Open-Meteo fornece clima. Esses serviços têm seus próprios termos e políticas. O aplicativo conserva exemplos públicos para inicialização e respostas válidas em cache local.
 
 A licença de software não transfere direitos sobre marcas, escudos, calendários, dados ou imagens dos titulares. Não há afiliação nem endosso dos serviços, fabricantes, ligas ou equipes mencionados.
 
@@ -30,3 +30,5 @@ Os pódios são agregados dos resultados públicos de GPs fornecidos por Jolpica
 ## Variantes de escudos em fundo escuro
 
 O carregador compartilhado consulta arquivos ESPN de futebol, seleções e ligas americanas, mantendo o original como alternativa. Na revisão de 17/11/2026, algumas variantes escuras ainda traziam marcas anteriores; Athletico-PR, New York Jets e Cleveland Guardians conservam o arquivo da identidade atual. Referências oficiais: [manual de marca do Athletico](https://static.athletico.com.br/downloads/MIV_CAP_01.pdf), [marca dos Jets em 2024](https://www.newyorkjets.com/news/jets-logo-new-uniforms-jim-pons) e [identidade dos Guardians](https://www.mlb.com/guardians/press-release/press-release-cleveland-guardians-era-launches-at-progressive-field?t=guardians-press-releases). Essas exceções podem precisar de revisão quando as fontes atualizarem os arquivos.
+
+Os exemplos mínimos de placares e resumos em `tools/fixtures` são usados somente para testes do parser, incluindo futebol e NHL. Os autores e tempos dos gols pertencem às fontes e aos respectivos titulares; não são dados de contas do usuário.

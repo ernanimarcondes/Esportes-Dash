@@ -17,10 +17,16 @@ final class SportsHomeView extends RacingHomeView {
     private final RectF box=new RectF();
     private final Typeface normal,bold;
     private final SportsData sports;
+    private final SportsRenderCadence cadence=new SportsRenderCadence();
+    private long visibleModelVersion=-1;
     private final F1Logos f1Logos;
     private final F1CircuitDiagram f1Circuit;
     private F1DetailsScreen f1Details;
     private boolean f1Open;
+    private DayGamesScreen dayGames;
+    private boolean dayOpen;
+    private DayGamesScreen recentGames;
+    private boolean recentOpen;
     private final RectF[] areas=new RectF[13];
     private final SimpleDateFormat clock=fmt("HH:mm"),date=fmt("dd 'de' MMMM"),weekday=fmt("EEEE"),time=fmt("HH:mm"),shortDate=fmt("dd/MM"),todayDate=fmt("dd/MM/yyyy"),stamp=fmt("dd/MM HH:mm"),session=fmt("EEE dd/MM · HH:mm"),sessionDay=fmt("EEE dd/MM");
     private float zoom=1,ox,oy;private int focus=7;private boolean running;
@@ -28,33 +34,37 @@ final class SportsHomeView extends RacingHomeView {
     private List<SportsFeedParser.Game> today=new ArrayList<>(),recent=new ArrayList<>();
     private final Runnable tick=new Runnable(){@Override public void run(){
         if(!running)return;long now=SystemClock.elapsedRealtime();
-        if(now-lastGames>=5000){today=sports.games(false);recent=sports.games(true);lastGames=now;}
+        if(now-lastGames>=5000)refreshGames();
         if(now>=nextRefresh){sports.refresh();nextRefresh=now+60000;}
-        invalidate();postDelayed(this,500);
+        if(cadence.due(elapsed(),System.currentTimeMillis(),f1Open||dayOpen||recentOpen))invalidate();postDelayed(this,1000);
     }};
     SportsHomeView(Activity activity){
         super(activity);normal=Ui.medium;Typeface strong;
         try{strong=Typeface.createFromAsset(activity.getAssets(),"fonts/rajdhani/Rajdhani-Bold.ttf");}catch(Exception e){strong=Ui.displaySemibold;}bold=strong;
         p.setSubpixelText(true);p.setDither(true);p.setHinting(Paint.HINTING_ON);
         f1Logos=new F1Logos(activity,()->invalidate());f1Circuit=new F1CircuitDiagram(activity,bold,()->invalidate());
-        sports=new SportsData(activity,()->invalidate());today=sports.games(false);recent=sports.games(true);
+        sports=new SportsData(activity,this::sportsChanged);refreshGames();
         areas[0]=new RectF(48,138,456,926);areas[1]=new RectF(478,138,1158,514);areas[2]=new RectF(478,536,1158,926);
         areas[3]=new RectF(1180,138,1872,514);areas[4]=new RectF(1180,536,1396,926);
         areas[5]=new RectF(1418,536,1634,926);areas[6]=new RectF(1656,536,1872,926);
         for(int i=0;i<6;i++)areas[7+i]=new RectF(48+i*308,954,48+i*308+284,1022);
         setContentDescription("Esportes Dash. Futebol, jogos do dia, resultados recentes, Fórmula 1, NBA, NFL, NHL e MLB. Aplicativos e ajustes abaixo. Use as setas e OK para detalhes.");
     }
+    private void refreshGames(){today=sports.games(false);recent=sports.games(true);visibleModelVersion=sports.modelVersion();lastGames=SystemClock.elapsedRealtime();}
+    private void sportsChanged(){if(sports.modelVersion()!=visibleModelVersion)refreshGames();invalidate();}
     private static SimpleDateFormat fmt(String pattern){SimpleDateFormat f=new SimpleDateFormat(pattern,new Locale("pt","BR"));f.setTimeZone(TimeZone.getTimeZone("America/Sao_Paulo"));return f;}
-    @Override void resume(){super.resume();if(running)return;running=true;startTime=SystemClock.elapsedRealtime();nextRefresh=lastGames=0;post(tick);}
+    @Override void resume(){super.resume();if(running)return;running=true;startTime=SystemClock.elapsedRealtime();nextRefresh=lastGames=0;cadence.reset();post(tick);}
     @Override void pause(){if(running)activeTime+=SystemClock.elapsedRealtime()-startTime;running=false;removeCallbacks(tick);super.pause();}
     @Override void destroy(){pause();sports.close();f1Logos.close();f1Circuit.close();if(f1Details!=null)f1Details.close();super.destroy();}
-    @Override void reset(boolean animate){f1Open=false;focus=7;invalidate();}
+    @Override void reset(boolean animate){f1Open=false;dayOpen=false;recentOpen=false;focus=7;invalidate();}
     @Override public void onData(){invalidate();}
     private long elapsed(){return activeTime+(running?SystemClock.elapsedRealtime()-startTime:0);}
     @Override protected void onSizeChanged(int w,int h,int oldw,int oldh){zoom=Math.min(w/1920f,h/1080f);ox=(w-1920*zoom)/2;oy=(h-1080*zoom)/2;}
     @Override protected void onDraw(Canvas c){
         c.drawColor(Color.BLACK);c.save();c.translate(ox,oy);c.scale(zoom,zoom);p.setStyle(Paint.Style.FILL);
         if(f1Open){f1Details.draw(c);c.restore();return;}
+        if(dayOpen){dayGames.draw(c,today);c.restore();return;}
+        if(recentOpen){recentGames.draw(c,recent);c.restore();return;}
         header(c);football(c);games(c,1,false);games(c,2,true);formula(c);narrow(c,4);narrow(c,5);narrow(c,6);
         String[] dock={"YouTube","Prime Video","Spotify","Aplicativos","TV / HDMI","Ajustes"};
         for(int i=0;i<dock.length;i++){panel(c,7+i);text(c,dock[i],areas[7+i].left+23,998,23,WHITE,true);right(c,"›",areas[7+i].right-23,998,28,ACCENT,false);}
@@ -275,6 +285,8 @@ final class SportsHomeView extends RacingHomeView {
     private void weatherIcon(Canvas c,float x,float y,float s,int code){p.setColor(code==0?AMBER:0xFFD7E1ED);if(code==0)c.drawCircle(x,y,s,p);
         else{x-=s*.2f;y+=s*.25f;c.drawCircle(x-s*.5f,y,s*.55f,p);c.drawCircle(x,y-s*.3f,s*.7f,p);c.drawCircle(x+s*.6f,y,s*.5f,p);c.drawRoundRect(x-s*.7f,y,x+s*.8f,y+s*.5f,6,6,p);}}
     @Override boolean onKey(KeyEvent e){
+        if(recentOpen){int action=recentGames.onKey(e);if(action>=0){if(action==1){recentOpen=false;focus=2;}invalidate();return true;}}
+        if(dayOpen){int action=dayGames.onKey(e);if(action>=0){if(action==1){dayOpen=false;focus=1;}invalidate();return true;}}
         if(f1Open){int action=f1Details.onKey(e);if(action>=0){if(action==1){f1Open=false;focus=3;}invalidate();return true;}}
         int key=e.getKeyCode();if(key==KeyEvent.KEYCODE_BACK){if(e.getAction()==KeyEvent.ACTION_DOWN)reset(false);return true;}
         if(key==KeyEvent.KEYCODE_DPAD_CENTER||key==KeyEvent.KEYCODE_ENTER){if(e.getAction()==KeyEvent.ACTION_DOWN)activate();return true;}
@@ -286,11 +298,14 @@ final class SportsHomeView extends RacingHomeView {
         focus=target;invalidate();return true;
     }
     @Override public boolean onTouchEvent(MotionEvent e){if(e.getAction()!=MotionEvent.ACTION_UP)return true;float x=(e.getX()-ox)/zoom,y=(e.getY()-oy)/zoom;
+        if(recentOpen){if(recentGames.touch(x,y)){recentOpen=false;focus=2;}invalidate();performClick();return true;}
+        if(dayOpen){if(dayGames.touch(x,y)){dayOpen=false;focus=1;}invalidate();performClick();return true;}
         if(f1Open){if(f1Details.touch(x,y)){f1Open=false;focus=3;}invalidate();performClick();return true;}
         for(int i=0;i<areas.length;i++)if(areas[i].contains(x,y)){focus=i;activate();invalidate();performClick();break;}return true;}
     private void activate(){
         if(focus==0){List<SportsFeedParser.Table> ts=sports.tables(SportsFeedParser.TABLE_KEYS[(int)(elapsed()/FOOTBALL_INTERVAL)%SportsFeedParser.FOOTBALL_COUNT]);if(!ts.isEmpty())tableDetails(ts.get(0));}
-        else if(focus==1||focus==2)gameDetails(focus==2);
+        else if(focus==1){if(dayGames==null)dayGames=new DayGamesScreen(sports,normal,bold);dayGames.reset();dayOpen=true;invalidate();}
+        else if(focus==2){if(recentGames==null)recentGames=new DayGamesScreen(sports,normal,bold,true);recentGames.reset(recent);recentOpen=true;invalidate();}
         else if(focus==3){if(f1Details==null)f1Details=new F1DetailsScreen(getContext(),sports,agenda,normal,bold,()->invalidate());f1Details.reset();f1Open=true;invalidate();}
         else if(focus>=4&&focus<=6){SportsFeedParser.Table t=narrowPage(focus,elapsed()).table;if(!t.rows.isEmpty())tableDetails(t);}
         else if(focus<10)openApp(focus-7);else if(focus==10)showAllApps();else if(focus==11)showInputs();else settings();
@@ -298,9 +313,4 @@ final class SportsHomeView extends RacingHomeView {
     private void tableDetails(SportsFeedParser.Table t){StringBuilder message=new StringBuilder("Temporada "+t.season+"\nAtualizado: "+stamp.format(new Date(t.at))+"\n\n");
         for(SportsFeedParser.Row r:t.rows)message.append(r.rank).append(". ").append(r.name).append("   ").append(t.key.startsWith("f1-")?r.points+" pts"+(r.record.isEmpty()?"":" · "+r.record):t.key.contains(".")?r.points+" pts · "+r.played+" jogos":t.key.equals("nhl")?r.points+" pts · "+r.record:r.record).append("\n");
         new AlertDialog.Builder(activity).setTitle(t.title+" · "+t.group).setMessage(message.toString()).setPositiveButton("FECHAR",null).show();}
-    private void gameDetails(boolean results){List<SportsFeedParser.Game> list=results?recent:today;StringBuilder message=new StringBuilder(sports.gamesStatus(results)+"\n\n");
-        for(SportsFeedParser.Game g:list)message.append(g.league).append(" · ").append(session.format(new Date(g.at))).append("\n")
-                .append(g.home).append(g.complete||g.state.equals("in")?" "+g.homeScore+"  –  "+g.awayScore+" ":" × ").append(g.away).append("\n")
-                .append(gameStatus(g)).append("\n\n");
-        new AlertDialog.Builder(activity).setTitle(results?"Resultados · últimas 72 horas":"Jogos de hoje · Brasília").setMessage(message.toString()).setPositiveButton("FECHAR",null).show();}
 }
