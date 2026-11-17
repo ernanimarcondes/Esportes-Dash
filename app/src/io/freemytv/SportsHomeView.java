@@ -182,13 +182,13 @@ final class SportsHomeView extends RacingHomeView {
         text(c,fit(agenda.circuitName,18,325,false),b.left+23,b.top+108,18,MUTED,false);
         List<RacingAgenda.Event> weekend=agenda.currentRaceSessions();RacingAgenda.Event next=null;
         for(RacingAgenda.Event e:weekend)if(e.at>System.currentTimeMillis()){next=e;break;}
-        text(c,"PROGRAMAÇÃO DO GP",b.left+28,b.top+137,14,ACCENT,true);
+        text(c,"PROGRAMAÇÃO DO GP",b.left+28,b.top+137,16,ACCENT,true);
         int rows=Math.min(7,weekend.size());float gap=rows>5?19:24;
         for(int i=0;i<rows;i++){
-            RacingAgenda.Event e=weekend.get(i);float y=b.top+163+i*gap;int color=e==next?WHITE:MUTED;
-            text(c,fit(sessionName(e.title),rows>5?15:17,72,true),b.left+28,y,rows>5?15:17,color,e==next);
+            RacingAgenda.Event e=weekend.get(i);float y=b.top+163+i*gap;int color=MUTED;
+            text(c,fit(sessionName(e.title),rows>5?15:17,72,true),b.left+28,y,rows>5?15:17,color,false);
             text(c,sessionDay.format(new Date(e.at)),b.left+104,y,14,color,false);
-            right(c,e.dateOnly?"—":time.format(new Date(e.at)),b.left+252,y,17,e==next?AMBER:WHITE,true);
+            right(c,e.dateOnly?"—":time.format(new Date(e.at)),b.left+252,y,17,WHITE,true);
         }
         F1CircuitDiagram.Diagram diagram=f1Circuit.get(agenda.circuitId);
         if(diagram!=null)f1Circuit.drawCompact(c,diagram,new RectF(b.left+324,b.top+37,b.right-24,b.top+272));

@@ -164,8 +164,8 @@ final class SportsData {
     }
     /** A single alpha-aware reduction from the full original to the physical on-screen pixel size. */
     Bitmap logo(String address,int pixels){
-        if(address==null||!address.startsWith("https://a.espncdn.com/"))return null;
-        final String url=address.replaceAll("/(?:50|100|150|200|250)/","/500/");
+        final String[] candidates=TeamLogoPolicy.candidates(address);if(candidates.length==0)return null;
+        final String url=candidates[0];
         final int target=Math.max(8,Math.min(192,pixels));final String rasterKey=url+"#"+target;
         Bitmap cached=logos.get(rasterKey);if(cached!=null||closed)return cached;
         Long failure=logoFailures.get(url);if(failure!=null&&System.currentTimeMillis()-failure<10*60000L)return null;
@@ -174,22 +174,31 @@ final class SportsData {
             File dir=new File(context.getCacheDir(),"sports-shields-hq-v2");dir.mkdirs();String name=hash(url);
             File rasterFile=new File(dir,name+"-"+target+".png");Bitmap ready=rasterFile.exists()?BitmapFactory.decodeFile(rasterFile.getPath()):null;
             if(ready==null){
-                Bitmap original=sourceLogos.get(url);File originalFile=new File(dir,name+".png");
-                if(original==null&&originalFile.exists())original=BitmapFactory.decodeFile(originalFile.getPath());
-                if(original==null){
-                    byte[] raw=bytes(url,3000000);BitmapFactory.Options options=new BitmapFactory.Options();options.inJustDecodeBounds=true;
-                    BitmapFactory.decodeByteArray(raw,0,raw.length,options);options.inSampleSize=1;
-                    while(Math.max(options.outWidth,options.outHeight)/options.inSampleSize>1024)options.inSampleSize*=2;
-                    options.inJustDecodeBounds=false;options.inPreferredConfig=Bitmap.Config.ARGB_8888;
-                    original=BitmapFactory.decodeByteArray(raw,0,raw.length,options);
-                    if(original!=null){original=cropShield(original);try(FileOutputStream out=new FileOutputStream(originalFile)){original.compress(Bitmap.CompressFormat.PNG,100,out);}}
+                Bitmap original=null;
+                for(String candidate:candidates){
+                    try{original=originalLogo(candidate,dir);}catch(Exception ignored){}
+                    if(original!=null)break;
                 }
-                if(original!=null){sourceLogos.put(url,original);ready=ShieldRasterizer.reduce(original,target);
+                if(original!=null){ready=ShieldRasterizer.reduce(original,target);
                     try(FileOutputStream out=new FileOutputStream(rasterFile)){ready.compress(Bitmap.CompressFormat.PNG,100,out);}}
                 File[] all=dir.listFiles();if(all!=null&&all.length>800){Arrays.sort(all,Comparator.comparingLong(File::lastModified));for(int i=0;i<all.length-650;i++)all[i].delete();}
             }
             if(ready!=null&&!closed){logos.put(rasterKey,ready);logoFailures.remove(url);}else logoFailures.put(url,System.currentTimeMillis());
         }catch(Exception ignored){logoFailures.put(url,System.currentTimeMillis());}finally{pending.remove(key);notifyChanged();}});return null;
+    }
+    private Bitmap originalLogo(String url,File dir)throws Exception{
+        Bitmap original=sourceLogos.get(url);File originalFile=new File(dir,hash(url)+".png");
+        if(original==null&&originalFile.exists())original=BitmapFactory.decodeFile(originalFile.getPath());
+        if(original==null){
+            byte[] raw=bytes(url,3000000);BitmapFactory.Options options=new BitmapFactory.Options();options.inJustDecodeBounds=true;
+            BitmapFactory.decodeByteArray(raw,0,raw.length,options);
+            if(options.outWidth<=0||options.outHeight<=0)return null;
+            options.inSampleSize=1;while(Math.max(options.outWidth,options.outHeight)/options.inSampleSize>1024)options.inSampleSize*=2;
+            options.inJustDecodeBounds=false;options.inScaled=false;options.inPreferredConfig=Bitmap.Config.ARGB_8888;
+            original=BitmapFactory.decodeByteArray(raw,0,raw.length,options);
+            if(original!=null){original=cropShield(original);try(FileOutputStream out=new FileOutputStream(originalFile)){original.compress(Bitmap.CompressFormat.PNG,100,out);}}
+        }
+        if(original!=null)sourceLogos.put(url,original);return original;
     }
     private static Bitmap cropShield(Bitmap original){
         int w=original.getWidth(),h=original.getHeight(),left=w,top=h,right=-1,bottom=-1;int[] colors=new int[w*h];original.getPixels(colors,0,w,0,0,w,h);

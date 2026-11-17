@@ -1,5 +1,14 @@
 # Alterações
 
+## 1.2.3 — 2026-11-17
+
+- Programação do GP com título um pouco maior e aparência uniforme no quadro principal; destaque da Próxima sessão preservado.
+
+- Escudos próprios para fundo escuro em todos os quadros: futebol, seleções, NBA, NFL, NHL, MLB, jogos do dia e resultados recentes.
+- Seleção compartilhada dos originais em alta resolução, com redução de alta qualidade e alternativa automática para o escudo normal quando a variante falha.
+- Preserva cores oficiais, proporções, tamanho dos escudos e a rotação completa das conferências; evita variantes antigas de Athletico-PR, Jets e Guardians.
+- Testes dos caminhos de imagens por esporte, normalização de resolução e alternativas de carregamento.
+
 ## 1.2.2 — 2026-11-17
 
 - NBA, NFL, NHL e MLB exibem todas as páginas de uma conferência antes de trocar para a próxima.

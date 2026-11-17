@@ -17,6 +17,7 @@ Este é o projeto independente do painel esportivo. Para a base com Dash Pessoal
 - Fórmula 1: programação e traçado vetorial compacto do próximo GP por 30 segundos; classificação de pilotos em páginas consecutivas de dez nomes, com 15 segundos por página; construtores por 15 segundos. A próxima sessão permanece visível. Os 26 circuitos usam o mesmo enquadramento proporcional, setores coloridos e desenho vetorial na resolução da tela; os números das curvas ficam no painel exclusivo de F1. As classificações de pilotos e construtores mostram as logos das equipes em alta qualidade.
 - NBA e NFL: até oito times por página, com troca a cada 15 segundos. Todas as páginas da conferência atual são mostradas antes da próxima. NHL e MLB compartilham o quadro: primeiro são exibidas todas as páginas de cada conferência da NHL, depois de cada liga da MLB. OK abre a classificação completa.
 - Relógio, data, clima da cidade configurada e atalhos para aplicativos, TV/HDMI e ajustes.
+- Escudos de futebol, seleções, NBA, NFL, NHL e MLB priorizam as versões da ESPN próprias para fundo escuro em todos os quadros, incluindo jogos do dia e resultados recentes. O original é usado como alternativa se a variante não estiver disponível. O carregador mantém o recorte transparente e a redução de alta qualidade para o tamanho real da tela, sem recolorir os escudos. Variantes antigas de Athletico-PR, New York Jets e Cleveland Guardians são evitadas para preservar as identidades atuais.
 
 Os tempos acima controlam a rotação visual. As consultas de dados são periódicas, com cache local e conservação da última resposta válida. Não é um serviço de placar em tempo real. Não há grade de transmissão de TV. A cobertura depende das fontes e pode ter jogos ausentes, dados indisponíveis ou programação alterada.
 
@@ -94,6 +95,7 @@ Antes de publicar:
 ```text
 python tools/check_circuit_data.py
 python tools/check_standings_rotation.py
+python tools/check_team_logos.py
 python tools/privacy_check.py
 ```
 
