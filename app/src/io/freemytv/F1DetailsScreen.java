@@ -3,6 +3,7 @@ package io.freemytv;
 import android.graphics.*;
 import android.content.Context;
 import android.view.KeyEvent;
+import android.os.SystemClock;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -16,8 +17,10 @@ final class F1DetailsScreen {
     private final Typeface normal,bold;
     private final Paint paint=new Paint(Paint.ANTI_ALIAS_FLAG|Paint.FILTER_BITMAP_FLAG);
     private final Path trackPath=new Path();
-    private final RectF[] nav=new RectF[5];
-    private final String[] labels={"‹ Esportes Dash","Visão geral","Pilotos","Construtores","Calendário"};
+    private final RectF[] nav=new RectF[6];
+    private final F1ResultsRotation resultRotation=new F1ResultsRotation();
+    private F1RaceResults lastResults;
+    private final String[] labels={"‹ Esportes Dash","Visão geral","Pilotos","Construtores","Calendário","Resultados"};
     private final RectF trackCard=new RectF(48,190,730,690),programCard=new RectF(48,710,730,1008),driversCard=new RectF(752,190,1298,1008),constructorsCard=new RectF(1320,190,1872,696),calendarCard=new RectF(1320,716,1872,1008);
     private final RectF full=new RectF(48,190,1872,1008);
     private final SimpleDateFormat clock=fmt("HH:mm"),date=fmt("EEE, dd 'de' MMMM"),day=fmt("EEE dd/MM"),hour=fmt("HH:mm"),calendarDate=fmt("dd/MM"),stamp=fmt("dd/MM HH:mm");
@@ -25,13 +28,13 @@ final class F1DetailsScreen {
     F1DetailsScreen(Context context,SportsData sports,RacingAgenda agenda,Typeface normal,Typeface bold,Runnable changed){
         logos=new F1Logos(context,changed);circuitDiagram=new F1CircuitDiagram(context,bold,changed);
         this.sports=sports;this.agenda=agenda;this.normal=normal;this.bold=bold;
-        for(int i=0;i<nav.length;i++)nav[i]=new RectF(48+i*368.8f,112,48+i*368.8f+348.8f,166);
+        float width=(1824-(nav.length-1)*18)/nav.length;for(int i=0;i<nav.length;i++)nav[i]=new RectF(48+i*(width+18),112,48+i*(width+18)+width,166);
         paint.setSubpixelText(true);paint.setDither(true);paint.setHinting(Paint.HINTING_ON);
     }
     private static SimpleDateFormat fmt(String pattern){SimpleDateFormat f=new SimpleDateFormat(pattern,new Locale("pt","BR"));f.setTimeZone(TimeZone.getTimeZone("America/Sao_Paulo"));return f;}
     void close(){logos.close();circuitDiagram.close();}
     void reset(){page=0;focus=1;}
-    String description(){return "Fórmula 1. "+labels[page+1]+". Selecionado: "+labels[focus]+". Setas escolhem a seção, OK abre, Voltar retorna ao Esportes Dash.";}
+    String description(){return "Fórmula 1. "+labels[page+1]+". Selecionado: "+(focus<nav.length?labels[focus]:"Controles de resultados")+". Setas escolhem a seção, OK abre, Voltar retorna ao Esportes Dash.";}
     void draw(Canvas canvas){
         logo(canvas,"f1",new RectF(48,29,258,81),true);
         right(canvas,clock.format(new Date()),1872,62,46,TEXT,false);
@@ -41,8 +44,8 @@ final class F1DetailsScreen {
             border(canvas,nav[i],i==focus?RED:BORDER,i==focus?4:1.5f,11);
             center(canvas,labels[i],nav[i].centerX(),149,24,TEXT,true);
         }
-        if(page==0)overview(canvas);else if(page==1)drivers(canvas);else if(page==2)constructors(canvas);else calendar(canvas);
-        text(canvas,"Horários de Brasília · programação sujeita a alterações",48,1058,18,MUTED,false);
+        if(page==0)overview(canvas);else if(page==1)drivers(canvas);else if(page==2)constructors(canvas);else if(page==3)calendar(canvas);else results(canvas);
+        text(canvas,page==4?"Resultados de Grandes Prêmios · horários de Brasília":"Horários de Brasília · programação sujeita a alterações",48,1058,18,MUTED,false);
         right(canvas,"SETAS escolher seção · OK abrir · VOLTAR Esportes Dash",1872,1058,18,MUTED,false);
     }
     private SportsFeedParser.Table table(String key){List<SportsFeedParser.Table> all=sports.tables(key);return all.isEmpty()?null:all.get(0);}
@@ -156,6 +159,42 @@ final class F1DetailsScreen {
             text(c,fit(race.detail,27,582,true),x+108,y,27,TEXT,true);right(c,race.dateOnly?"A definir":hour.format(new Date(race.at)),x+835,y,24,TEXT,true);
         }
     }
+    private void choosePage(int value){
+        if(value==4&&page!=4){resultRotation.enter(SystemClock.elapsedRealtime());lastResults=sports.f1Results;}
+        page=value;
+    }
+    private void results(Canvas c){
+        card(c,full);F1RaceResults data=sports.f1Results;long now=SystemClock.elapsedRealtime();
+        if(data!=lastResults){resultRotation.refresh(lastResults,data,now);lastResults=data;}
+        int count=data==null?0:data.races.size();resultRotation.tick(count,now);
+        if(count==0){text(c,"RESULTADOS DOS GPs",78,246,35,RED,true);text(c,"Aguardando resultados da temporada",78,396,27,MUTED,false);return;}
+        F1RaceResults.Race race=data.races.get(resultRotation.index);
+        text(c,fit(gpName(race.name),35,1050,true),78,246,35,RED,true);
+        text(c,fit(race.circuit+" · "+day.format(new Date(race.at))+" · "+data.season,21,1100,false),78,276,21,MUTED,false);
+        if(race.fastest!=null){
+            right(c,"VOLTA MAIS RÁPIDA",1840,225,17,MUTED,true);
+            right(c,fit(race.fastest.name+" · "+race.fastest.fastestTime,24,590,true),1840,261,24,TEXT,true);
+        }
+        int perColumn=(race.finishers.size()+1)/2;float gap=Math.min(54,580f/Math.max(1,perColumn));
+        for(int col=0;col<2;col++){
+            float x=80+col*900;right(c,"POS",x+30,326,17,MUTED,true);text(c,"PILOTO",x+112,326,17,MUTED,true);
+            right(c,"TEMPO / STATUS",x+738,326,17,MUTED,true);right(c,"PTS",x+836,326,17,MUTED,true);
+        }
+        for(int i=0;i<race.finishers.size();i++){
+            F1RaceResults.Finish r=race.finishers.get(i);int col=i/perColumn,row=i%perColumn;float x=80+col*900,y=371+row*gap;
+            if(row%2==0)fill(c,new RectF(x-8,y-29,x+852,y+16),ROW,5);
+            right(c,String.valueOf(r.position),x+30,y+3,23,MUTED,false);
+            if(!r.team.isEmpty())logo(c,r.team,new RectF(x+46,y-25,x+98,y+14),false);
+            text(c,fit(r.name,29,395,true),x+112,y+3,29,TEXT,true);
+            right(c,fit(r.display(),24,215,false),x+738,y+3,24,TEXT,false);
+            right(c,r.points,x+836,y+3,29,RED,true);
+        }
+        text(c,"DNF: abandono · DNS: não largou · DSQ: desclassificado · NC: não classificado",78,978,18,MUTED,false);
+    }
+    private static String gpName(String name){
+        String value=name.replace("Grand Prix","GP");String[][] names={{"Brazilian GP","GP de São Paulo"},{"Las Vegas GP","GP de Las Vegas"},{"Qatar GP","GP do Catar"},{"Abu Dhabi GP","GP de Abu Dhabi"},{"Australian GP","GP da Austrália"},{"Chinese GP","GP da China"},{"Japanese GP","GP do Japão"},{"Miami GP","GP de Miami"},{"Canadian GP","GP do Canadá"},{"Monaco GP","GP de Mônaco"},{"Spanish GP","GP da Espanha"},{"Austrian GP","GP da Áustria"},{"British GP","GP da Grã-Bretanha"},{"Belgian GP","GP da Bélgica"},{"Hungarian GP","GP da Hungria"},{"Dutch GP","GP dos Países Baixos"},{"Italian GP","GP da Itália"},{"Azerbaijan GP","GP do Azerbaijão"},{"Singapore GP","GP de Singapura"},{"United States GP","GP dos Estados Unidos"},{"Mexican GP","GP do México"}};
+        for(String[] pair:names)if(value.equals(pair[0]))return pair[1];return value;
+    }
     private void drawTrack(Canvas c,RectF bounds){
         sports.ensureTrack(agenda.circuitId);float[] points=sports.track;if(points==null||!agenda.circuitId.equals(sports.trackId)){center(c,"Traçado em atualização",bounds.centerX(),bounds.centerY(),25,MUTED,false);return;}
         float minX=Float.MAX_VALUE,minY=Float.MAX_VALUE,maxX=-Float.MAX_VALUE,maxY=-Float.MAX_VALUE;
@@ -172,13 +211,15 @@ final class F1DetailsScreen {
         if(!ours)return -1;if(event.getAction()!=KeyEvent.ACTION_DOWN)return 0;if(key==KeyEvent.KEYCODE_BACK)return 1;
         if(key==KeyEvent.KEYCODE_DPAD_LEFT||key==KeyEvent.KEYCODE_DPAD_UP)focus=Math.max(0,focus-1);
         else if(key==KeyEvent.KEYCODE_DPAD_RIGHT||key==KeyEvent.KEYCODE_DPAD_DOWN)focus=Math.min(nav.length-1,focus+1);
-        else if(focus==0)return 1;else page=focus-1;return 0;
+        else if(focus==0)return 1;
+        else choosePage(focus-1);return 0;
     }
     boolean touch(float x,float y){
-        for(int i=0;i<nav.length;i++)if(nav[i].contains(x,y)){focus=i;if(i==0)return true;page=i-1;return false;}
-        if(page==0){if(driversCard.contains(x,y)){page=1;focus=2;}else if(constructorsCard.contains(x,y)){page=2;focus=3;}else if(calendarCard.contains(x,y)){page=3;focus=4;}}
+        for(int i=0;i<nav.length;i++)if(nav[i].contains(x,y)){focus=i;if(i==0)return true;choosePage(i-1);return false;}
+        if(page==0){if(driversCard.contains(x,y)){choosePage(1);focus=2;}else if(constructorsCard.contains(x,y)){choosePage(2);focus=3;}else if(calendarCard.contains(x,y)){choosePage(3);focus=4;}}
         return false;
     }
+
     private void logo(Canvas c,String team,RectF bounds,boolean red){
         float[] transform=new float[9];c.getMatrix().getValues(transform);
         float scale=Math.max(.01f,(float)Math.hypot(transform[Matrix.MSCALE_X],transform[Matrix.MSKEW_Y]));

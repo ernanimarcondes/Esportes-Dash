@@ -28,7 +28,12 @@ Na tela principal, selecione o quadro **Fórmula 1** e pressione **OK** no contr
 - **Pilotos:** classificação completa, logo da equipe, pontos, vitórias e pódios da temporada.
 - **Construtores:** logos, pontos, vitórias, pódios e comparação de pontos.
 - **Calendário:** datas e horários de Brasília para as corridas da temporada.
+- **Resultados:** classificação final de cada GP em ordem do calendário, da primeira corrida até a mais recente, com troca automática a cada 30 segundos. Mostra posições, logos, tempos/status, pontos e a volta mais rápida (piloto e tempo), quando disponível na fonte. Ao chegar à última corrida, recomeça pela primeira.
 - **26 circuitos preparados:** traçados com linhas contínuas, curvas numeradas, largada e setores em vermelho, azul e amarelo. O mapa muda automaticamente conforme o próximo GP. A imagem intermediária é renderizada com três vezes a resolução de exibição e reduzida com alta qualidade para o tamanho real da tela. Os nomes dos setores aparecem somente na legenda abaixo do desenho.
+
+![Resultados de F1 na ordem do calendário, com a volta mais rápida](docs/images/f1-results.png)
+
+Novos resultados entram automaticamente após a publicação pela fonte, sem recompilar ou reinstalar. Com o painel aberto, a consulta ocorre aproximadamente a cada 15 minutos; ao retornar ao painel, ele verifica se a atualização está vencida. Novas corridas são acrescentadas à sequência do calendário sem interromper o GP exibido. Sem conexão, conserva a última resposta válida.
 
 O painel de F1 usa fundo preto, grafite e vermelho. Os pódios são calculados pelos resultados dos Grandes Prêmios da temporada; sprints não entram nessa contagem. Logos e mapas têm suas fontes indicadas nos assets e nos créditos.
 
@@ -70,7 +75,7 @@ adb shell "appops set io.freemytv AUTO_START allow || appops set io.freemytv APP
 - [Free My TV](https://github.com/simbasjungles/free-my-tv): código-base, troca de tela inicial e recuperação; MIT.
 - [TV-Dashboard](https://github.com/ernanimarcondes/TV-Dashboard): origem desta adaptação esportiva.
 - ESPN: tabelas, jogos e escudos públicos. Seus endpoints e a cobertura podem mudar.
-- [Jolpica F1](https://github.com/jolpica/jolpica-f1): calendário, classificações e resultados usados na contagem de pódios de F1.
+- [Jolpica F1](https://github.com/jolpica/jolpica-f1): calendário, classificações e resultados, voltas mais rápidas e dados usados na contagem de pódios de F1.
 - [Formula 1](https://www.formula1.com/): referências oficiais dos circuitos e logos. Esses materiais pertencem aos respectivos titulares e não são abrangidos pela licença MIT do código.
 - [Open-Meteo](https://open-meteo.com/): clima das coordenadas configuradas pelo usuário.
 - [bacinger/f1-circuits](https://github.com/bacinger/f1-circuits): geometria dos circuitos; MIT, aviso preservado nos assets.
@@ -89,7 +94,7 @@ python tools/check_circuit_data.py
 python tools/privacy_check.py
 ```
 
-Somente código, assets licenciados e exemplos de dados públicos são versionados. Não publique configurações locais, capturas com dados pessoais, caches, sessões, chaves ou APKs pessoais. O print de documentação foi revisado e mostra apenas dados públicos de F1, relógio e data, sem localização pessoal, contas ou credenciais.
+Somente código, assets licenciados e exemplos de dados públicos são versionados. Não publique configurações locais, capturas com dados pessoais, caches, sessões, chaves ou APKs pessoais. Os prints de documentação foram revisados e mostram apenas dados públicos de F1, relógio e data, sem localização pessoal, contas ou credenciais.
 
 
 <img width="1280" height="720" alt="image" src="https://github.com/user-attachments/assets/5be0990f-3354-4f3f-879f-32b61d77b690" />

@@ -1,5 +1,13 @@
 # Alterações
 
+## 1.2.0 — 2026-11-17
+
+- Nova aba Resultados no painel de F1, com a classificação final completa de cada GP.
+- Corridas em ordem do calendário, da primeira à mais recente; rotação automática a cada 30 segundos, sem controles de pausa ou contadores.
+- Piloto e tempo da volta mais rápida no canto superior direito, quando fornecidos pela fonte.
+- Consulta periódica dos resultados, cache local e inclusão automática de novos GPs ao final da sequência.
+- Print atualizado e documentação; créditos e padrões públicos sem credenciais preservados.
+
 ## 1.1.0 — 2026-11-17
 
 - OK no quadro de F1 abre um painel dedicado; Voltar retorna ao quadro selecionado.

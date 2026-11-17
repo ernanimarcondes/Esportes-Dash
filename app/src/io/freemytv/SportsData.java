@@ -42,12 +42,14 @@ final class SportsData {
     });
     private volatile boolean closed,cacheLoaded;
     volatile F1SeasonStats f1Stats;
+    volatile F1RaceResults f1Results;
     volatile float[] track;
     volatile String trackId="vegas",trackLength="6,201 km";
     SportsData(Context c,Runnable changed){
         context=c.getApplicationContext();this.changed=changed;
         try{load(new JSONObject(read(context.getAssets().open("sports/seed.json"))));}catch(Exception ignored){}
         try{f1Stats=new F1SeasonStats(new JSONObject(read(context.getAssets().open("sports/f1/stats-seed.json"))));}catch(Exception ignored){}
+        try{f1Results=new F1RaceResults(new JSONObject(read(context.getAssets().open("sports/f1/results-seed.json"))));}catch(Exception ignored){}
         try{track=CircuitGeometry.parseTrack(read(context.getAssets().open("racing/vegas.geojson")));}catch(Exception ignored){}
         feeds.execute(()->{
             try{load(new JSONObject(read(new FileInputStream(file()))));}catch(Exception ignored){}
@@ -58,6 +60,8 @@ final class SportsData {
         if(root.optInt("schema")!=2)return;
         JSONObject stats=root.optJSONObject("f1Stats");
         if(stats!=null)try{F1SeasonStats incoming=new F1SeasonStats(stats);if(f1Stats==null||incoming.at>f1Stats.at)f1Stats=incoming;}catch(Exception ignored){}
+        JSONObject results=root.optJSONObject("f1Results");
+        if(results!=null)try{F1RaceResults incoming=new F1RaceResults(results);if(f1Results==null||incoming.at>f1Results.at)f1Results=incoming;}catch(Exception ignored){}
         JSONArray ts=root.optJSONArray("tables");Map<String,List<SportsFeedParser.Table>> incoming=new LinkedHashMap<>();
         for(int i=0;ts!=null&&i<ts.length();i++){SportsFeedParser.Table t=SportsFeedParser.Table.read(ts.optJSONObject(i));
             incoming.computeIfAbsent(t.key,k->new ArrayList<>()).add(t);}
@@ -94,7 +98,7 @@ final class SportsData {
         List<SportsFeedParser.Table> driverTables=tables("f1-drivers");
         if(!driverTables.isEmpty()){
             String season=driverTables.get(0).season;
-            if(f1Stats==null||!f1Stats.season.equals(season)||now-f1Stats.at>15*60000L)fetchF1Stats(season);
+            if(f1Stats==null||!f1Stats.season.equals(season)||now-f1Stats.at>15*60000L||f1Results==null||!f1Results.hasLapData||!f1Results.season.equals(season))fetchF1Stats(season);
         }
         for(int offset=-3;offset<=1;offset++){
             String date=today.plusDays(offset).format(DateTimeFormatter.BASIC_ISO_DATE);long ttl=offset>=0?5*60000L:30*60000L;
@@ -127,7 +131,7 @@ final class SportsData {
         feeds.execute(()->{try{
             F1SeasonStats.Builder builder=new F1SeasonStats.Builder(season);
             for(int page=0;page<30&&!builder.complete();page++)builder.add(get("https://api.jolpi.ca/ergast/f1/"+season+"/results.json?limit=100&offset="+builder.count));
-            f1Stats=builder.finish(System.currentTimeMillis());failed.remove(task);save();
+            long at=System.currentTimeMillis();F1SeasonStats stats=builder.finish(at);F1RaceResults results=builder.resultSnapshot(at);f1Stats=stats;f1Results=results;failed.remove(task);save();
         }catch(Exception e){failed.add(task);android.util.Log.w("SportsData","F1 podium totals unavailable");}
             finally{pending.remove(task);notifyChanged();}});
     }
@@ -144,7 +148,7 @@ final class SportsData {
         case "nhl":return "hockey/nhl";case "mlb":return "baseball/mlb";default:return "soccer/"+key;}}
     private synchronized void save(){if(closed)return;try{
         JSONArray ts=new JSONArray(),ss=new JSONArray();for(List<SportsFeedParser.Table> list:tables.values())for(SportsFeedParser.Table t:list)ts.put(t.json());
-        for(Snapshot s:snapshots.values())ss.put(s.json());byte[] body=new JSONObject().put("schema",2).put("tables",ts).put("snapshots",ss).put("f1Stats",f1Stats==null?JSONObject.NULL:f1Stats.json()).toString().getBytes(StandardCharsets.UTF_8);
+        for(Snapshot s:snapshots.values())ss.put(s.json());byte[] body=new JSONObject().put("schema",2).put("tables",ts).put("snapshots",ss).put("f1Stats",f1Stats==null?JSONObject.NULL:f1Stats.json()).put("f1Results",f1Results==null?JSONObject.NULL:f1Results.json()).toString().getBytes(StandardCharsets.UTF_8);
         File temp=new File(context.getFilesDir(),"sports-dashboard.tmp");try(FileOutputStream out=new FileOutputStream(temp)){out.write(body);}temp.renameTo(file());
     }catch(Exception ignored){}}
     private File file(){return new File(context.getFilesDir(),"sports-dashboard.json");}

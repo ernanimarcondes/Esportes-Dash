@@ -15,7 +15,7 @@ A licença MIT original é preservada integralmente em LICENSE. A adaptação es
 
 ## Dados e serviços
 
-ESPN fornece tabelas, jogos e escudos; Jolpica F1 fornece programação e classificações de F1; Open-Meteo fornece clima. Esses serviços têm seus próprios termos e políticas. O aplicativo conserva exemplos públicos para inicialização e respostas válidas em cache local.
+ESPN fornece tabelas, jogos e escudos; Jolpica F1 fornece programação, classificações, resultados de GPs e voltas mais rápidas de F1; Open-Meteo fornece clima. Esses serviços têm seus próprios termos e políticas. O aplicativo conserva exemplos públicos para inicialização e respostas válidas em cache local.
 
 A licença de software não transfere direitos sobre marcas, escudos, calendários, dados ou imagens dos titulares. Não há afiliação nem endosso dos serviços, fabricantes, ligas ou equipes mencionados.
 

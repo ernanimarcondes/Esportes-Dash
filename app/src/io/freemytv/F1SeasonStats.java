@@ -19,17 +19,18 @@ final class F1SeasonStats {
     JSONObject json()throws Exception{return new JSONObject().put("season",season).put("at",at).put("round",round).put("drivers",drivers).put("constructors",constructors);}
     static final class Builder {
         final String season;
+        final F1RaceResults.Builder results;
         int count,total=-1,round;
         final Set<String> seen=new HashSet<>();
         final JSONObject drivers=new JSONObject(),constructors=new JSONObject();
-        Builder(String season){this.season=season;}
+        Builder(String season){this.season=season;results=new F1RaceResults.Builder(season);}
         void add(String body)throws Exception {
             JSONObject data=new JSONObject(body).getJSONObject("MRData"),table=data.getJSONObject("RaceTable");
             int expected=data.getInt("total");
             if(!season.equals(table.getString("season"))||data.getInt("offset")!=count||(total>=0&&total!=expected))throw new IllegalArgumentException("Results changed during pagination");
             total=expected;JSONArray races=table.getJSONArray("Races");int before=count;
             for(int i=0;i<races.length();i++){
-                JSONObject race=races.getJSONObject(i);int raceRound=race.getInt("round");round=Math.max(round,raceRound);
+                JSONObject race=races.getJSONObject(i);results.add(race);int raceRound=race.getInt("round");round=Math.max(round,raceRound);
                 JSONArray results=race.getJSONArray("Results");
                 for(int j=0;j<results.length();j++){
                     JSONObject result=results.getJSONObject(j);String driver=result.getJSONObject("Driver").getString("driverId");
@@ -43,6 +44,9 @@ final class F1SeasonStats {
         F1SeasonStats finish(long at)throws Exception {
             if(!complete())throw new IllegalArgumentException("Incomplete season results");
             return new F1SeasonStats(new JSONObject().put("season",season).put("at",at).put("round",round).put("drivers",drivers).put("constructors",constructors));
+        }
+        F1RaceResults resultSnapshot(long at)throws Exception{
+            if(!complete())throw new IllegalArgumentException("Incomplete season results");return results.finish(at);
         }
         private static void increment(JSONObject counts,String id)throws Exception{counts.put(id,counts.optInt(id,0)+1);}
     }
