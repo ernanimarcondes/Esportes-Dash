@@ -76,5 +76,22 @@ final class F1CircuitDiagram {
         if(artwork==null){artwork=new F1TrackArtwork(d,bold,()->{if(!closed)changed.run();});artworks.put(d.id,artwork);}
         artwork.draw(c,inset);
     }
+    /** Small home card: native vector strokes at screen resolution, true proportions, no crowded corner badges. */
+    void drawCompact(Canvas c,Diagram d,RectF bounds){
+        Path[] sectors=d.id.equals("vegas")?vegas.compactSectors():d.sectors;
+        RectF geometry=new RectF(),part=new RectF();
+        for(int i=0;i<sectors.length;i++){sectors[i].computeBounds(part,true);if(i==0)geometry.set(part);else geometry.union(part);}
+        RectF area=new RectF(bounds.left+10,bounds.top+8,bounds.right-10,bounds.bottom-32);
+        float scale=Math.min(area.width()/Math.max(1,geometry.width()),area.height()/Math.max(1,geometry.height()));
+        Matrix matrix=new Matrix();matrix.setScale(scale,scale);matrix.postTranslate(area.centerX()-geometry.centerX()*scale,area.centerY()-geometry.centerY()*scale);
+        Path target=new Path();p.setStyle(Paint.Style.STROKE);p.setStrokeJoin(Paint.Join.ROUND);p.setStrokeCap(Paint.Cap.ROUND);
+        for(Path sector:sectors){sector.transform(matrix,target);p.setStrokeWidth(8);p.setColor(0xFF33414F);c.drawPath(target,p);}
+        for(int i=0;i<sectors.length;i++){sectors[i].transform(matrix,target);p.setStrokeWidth(3.8f);p.setColor(COLORS[i]);c.drawPath(target,p);}
+        float[] start={d.id.equals("vegas")?1722:d.startX,d.id.equals("vegas")?254:d.startY};matrix.mapPoints(start);
+        p.setStyle(Paint.Style.FILL);p.setColor(Color.WHITE);c.drawCircle(start[0],start[1],4,p);
+        p.setTypeface(bold);p.setTextSize(15);
+        for(int i=0;i<3;i++){float x=bounds.centerX()-135+i*97;p.setColor(COLORS[i]);c.drawRoundRect(x,bounds.bottom-15,x+17,bounds.bottom-11,2,2,p);p.setColor(0xFFB5B5C0);c.drawText("SETOR "+(i+1),x+24,bounds.bottom-8,p);}
+        p.setStrokeCap(Paint.Cap.BUTT);
+    }
     void close(){closed=true;worker.shutdownNow();vegas.close();for(F1TrackArtwork a:artworks.values())a.close();artworks.clear();diagrams.clear();}
 }

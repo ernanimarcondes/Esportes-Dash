@@ -25,6 +25,7 @@ final class F1VegasArtwork {
         a=sectors[1];a.moveTo(728,260);a.lineTo(727,190);a.quadTo(714,80,598,76);a.cubicTo(548,68,532,60,530,90);a.cubicTo(520,146,484,108,466,88);a.cubicTo(451,65,440,87,440,110);a.lineTo(444,345);a.cubicTo(444,452,398,496,342,520);a.lineTo(206,580);a.quadTo(185,590,175,615);a.lineTo(155,714);a.quadTo(153,730,172,737);a.lineTo(280,800);
         a=sectors[2];a.moveTo(280,800);a.lineTo(640,987);a.quadTo(680,1005,725,1004);a.lineTo(1655,1004);a.quadTo(1692,1004,1693,973);a.lineTo(1693,950);a.lineTo(1745,899);a.quadTo(1768,878,1768,846);a.lineTo(1776,382);a.cubicTo(1776,330,1758,295,1722,254);
     }
+    Path[] compactSectors(){return sectors;}
     void draw(Canvas c,RectF bounds){
         float[] values=new float[9];c.getMatrix().getValues(values);float displayScale=Math.max(.01f,(float)Math.hypot(values[Matrix.MSCALE_X],values[Matrix.MSKEW_Y]));
         int width=Math.max(1,Math.round(bounds.width()*displayScale)),height=Math.max(1,Math.round((bounds.height()+40)*displayScale));

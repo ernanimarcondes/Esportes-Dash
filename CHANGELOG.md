@@ -1,5 +1,11 @@
 # Alterações
 
+## 1.2.1 — 2026-11-17
+
+- Os 26 mapas do quadro de F1 na tela principal usam o novo desenho compacto: proporção preservada, traços vetoriais nítidos e setores coloridos, sem números de curvas sobrepostos.
+- Logos em alta qualidade junto aos pilotos e construtores no quadro principal.
+- Print principal atualizado; mapas completos e números das curvas preservados no painel exclusivo de F1.
+
 ## 1.2.0 — 2026-11-17
 
 - Nova aba Resultados no painel de F1, com a classificação final completa de cada GP.

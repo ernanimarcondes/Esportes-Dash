@@ -8,11 +8,13 @@ Este é o projeto independente do painel esportivo. Para a base com Dash Pessoal
 
 ## O painel
 
+![Esportes Dash com o mapa compacto de F1 e setores coloridos](docs/images/esportes-dashboard.png)
+
 - Classificações: Brasileirão Série A e B, Premier League, Ligue 1, LaLiga, Liga Portugal e Bundesliga. Troca a cada 30 segundos.
 - Jogos do dia: dois confrontos por página, escudos e horários de Brasília, em ordem de horário. Troca a cada 10 segundos.
 - Resultados: partidas encerradas nas últimas 72 horas em ordem de data e horário, dois confrontos por página e troca a cada 10 segundos.
 - Futebol de clubes e seleções: ligas selecionadas, Libertadores, Sul-Americana, Champions, Europa League, Conference League, copas nacionais e outras competições importantes disponíveis na fonte. Nas copas nacionais, prioriza os clubes das ligas acompanhadas; amistosos priorizam seleções de maior destaque.
-- Fórmula 1: programação e traçado do próximo GP por 30 segundos; classificação de pilotos em páginas consecutivas de dez nomes, com 15 segundos por página; construtores por 15 segundos. A próxima sessão permanece visível.
+- Fórmula 1: programação e traçado vetorial compacto do próximo GP por 30 segundos; classificação de pilotos em páginas consecutivas de dez nomes, com 15 segundos por página; construtores por 15 segundos. A próxima sessão permanece visível. Os 26 circuitos usam o mesmo enquadramento proporcional, setores coloridos e desenho vetorial na resolução da tela; os números das curvas ficam no painel exclusivo de F1. As classificações de pilotos e construtores mostram as logos das equipes em alta qualidade.
 - NBA e NFL: conferências alternadas a cada 15 segundos. NHL e MLB compartilham o quadro e alternam as conferências/ligas a cada 15 segundos. Tabelas menores têm páginas de oito times; OK abre a lista completa.
 - Relógio, data, clima da cidade configurada e atalhos para aplicativos, TV/HDMI e ajustes.
 
@@ -94,10 +96,4 @@ python tools/check_circuit_data.py
 python tools/privacy_check.py
 ```
 
-Somente código, assets licenciados e exemplos de dados públicos são versionados. Não publique configurações locais, capturas com dados pessoais, caches, sessões, chaves ou APKs pessoais. Os prints de documentação foram revisados e mostram apenas dados públicos de F1, relógio e data, sem localização pessoal, contas ou credenciais.
-
-
-<img width="1280" height="720" alt="image" src="https://github.com/user-attachments/assets/5be0990f-3354-4f3f-879f-32b61d77b690" />
-
-
-
+Somente código, assets licenciados e exemplos de dados públicos são versionados. Não publique configurações locais, capturas com dados pessoais, caches, sessões, chaves ou APKs pessoais. Os prints de F1 mostram dados esportivos públicos, relógio e data. O print principal do Esportes Dash foi atualizado a pedido do autor e inclui o clima com a cidade exibida no painel. Nenhuma imagem contém contas ou credenciais.

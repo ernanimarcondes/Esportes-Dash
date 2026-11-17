@@ -14,9 +14,11 @@ final class SportsHomeView extends RacingHomeView {
     private static final int ACCENT=0xFF59C7FF,AMBER=0xFFFFCA5C,WHITE=0xFFE8EDF2,MUTED=0xFFA7B1BE,PANEL=0xFF151A21,BORDER=0xFF64748B;
     private static final long FOOTBALL_INTERVAL=30000L, GAME_INTERVAL=10000L, AMERICAN_INTERVAL=15000L;
     private final Paint p=new Paint(Paint.ANTI_ALIAS_FLAG|Paint.FILTER_BITMAP_FLAG);
-    private final RectF box=new RectF();private final Path circuit=new Path();
+    private final RectF box=new RectF();
     private final Typeface normal,bold;
     private final SportsData sports;
+    private final F1Logos f1Logos;
+    private final F1CircuitDiagram f1Circuit;
     private F1DetailsScreen f1Details;
     private boolean f1Open;
     private final RectF[] areas=new RectF[13];
@@ -34,6 +36,7 @@ final class SportsHomeView extends RacingHomeView {
         super(activity);normal=Ui.medium;Typeface strong;
         try{strong=Typeface.createFromAsset(activity.getAssets(),"fonts/rajdhani/Rajdhani-Bold.ttf");}catch(Exception e){strong=Ui.displaySemibold;}bold=strong;
         p.setSubpixelText(true);p.setDither(true);p.setHinting(Paint.HINTING_ON);
+        f1Logos=new F1Logos(activity,()->invalidate());f1Circuit=new F1CircuitDiagram(activity,bold,()->invalidate());
         sports=new SportsData(activity,()->invalidate());today=sports.games(false);recent=sports.games(true);
         areas[0]=new RectF(48,138,456,926);areas[1]=new RectF(478,138,1158,514);areas[2]=new RectF(478,536,1158,926);
         areas[3]=new RectF(1180,138,1872,514);areas[4]=new RectF(1180,536,1396,926);
@@ -44,7 +47,7 @@ final class SportsHomeView extends RacingHomeView {
     private static SimpleDateFormat fmt(String pattern){SimpleDateFormat f=new SimpleDateFormat(pattern,new Locale("pt","BR"));f.setTimeZone(TimeZone.getTimeZone("America/Sao_Paulo"));return f;}
     @Override void resume(){super.resume();if(running)return;running=true;startTime=SystemClock.elapsedRealtime();nextRefresh=lastGames=0;post(tick);}
     @Override void pause(){if(running)activeTime+=SystemClock.elapsedRealtime()-startTime;running=false;removeCallbacks(tick);super.pause();}
-    @Override void destroy(){pause();sports.close();if(f1Details!=null)f1Details.close();super.destroy();}
+    @Override void destroy(){pause();sports.close();f1Logos.close();f1Circuit.close();if(f1Details!=null)f1Details.close();super.destroy();}
     @Override void reset(boolean animate){f1Open=false;focus=7;invalidate();}
     @Override public void onData(){invalidate();}
     private long elapsed(){return activeTime+(running?SystemClock.elapsedRealtime()-startTime:0);}
@@ -179,17 +182,9 @@ final class SportsHomeView extends RacingHomeView {
             text(c,sessionDay.format(new Date(e.at)),b.left+104,y,14,color,false);
             right(c,e.dateOnly?"—":time.format(new Date(e.at)),b.left+252,y,17,e==next?AMBER:WHITE,true);
         }
-        sports.ensureTrack(agenda.circuitId);float[] points=sports.track;
-        if(points!=null&&sports.trackId.equals(agenda.circuitId)){
-            float minX=Float.MAX_VALUE,minY=Float.MAX_VALUE,maxX=-Float.MAX_VALUE,maxY=-Float.MAX_VALUE;
-            for(int i=0;i<points.length;i+=2){float x=-points[i+1],y=points[i];minX=Math.min(minX,x);maxX=Math.max(maxX,x);minY=Math.min(minY,y);maxY=Math.max(maxY,y);}
-            float size=Math.min(300/Math.max(.01f,maxX-minX),168/Math.max(.01f,maxY-minY));
-            circuit.reset();float firstX=0,firstY=0;
-            for(int i=0;i<points.length;i+=2){float x=b.left+509+(-points[i+1]-(minX+maxX)/2)*size,y=b.top+165+(points[i]-(minY+maxY)/2)*size;
-                if(i==0){circuit.moveTo(x,y);firstX=x;firstY=y;}else circuit.lineTo(x,y);}
-            p.setStyle(Paint.Style.STROKE);p.setStrokeJoin(Paint.Join.ROUND);p.setStrokeCap(Paint.Cap.ROUND);p.setStrokeWidth(14);p.setColor(0xFF234557);c.drawPath(circuit,p);
-            p.setStrokeWidth(4);p.setColor(ACCENT);c.drawPath(circuit,p);p.setStyle(Paint.Style.FILL);p.setStrokeCap(Paint.Cap.BUTT);p.setColor(WHITE);c.drawCircle(firstX,firstY,4,p);
-        }else center(c,"Traçado em atualização",b.left+509,b.top+185,18,MUTED,false);
+        F1CircuitDiagram.Diagram diagram=f1Circuit.get(agenda.circuitId);
+        if(diagram!=null)f1Circuit.drawCompact(c,diagram,new RectF(b.left+324,b.top+37,b.right-24,b.top+272));
+        else center(c,"Traçado em atualização",b.left+505,b.top+185,18,MUTED,false);
         nextSession(c,b,next);
     }
     private void nextSession(Canvas c,RectF b,RacingAgenda.Event next){
@@ -215,11 +210,20 @@ final class SportsHomeView extends RacingHomeView {
                 float x=b.left+24+col*326,y=b.top+132+row*27;
                 if(row%2==0)fill(c,x-5,y-20,x+309,y+6,0xFF1E2732,4);
                 right(c,String.valueOf(r.rank),x+23,y,17,MUTED,false);
-                text(c,fit(r.name,21,220,true),x+37,y,21,WHITE,true);right(c,r.points,x+301,y,22,ACCENT,true);
+                f1TeamLogo(c,drivers?r.record:r.name,new RectF(x+35,y-19,x+77,y+4));
+                text(c,fit(r.name,21,178,true),x+86,y,21,WHITE,true);right(c,r.points,x+301,y,22,ACCENT,true);
             }
         }
         RacingAgenda.Event next=null;for(RacingAgenda.Event event:agenda.currentRaceSessions())if(event.at>System.currentTimeMillis()){next=event;break;}
         nextSession(c,b,next);
+    }
+    private void f1TeamLogo(Canvas c,String team,RectF bounds){
+        Bitmap image=f1Logos.get(team,Math.max(1,Math.round(bounds.width()*zoom)),Math.max(1,Math.round(bounds.height()*zoom)));
+        if(image==null)return;
+        float left=(Math.round(bounds.centerX()*zoom+ox-image.getWidth()/2f)-ox)/zoom;
+        float top=(Math.round(bounds.centerY()*zoom+oy-image.getHeight()/2f)-oy)/zoom;
+        p.setColor(WHITE);p.setFilterBitmap(true);
+        c.drawBitmap(image,null,new RectF(left,top,left+image.getWidth()/zoom,top+image.getHeight()/zoom),p);
     }
     private static String sessionName(String name){
         switch(name){case "Treino livre 1":return "TL 1";case "Treino livre 2":return "TL 2";case "Treino livre 3":return "TL 3";
