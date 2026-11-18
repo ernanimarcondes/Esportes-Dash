@@ -1,12 +1,10 @@
-"""Publish the reviewed 1.3.0 release on GitHub's runner, never before its deadline."""
-from datetime import datetime, timezone
+"""Publish the reviewed 1.3.0 release on demand, without a scheduled trigger."""
 import json, os, urllib.error, urllib.request
 
 REPOSITORY='ernanimarcondes/Esportes-Dash'
 COMMIT='14ae742726098c455fbb0c81149f7a6e82ae020f'
 TREE='8b10f3e1e1e7b19be7a6b3e057551f3932894b6f'
 TAG='v1.3.0'
-DEADLINE=datetime(2026,11,18,11,0,tzinfo=timezone.utc)
 NOTES='''## Novos painéis de jogos e resultados
 
 - Jogos do dia com identidade verde-esmeralda, seis cartões, filtros e troca automática a cada 20 segundos.
@@ -32,10 +30,9 @@ def request(path,method='GET',data=None,optional=False):
         if optional and error.code==404:return None
         raise RuntimeError('GitHub API returned HTTP '+str(error.code)) from None
 
-def publish(event,now,api=request):
-    # The yearly cron is intentionally inert outside this single release date.
-    if event=='schedule' and now.date()!=DEADLINE.date():
-        print('Outside the one-time publication date; no changes.');return 'outside-date'
+def publish(event,api=request):
+    if event not in {'push','workflow_dispatch'}:
+        raise RuntimeError('An explicit publication trigger is required')
     commit=api('git/commits/'+COMMIT)
     if commit.get('sha')!=COMMIT or commit.get('tree',{}).get('sha')!=TREE:
         raise RuntimeError('Reviewed commit/tree mismatch')
@@ -46,9 +43,6 @@ def publish(event,now,api=request):
     if release:
         if release.get('draft') or not tag:raise RuntimeError('Unexpected existing release state')
         print('Release already published: '+release['html_url']);return 'already-published'
-    if event!='schedule':
-        print('Validation passed. Publication is scheduled for 18/11/2026 at 08:00 America/Sao_Paulo.');return 'validated'
-    if now<DEADLINE:raise RuntimeError('Publication deadline has not been reached')
     result=api('releases',method='POST',data={'tag_name':TAG,'target_commitish':COMMIT,
         'name':'Esportes-Dash 1.3.0','body':NOTES,'draft':False,'prerelease':False,'make_latest':'true'})
     if result.get('tag_name')!=TAG or result.get('draft'):raise RuntimeError('Unexpected publication response')
@@ -56,4 +50,4 @@ def publish(event,now,api=request):
 
 if __name__=='__main__':
     if os.environ.get('GITHUB_REPOSITORY')!=REPOSITORY:raise SystemExit('Repository mismatch')
-    publish(os.environ.get('GITHUB_EVENT_NAME',''),datetime.now(timezone.utc))
+    publish(os.environ.get('GITHUB_EVENT_NAME',''))
