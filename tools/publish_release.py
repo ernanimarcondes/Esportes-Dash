@@ -2,8 +2,8 @@
 import json, os, urllib.error, urllib.request
 
 REPOSITORY='ernanimarcondes/Esportes-Dash'
-COMMIT='be7d9e43797c8ce200fdf5f51c6f3f8fccea0d42'
-TREE='1099c3ff4ca4ccfa0d9e0fb499f68324cb3940be'
+COMMIT='7509ede9fcfb7c127db27da82e63f17d57428194'
+TREE='2e6f336fb4db8c35f447b60f194a37f21fe95ba3'
 TAG='v1.4.0'
 NOTES='''## NBA, NFL e melhorias do Esportes Dash
 
