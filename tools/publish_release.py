@@ -1,21 +1,24 @@
-"""Publish the reviewed 1.3.0 release on demand, without a scheduled trigger."""
+"""Publish the reviewed 1.4.0 release on demand, without a scheduled trigger."""
 import json, os, urllib.error, urllib.request
 
 REPOSITORY='ernanimarcondes/Esportes-Dash'
-COMMIT='14ae742726098c455fbb0c81149f7a6e82ae020f'
-TREE='8b10f3e1e1e7b19be7a6b3e057551f3932894b6f'
-TAG='v1.3.0'
-NOTES='''## Novos painéis de jogos e resultados
+COMMIT='be7d9e43797c8ce200fdf5f51c6f3f8fccea0d42'
+TREE='1099c3ff4ca4ccfa0d9e0fb499f68324cb3940be'
+TAG='v1.4.0'
+NOTES='''## NBA, NFL e melhorias do Esportes Dash
 
-- Jogos do dia com identidade verde-esmeralda, seis cartões, filtros e troca automática a cada 20 segundos.
-- Resultados recentes em roxo, aba Todos em lista primeiro e datas do mais antigo ao mais novo.
-- Autores e momentos dos gols de futebol e NHL nos detalhes, com alternância a cada cinco segundos quando necessário.
-- Tela principal compacta, sem autores dos gols; melhorias nos caches e redução de redesenhos ociosos.
-- Testes de cronologia, paginação, gols e temporizadores; documentação e prints atualizados.
+- Novos painéis exclusivos de NBA e NFL, com identidade visual própria, fundo preto, logos das ligas e escudos em alta qualidade.
+- Visão geral, classificações completas por conferência (Leste/Oeste e AFC/NFC), campanha, aproveitamento, Jogos e Resultados.
+- NBA: confronto em andamento ou próximo confronto de cada time em Jogos; último confronto encerrado de cada time em Resultados. Ambas as conferências, sem recorte por datas e sem repetir partidas compartilhadas.
+- NFL: semana oficial atual em Jogos e semana anterior em Resultados, com a identidade das rodadas preservada no cache.
+- Classificações e programação da F1 consultadas a cada 15 minutos; placares de hoje mantêm cinco minutos e clima/resultados antigos mantêm 30 minutos.
+- Aba Todos dos Jogos do dia em lista cronológica de duas colunas, com páginas automáticas a cada 20 segundos.
+- Cache compacto dos calendários da NBA, proteção dos placares conhecidos e novos testes de confrontos por time e rodadas da NFL.
+- README, changelog, créditos e sete prints de documentação atualizados.
 
-Os dados esportivos dependem da cobertura das fontes e são atualizados periodicamente. Consulte o README para compilação e instalação.
+Os dados são atualizados periodicamente e dependem da cobertura das fontes. Calendários completos dos times NBA são conservados por seis horas; o cache guarda apenas a sequência de confrontos necessária à exibição. Instruções de compilação e instalação estão no README. Configurações pessoais, contas, credenciais, caches e chaves de assinatura não são publicados.
 
-Baseado no [Free My TV, de simbasjungles e colaboradores](https://github.com/simbasjungles/free-my-tv), e desenvolvido a partir do [TV-Dashboard](https://github.com/ernanimarcondes/TV-Dashboard). Licenças e créditos preservados em THIRD_PARTY_NOTICES.md.
+Baseado no [Free My TV, de simbasjungles e colaboradores](https://github.com/simbasjungles/free-my-tv), e desenvolvido a partir do [TV-Dashboard](https://github.com/ernanimarcondes/TV-Dashboard). Licença MIT e avisos dos componentes preservados. Logos e dados pertencem aos respectivos titulares; créditos em THIRD_PARTY_NOTICES.md.
 '''
 
 def request(path,method='GET',data=None,optional=False):
@@ -44,7 +47,7 @@ def publish(event,api=request):
         if release.get('draft') or not tag:raise RuntimeError('Unexpected existing release state')
         print('Release already published: '+release['html_url']);return 'already-published'
     result=api('releases',method='POST',data={'tag_name':TAG,'target_commitish':COMMIT,
-        'name':'Esportes-Dash 1.3.0','body':NOTES,'draft':False,'prerelease':False,'make_latest':'true'})
+        'name':'Esportes-Dash 1.4.0','body':NOTES,'draft':False,'prerelease':False,'make_latest':'true'})
     if result.get('tag_name')!=TAG or result.get('draft'):raise RuntimeError('Unexpected publication response')
     print('Published: '+result['html_url']);return 'published'
 

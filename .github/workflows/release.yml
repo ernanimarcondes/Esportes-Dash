@@ -1,0 +1,33 @@
+name: Publicar versão revisada do Esportes-Dash
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/release.yml'
+      - 'tools/publish_release.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: reviewed-release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    if: github.repository == 'ernanimarcondes/Esportes-Dash'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout the workflow revision
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Validate or publish the reviewed release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python3 tools/publish_release.py
