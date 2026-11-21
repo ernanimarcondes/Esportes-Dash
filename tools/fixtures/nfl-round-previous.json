@@ -1,0 +1,1166 @@
+{
+  "season": {
+    "type": 2,
+    "year": 2026
+  },
+  "week": {
+    "number": 10
+  },
+  "leagues": [
+    {
+      "calendar": [
+        {
+          "label": "Preseason",
+          "value": "1",
+          "entries": [
+            {
+              "label": "Hall of Fame Weekend",
+              "value": "1"
+            },
+            {
+              "label": "Preseason Week 1",
+              "value": "2"
+            },
+            {
+              "label": "Preseason Week 2",
+              "value": "3"
+            },
+            {
+              "label": "Preseason Week 3",
+              "value": "4"
+            }
+          ]
+        },
+        {
+          "label": "Regular Season",
+          "value": "2",
+          "entries": [
+            {
+              "label": "Week 1",
+              "value": "1"
+            },
+            {
+              "label": "Week 2",
+              "value": "2"
+            },
+            {
+              "label": "Week 3",
+              "value": "3"
+            },
+            {
+              "label": "Week 4",
+              "value": "4"
+            },
+            {
+              "label": "Week 5",
+              "value": "5"
+            },
+            {
+              "label": "Week 6",
+              "value": "6"
+            },
+            {
+              "label": "Week 7",
+              "value": "7"
+            },
+            {
+              "label": "Week 8",
+              "value": "8"
+            },
+            {
+              "label": "Week 9",
+              "value": "9"
+            },
+            {
+              "label": "Week 10",
+              "value": "10"
+            },
+            {
+              "label": "Week 11",
+              "value": "11"
+            },
+            {
+              "label": "Week 12",
+              "value": "12"
+            },
+            {
+              "label": "Week 13",
+              "value": "13"
+            },
+            {
+              "label": "Week 14",
+              "value": "14"
+            },
+            {
+              "label": "Week 15",
+              "value": "15"
+            },
+            {
+              "label": "Week 16",
+              "value": "16"
+            },
+            {
+              "label": "Week 17",
+              "value": "17"
+            },
+            {
+              "label": "Week 18",
+              "value": "18"
+            }
+          ]
+        },
+        {
+          "label": "Postseason",
+          "value": "3",
+          "entries": [
+            {
+              "label": "Wild Card",
+              "value": "1"
+            },
+            {
+              "label": "Divisional Round",
+              "value": "2"
+            },
+            {
+              "label": "Conference Championships",
+              "value": "3"
+            },
+            {
+              "label": "Super Bowl",
+              "value": "4"
+            }
+          ]
+        },
+        {
+          "label": "Off Season",
+          "value": "4",
+          "entries": []
+        }
+      ]
+    }
+  ],
+  "events": [
+    {
+      "id": "401873052",
+      "uid": "s:20~l:28~e:401873052",
+      "date": "2026-11-13T01:15Z",
+      "name": "Washington Commanders at New York Giants",
+      "week": {
+        "number": 10
+      },
+      "season": {
+        "year": 2026,
+        "type": 2,
+        "slug": "regular-season"
+      },
+      "status": {
+        "clock": 0.0,
+        "displayClock": "0:00",
+        "period": 4,
+        "type": {
+          "id": "3",
+          "name": "STATUS_FINAL",
+          "state": "post",
+          "completed": true,
+          "description": "Final",
+          "detail": "Final",
+          "shortDetail": "Final"
+        }
+      },
+      "competitions": [
+        {
+          "date": "2026-11-13T01:15Z",
+          "timeValid": true,
+          "status": {
+            "clock": 0.0,
+            "displayClock": "0:00",
+            "period": 4,
+            "type": {
+              "id": "3",
+              "name": "STATUS_FINAL",
+              "state": "post",
+              "completed": true,
+              "description": "Final",
+              "detail": "Final",
+              "shortDetail": "Final"
+            },
+            "isTBDFlex": false
+          },
+          "competitors": [
+            {
+              "homeAway": "home",
+              "score": "21",
+              "team": {
+                "id": "19",
+                "shortDisplayName": "Giants",
+                "displayName": "New York Giants",
+                "abbreviation": "NYG",
+                "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/scoreboard/nyg.png"
+              }
+            },
+            {
+              "homeAway": "away",
+              "score": "24",
+              "team": {
+                "id": "28",
+                "shortDisplayName": "Commanders",
+                "displayName": "Washington Commanders",
+                "abbreviation": "WSH",
+                "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/scoreboard/wsh.png"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "401873053",
+      "uid": "s:20~l:28~e:401873053",
+      "date": "2026-11-15T14:30Z",
+      "name": "New England Patriots at Detroit Lions",
+      "week": {
+        "number": 10
+      },
+      "season": {
+        "year": 2026,
+        "type": 2,
+        "slug": "regular-season"
+      },
+      "status": {
+        "clock": 0.0,
+        "displayClock": "0:00",
+        "period": 4,
+        "type": {
+          "id": "3",
+          "name": "STATUS_FINAL",
+          "state": "post",
+          "completed": true,
+          "description": "Final",
+          "detail": "Final",
+          "shortDetail": "Final"
+        }
+      },
+      "competitions": [
+        {
+          "date": "2026-11-15T14:30Z",
+          "timeValid": true,
+          "status": {
+            "clock": 0.0,
+            "displayClock": "0:00",
+            "period": 4,
+            "type": {
+              "id": "3",
+              "name": "STATUS_FINAL",
+              "state": "post",
+              "completed": true,
+              "description": "Final",
+              "detail": "Final",
+              "shortDetail": "Final"
+            },
+            "isTBDFlex": false
+          },
+          "competitors": [
+            {
+              "homeAway": "home",
+              "score": "35",
+              "team": {
+                "id": "8",
+                "shortDisplayName": "Lions",
+                "displayName": "Detroit Lions",
+                "abbreviation": "DET",
+                "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/scoreboard/det.png"
+              }
+            },
+            {
+              "homeAway": "away",
+              "score": "10",
+              "team": {
+                "id": "17",
+                "shortDisplayName": "Patriots",
+                "displayName": "New England Patriots",
+                "abbreviation": "NE",
+                "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/scoreboard/ne.png"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "401873058",
+      "uid": "s:20~l:28~e:401873058",
+      "date": "2026-11-15T18:00Z",
+      "name": "Kansas City Chiefs at Atlanta Falcons",
+      "week": {
+        "number": 10
+      },
+      "season": {
+        "year": 2026,
+        "type": 2,
+        "slug": "regular-season"
+      },
+      "status": {
+        "clock": 0.0,
+        "displayClock": "0:00",
+        "period": 4,
+        "type": {
+          "id": "3",
+          "name": "STATUS_FINAL",
+          "state": "post",
+          "completed": true,
+          "description": "Final",
+          "detail": "Final",
+          "shortDetail": "Final"
+        }
+      },
+      "competitions": [
+        {
+          "date": "2026-11-15T18:00Z",
+          "timeValid": true,
+          "status": {
+            "clock": 0.0,
+            "displayClock": "0:00",
+            "period": 4,
+            "type": {
+              "id": "3",
+              "name": "STATUS_FINAL",
+              "state": "post",
+              "completed": true,
+              "description": "Final",
+              "detail": "Final",
+              "shortDetail": "Final"
+            },
+            "isTBDFlex": false
+          },
+          "competitors": [
+            {
+              "homeAway": "home",
+              "score": "13",
+              "team": {
+                "id": "1",
+                "shortDisplayName": "Falcons",
+                "displayName": "Atlanta Falcons",
+                "abbreviation": "ATL",
+                "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/scoreboard/atl.png"
+              }
+            },
+            {
+              "homeAway": "away",
+              "score": "35",
+              "team": {
+                "id": "12",
+                "shortDisplayName": "Chiefs",
+                "displayName": "Kansas City Chiefs",
+                "abbreviation": "KC",
+                "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/scoreboard/kc.png"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "401873056",
+      "uid": "s:20~l:28~e:401873056",
+      "date": "2026-11-15T18:00Z",
+      "name": "Houston Texans at Cleveland Browns",
+      "week": {
+        "number": 10
+      },
+      "season": {
+        "year": 2026,
+        "type": 2,
+        "slug": "regular-season"
+      },
+      "status": {
+        "clock": 0.0,
+        "displayClock": "0:00",
+        "period": 4,
+        "type": {
+          "id": "3",
+          "name": "STATUS_FINAL",
+          "state": "post",
+          "completed": true,
+          "description": "Final",
+          "detail": "Final",
+          "shortDetail": "Final"
+        }
+      },
+      "competitions": [
+        {
+          "date": "2026-11-15T18:00Z",
+          "timeValid": true,
+          "status": {
+            "clock": 0.0,
+            "displayClock": "0:00",
+            "period": 4,
+            "type": {
+              "id": "3",
+              "name": "STATUS_FINAL",
+              "state": "post",
+              "completed": true,
+              "description": "Final",
+              "detail": "Final",
+              "shortDetail": "Final"
+            },
+            "isTBDFlex": false
+          },
+          "competitors": [
+            {
+              "homeAway": "home",
+              "score": "27",
+              "team": {
+                "id": "5",
+                "shortDisplayName": "Browns",
+                "displayName": "Cleveland Browns",
+                "abbreviation": "CLE",
+                "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/scoreboard/cle.png"
+              }
+            },
+            {
+              "homeAway": "away",
+              "score": "24",
+              "team": {
+                "id": "34",
+                "shortDisplayName": "Texans",
+                "displayName": "Houston Texans",
+                "abbreviation": "HOU",
+                "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/scoreboard/hou.png"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "401873060",
+      "uid": "s:20~l:28~e:401873060",
+      "date": "2026-11-15T18:00Z",
+      "name": "Minnesota Vikings at Green Bay Packers",
+      "week": {
+        "number": 10
+      },
+      "season": {
+        "year": 2026,
+        "type": 2,
+        "slug": "regular-season"
+      },
+      "status": {
+        "clock": 0.0,
+        "displayClock": "0:00",
+        "period": 4,
+        "type": {
+          "id": "3",
+          "name": "STATUS_FINAL",
+          "state": "post",
+          "completed": true,
+          "description": "Final",
+          "detail": "Final",
+          "shortDetail": "Final"
+        }
+      },
+      "competitions": [
+        {
+          "date": "2026-11-15T18:00Z",
+          "timeValid": true,
+          "status": {
+            "clock": 0.0,
+            "displayClock": "0:00",
+            "period": 4,
+            "type": {
+              "id": "3",
+              "name": "STATUS_FINAL",
+              "state": "post",
+              "completed": true,
+              "description": "Final",
+              "detail": "Final",
+              "shortDetail": "Final"
+            },
+            "isTBDFlex": false
+          },
+          "competitors": [
+            {
+              "homeAway": "home",
+              "score": "10",
+              "team": {
+                "id": "9",
+                "shortDisplayName": "Packers",
+                "displayName": "Green Bay Packers",
+                "abbreviation": "GB",
+                "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/scoreboard/gb.png"
+              }
+            },
+            {
+              "homeAway": "away",
+              "score": "30",
+              "team": {
+                "id": "16",
+                "shortDisplayName": "Vikings",
+                "displayName": "Minnesota Vikings",
+                "abbreviation": "MIN",
+                "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/scoreboard/min.png"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "401873057",
+      "uid": "s:20~l:28~e:401873057",
+      "date": "2026-11-15T18:00Z",
+      "name": "Jacksonville Jaguars at Tennessee Titans",
+      "week": {
+        "number": 10
+      },
+      "season": {
+        "year": 2026,
+        "type": 2,
+        "slug": "regular-season"
+      },
+      "status": {
+        "clock": 0.0,
+        "displayClock": "0:00",
+        "period": 4,
+        "type": {
+          "id": "3",
+          "name": "STATUS_FINAL",
+          "state": "post",
+          "completed": true,
+          "description": "Final",
+          "detail": "Final",
+          "shortDetail": "Final"
+        }
+      },
+      "competitions": [
+        {
+          "date": "2026-11-15T18:00Z",
+          "timeValid": true,
+          "status": {
+            "clock": 0.0,
+            "displayClock": "0:00",
+            "period": 4,
+            "type": {
+              "id": "3",
+              "name": "STATUS_FINAL",
+              "state": "post",
+              "completed": true,
+              "description": "Final",
+              "detail": "Final",
+              "shortDetail": "Final"
+            },
+            "isTBDFlex": false
+          },
+          "competitors": [
+            {
+              "homeAway": "home",
+              "score": "23",
+              "team": {
+                "id": "10",
+                "shortDisplayName": "Titans",
+                "displayName": "Tennessee Titans",
+                "abbreviation": "TEN",
+                "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/scoreboard/ten.png"
+              }
+            },
+            {
+              "homeAway": "away",
+              "score": "40",
+              "team": {
+                "id": "30",
+                "shortDisplayName": "Jaguars",
+                "displayName": "Jacksonville Jaguars",
+                "abbreviation": "JAX",
+                "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/scoreboard/jax.png"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "401873059",
+      "uid": "s:20~l:28~e:401873059",
+      "date": "2026-11-15T18:00Z",
+      "name": "Miami Dolphins at Indianapolis Colts",
+      "week": {
+        "number": 10
+      },
+      "season": {
+        "year": 2026,
+        "type": 2,
+        "slug": "regular-season"
+      },
+      "status": {
+        "clock": 0.0,
+        "displayClock": "0:00",
+        "period": 4,
+        "type": {
+          "id": "3",
+          "name": "STATUS_FINAL",
+          "state": "post",
+          "completed": true,
+          "description": "Final",
+          "detail": "Final",
+          "shortDetail": "Final"
+        }
+      },
+      "competitions": [
+        {
+          "date": "2026-11-15T18:00Z",
+          "timeValid": true,
+          "status": {
+            "clock": 0.0,
+            "displayClock": "0:00",
+            "period": 4,
+            "type": {
+              "id": "3",
+              "name": "STATUS_FINAL",
+              "state": "post",
+              "completed": true,
+              "description": "Final",
+              "detail": "Final",
+              "shortDetail": "Final"
+            },
+            "isTBDFlex": false
+          },
+          "competitors": [
+            {
+              "homeAway": "home",
+              "score": "24",
+              "team": {
+                "id": "11",
+                "shortDisplayName": "Colts",
+                "displayName": "Indianapolis Colts",
+                "abbreviation": "IND",
+                "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/scoreboard/ind.png"
+              }
+            },
+            {
+              "homeAway": "away",
+              "score": "22",
+              "team": {
+                "id": "15",
+                "shortDisplayName": "Dolphins",
+                "displayName": "Miami Dolphins",
+                "abbreviation": "MIA",
+                "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/scoreboard/mia.png"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "401873055",
+      "uid": "s:20~l:28~e:401873055",
+      "date": "2026-11-15T18:00Z",
+      "name": "Carolina Panthers at New Orleans Saints",
+      "week": {
+        "number": 10
+      },
+      "season": {
+        "year": 2026,
+        "type": 2,
+        "slug": "regular-season"
+      },
+      "status": {
+        "clock": 0.0,
+        "displayClock": "0:00",
+        "period": 4,
+        "type": {
+          "id": "3",
+          "name": "STATUS_FINAL",
+          "state": "post",
+          "completed": true,
+          "description": "Final",
+          "detail": "Final",
+          "shortDetail": "Final"
+        }
+      },
+      "competitions": [
+        {
+          "date": "2026-11-15T18:00Z",
+          "timeValid": true,
+          "status": {
+            "clock": 0.0,
+            "displayClock": "0:00",
+            "period": 4,
+            "type": {
+              "id": "3",
+              "name": "STATUS_FINAL",
+              "state": "post",
+              "completed": true,
+              "description": "Final",
+              "detail": "Final",
+              "shortDetail": "Final"
+            },
+            "isTBDFlex": false
+          },
+          "competitors": [
+            {
+              "homeAway": "home",
+              "score": "17",
+              "team": {
+                "id": "18",
+                "shortDisplayName": "Saints",
+                "displayName": "New Orleans Saints",
+                "abbreviation": "NO",
+                "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/scoreboard/no.png"
+              }
+            },
+            {
+              "homeAway": "away",
+              "score": "20",
+              "team": {
+                "id": "29",
+                "shortDisplayName": "Panthers",
+                "displayName": "Carolina Panthers",
+                "abbreviation": "CAR",
+                "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/scoreboard/car.png"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "401873054",
+      "uid": "s:20~l:28~e:401873054",
+      "date": "2026-11-15T18:00Z",
+      "name": "Buffalo Bills at New York Jets",
+      "week": {
+        "number": 10
+      },
+      "season": {
+        "year": 2026,
+        "type": 2,
+        "slug": "regular-season"
+      },
+      "status": {
+        "clock": 0.0,
+        "displayClock": "0:00",
+        "period": 4,
+        "type": {
+          "id": "3",
+          "name": "STATUS_FINAL",
+          "state": "post",
+          "completed": true,
+          "description": "Final",
+          "detail": "Final",
+          "shortDetail": "Final"
+        }
+      },
+      "competitions": [
+        {
+          "date": "2026-11-15T18:00Z",
+          "timeValid": true,
+          "status": {
+            "clock": 0.0,
+            "displayClock": "0:00",
+            "period": 4,
+            "type": {
+              "id": "3",
+              "name": "STATUS_FINAL",
+              "state": "post",
+              "completed": true,
+              "description": "Final",
+              "detail": "Final",
+              "shortDetail": "Final"
+            },
+            "isTBDFlex": false
+          },
+          "competitors": [
+            {
+              "homeAway": "home",
+              "score": "12",
+              "team": {
+                "id": "20",
+                "shortDisplayName": "Jets",
+                "displayName": "New York Jets",
+                "abbreviation": "NYJ",
+                "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/scoreboard/nyj.png"
+              }
+            },
+            {
+              "homeAway": "away",
+              "score": "31",
+              "team": {
+                "id": "2",
+                "shortDisplayName": "Bills",
+                "displayName": "Buffalo Bills",
+                "abbreviation": "BUF",
+                "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/scoreboard/buf.png"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "401873062",
+      "uid": "s:20~l:28~e:401873062",
+      "date": "2026-11-15T21:05Z",
+      "name": "Seattle Seahawks at Las Vegas Raiders",
+      "week": {
+        "number": 10
+      },
+      "season": {
+        "year": 2026,
+        "type": 2,
+        "slug": "regular-season"
+      },
+      "status": {
+        "clock": 0.0,
+        "displayClock": "0:00",
+        "period": 4,
+        "type": {
+          "id": "3",
+          "name": "STATUS_FINAL",
+          "state": "post",
+          "completed": true,
+          "description": "Final",
+          "detail": "Final",
+          "shortDetail": "Final"
+        }
+      },
+      "competitions": [
+        {
+          "date": "2026-11-15T21:05Z",
+          "timeValid": true,
+          "status": {
+            "clock": 0.0,
+            "displayClock": "0:00",
+            "period": 4,
+            "type": {
+              "id": "3",
+              "name": "STATUS_FINAL",
+              "state": "post",
+              "completed": true,
+              "description": "Final",
+              "detail": "Final",
+              "shortDetail": "Final"
+            },
+            "isTBDFlex": false
+          },
+          "competitors": [
+            {
+              "homeAway": "home",
+              "score": "13",
+              "team": {
+                "id": "13",
+                "shortDisplayName": "Raiders",
+                "displayName": "Las Vegas Raiders",
+                "abbreviation": "LV",
+                "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/scoreboard/lv.png"
+              }
+            },
+            {
+              "homeAway": "away",
+              "score": "21",
+              "team": {
+                "id": "26",
+                "shortDisplayName": "Seahawks",
+                "displayName": "Seattle Seahawks",
+                "abbreviation": "SEA",
+                "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/scoreboard/sea.png"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "401873061",
+      "uid": "s:20~l:28~e:401873061",
+      "date": "2026-11-15T21:05Z",
+      "name": "Los Angeles Rams at Arizona Cardinals",
+      "week": {
+        "number": 10
+      },
+      "season": {
+        "year": 2026,
+        "type": 2,
+        "slug": "regular-season"
+      },
+      "status": {
+        "clock": 0.0,
+        "displayClock": "0:00",
+        "period": 4,
+        "type": {
+          "id": "3",
+          "name": "STATUS_FINAL",
+          "state": "post",
+          "completed": true,
+          "description": "Final",
+          "detail": "Final",
+          "shortDetail": "Final"
+        }
+      },
+      "competitions": [
+        {
+          "date": "2026-11-15T21:05Z",
+          "timeValid": true,
+          "status": {
+            "clock": 0.0,
+            "displayClock": "0:00",
+            "period": 4,
+            "type": {
+              "id": "3",
+              "name": "STATUS_FINAL",
+              "state": "post",
+              "completed": true,
+              "description": "Final",
+              "detail": "Final",
+              "shortDetail": "Final"
+            },
+            "isTBDFlex": false
+          },
+          "competitors": [
+            {
+              "homeAway": "home",
+              "score": "6",
+              "team": {
+                "id": "22",
+                "shortDisplayName": "Cardinals",
+                "displayName": "Arizona Cardinals",
+                "abbreviation": "ARI",
+                "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/scoreboard/ari.png"
+              }
+            },
+            {
+              "homeAway": "away",
+              "score": "34",
+              "team": {
+                "id": "14",
+                "shortDisplayName": "Rams",
+                "displayName": "Los Angeles Rams",
+                "abbreviation": "LAR",
+                "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/scoreboard/lar.png"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "401873063",
+      "uid": "s:20~l:28~e:401873063",
+      "date": "2026-11-15T21:25Z",
+      "name": "San Francisco 49ers at Dallas Cowboys",
+      "week": {
+        "number": 10
+      },
+      "season": {
+        "year": 2026,
+        "type": 2,
+        "slug": "regular-season"
+      },
+      "status": {
+        "clock": 0.0,
+        "displayClock": "0:00",
+        "period": 4,
+        "type": {
+          "id": "3",
+          "name": "STATUS_FINAL",
+          "state": "post",
+          "completed": true,
+          "description": "Final",
+          "detail": "Final",
+          "shortDetail": "Final"
+        }
+      },
+      "competitions": [
+        {
+          "date": "2026-11-15T21:25Z",
+          "timeValid": true,
+          "status": {
+            "clock": 0.0,
+            "displayClock": "0:00",
+            "period": 4,
+            "type": {
+              "id": "3",
+              "name": "STATUS_FINAL",
+              "state": "post",
+              "completed": true,
+              "description": "Final",
+              "detail": "Final",
+              "shortDetail": "Final"
+            },
+            "isTBDFlex": false
+          },
+          "competitors": [
+            {
+              "homeAway": "home",
+              "score": "40",
+              "team": {
+                "id": "6",
+                "shortDisplayName": "Cowboys",
+                "displayName": "Dallas Cowboys",
+                "abbreviation": "DAL",
+                "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/scoreboard/dal.png"
+              }
+            },
+            {
+              "homeAway": "away",
+              "score": "46",
+              "team": {
+                "id": "25",
+                "shortDisplayName": "49ers",
+                "displayName": "San Francisco 49ers",
+                "abbreviation": "SF",
+                "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/scoreboard/sf.png"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "401873064",
+      "uid": "s:20~l:28~e:401873064",
+      "date": "2026-11-16T01:20Z",
+      "name": "Pittsburgh Steelers at Cincinnati Bengals",
+      "week": {
+        "number": 10
+      },
+      "season": {
+        "year": 2026,
+        "type": 2,
+        "slug": "regular-season"
+      },
+      "status": {
+        "clock": 0.0,
+        "displayClock": "0:00",
+        "period": 4,
+        "type": {
+          "id": "3",
+          "name": "STATUS_FINAL",
+          "state": "post",
+          "completed": true,
+          "description": "Final",
+          "detail": "Final",
+          "shortDetail": "Final"
+        }
+      },
+      "competitions": [
+        {
+          "date": "2026-11-16T01:20Z",
+          "timeValid": true,
+          "status": {
+            "clock": 0.0,
+            "displayClock": "0:00",
+            "period": 4,
+            "type": {
+              "id": "3",
+              "name": "STATUS_FINAL",
+              "state": "post",
+              "completed": true,
+              "description": "Final",
+              "detail": "Final",
+              "shortDetail": "Final"
+            },
+            "isTBDFlex": false
+          },
+          "competitors": [
+            {
+              "homeAway": "home",
+              "score": "38",
+              "team": {
+                "id": "4",
+                "shortDisplayName": "Bengals",
+                "displayName": "Cincinnati Bengals",
+                "abbreviation": "CIN",
+                "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/scoreboard/cin.png"
+              }
+            },
+            {
+              "homeAway": "away",
+              "score": "18",
+              "team": {
+                "id": "23",
+                "shortDisplayName": "Steelers",
+                "displayName": "Pittsburgh Steelers",
+                "abbreviation": "PIT",
+                "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/scoreboard/pit.png"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "401873065",
+      "uid": "s:20~l:28~e:401873065",
+      "date": "2026-11-17T01:15Z",
+      "name": "Los Angeles Chargers at Baltimore Ravens",
+      "week": {
+        "number": 10
+      },
+      "season": {
+        "year": 2026,
+        "type": 2,
+        "slug": "regular-season"
+      },
+      "status": {
+        "clock": 0.0,
+        "displayClock": "0:00",
+        "period": 4,
+        "type": {
+          "id": "3",
+          "name": "STATUS_FINAL",
+          "state": "post",
+          "completed": true,
+          "description": "Final",
+          "detail": "Final",
+          "shortDetail": "Final"
+        }
+      },
+      "competitions": [
+        {
+          "date": "2026-11-17T01:15Z",
+          "timeValid": true,
+          "status": {
+            "clock": 0.0,
+            "displayClock": "0:00",
+            "period": 4,
+            "type": {
+              "id": "3",
+              "name": "STATUS_FINAL",
+              "state": "post",
+              "completed": true,
+              "description": "Final",
+              "detail": "Final",
+              "shortDetail": "Final"
+            },
+            "isTBDFlex": false
+          },
+          "competitors": [
+            {
+              "homeAway": "home",
+              "score": "20",
+              "team": {
+                "id": "33",
+                "shortDisplayName": "Ravens",
+                "displayName": "Baltimore Ravens",
+                "abbreviation": "BAL",
+                "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/scoreboard/bal.png"
+              }
+            },
+            {
+              "homeAway": "away",
+              "score": "23",
+              "team": {
+                "id": "24",
+                "shortDisplayName": "Chargers",
+                "displayName": "Los Angeles Chargers",
+                "abbreviation": "LAC",
+                "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/scoreboard/lac.png"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

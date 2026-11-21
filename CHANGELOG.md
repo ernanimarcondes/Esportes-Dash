@@ -1,5 +1,17 @@
 # Alterações
 
+## 1.4.0 — 2026-11-21
+
+- Novos painéis exclusivos da NBA e NFL, abertos com OK nos quadros da tela inicial e retorno por Voltar ao quadro selecionado.
+- Identidade visual própria de cada liga, fundo preto, logos originais em alta resolução e escudos com redução de alta qualidade para a TV.
+- Visão geral, classificações completas por conferência (Leste/Oeste e AFC/NFC), campanha e aproveitamento, Jogos e Resultados.
+- NBA: Jogos reúne o confronto em andamento de cada time ou seu próximo confronto; Resultados reúne seu último confronto encerrado. Inclui ambas as conferências, sem recorte por datas e sem repetir partidas compartilhadas. Títulos simplificados para Jogos e Resultados.
+- NFL: Jogos usa a semana oficial atual, incluindo partidas encerradas dessa semana; Resultados usa a semana anterior. Preserva a identidade de temporada/fase/semana no cache e as transições do calendário, sem inferir rodadas por datas.
+- Calendários da NBA carregados por time, com cache limitado pela sequência de partidas, gravação agrupada e preservação de placares conhecidos quando o calendário não oferece o placar em andamento.
+- Classificações de futebol, NBA, NFL, NHL e MLB e programação de F1 consultadas a cada 15 minutos enquanto o painel está aberto. Jogos de hoje mantêm cinco minutos; clima e resultados antigos mantêm 30 minutos.
+- Aba Todos dos Jogos do dia em lista de duas colunas, até 48 partidas por página e troca a cada 20 segundos; demais filtros continuam em cartões.
+- Documentação, prints, créditos e testes atualizados, incluindo confrontos por time sem limites de data, semanas da NFL e preservação dos placares.
+
 ## 1.3.0 — 2026-11-18
 
 - Painel exclusivo de Jogos do dia, verde-esmeralda, seis cartões, filtros de estado e páginas automáticas a cada 20 segundos.

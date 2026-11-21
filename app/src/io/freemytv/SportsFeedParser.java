@@ -123,7 +123,10 @@ final class SportsFeedParser {
     }
 
     static List<Game> scoreboard(String source,String body,long fetched) throws Exception {
-        JSONObject root=new JSONObject(body);JSONArray events=root.optJSONArray("events");
+        return scoreboard(source,new JSONObject(body),fetched);
+    }
+    static List<Game> scoreboard(String source,JSONObject root,long fetched) throws Exception {
+        JSONArray events=root.optJSONArray("events");
         if(events==null)throw new IllegalArgumentException("No events field");
         List<Game> out=new ArrayList<>();
         for(int i=0;i<events.length();i++)try{

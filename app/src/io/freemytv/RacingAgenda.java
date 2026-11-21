@@ -34,7 +34,7 @@ final class RacingAgenda {
     private final boolean[] failed = new boolean[4];
     private boolean busy, closed;
     private final boolean f1Only;
-    private long attempted;
+    private final long[] attempted=new long[3];
     volatile String raceName="Próximo GP", circuitName="Consultando circuito", circuitId="";
     RacingAgenda(Context c) { this(c,false); }
     RacingAgenda(Context c,boolean f1Only) {
@@ -73,12 +73,19 @@ final class RacingAgenda {
         return (failed[i]?"Salvo · ":"Atualizado · ")+new java.text.SimpleDateFormat("dd/MM HH:mm",new Locale("pt","BR")).format(new Date(fetched[i]));
     }
     void refresh(Runnable changed) {
-        if(closed||busy||System.currentTimeMillis()-attempted<30*60000L) return;
-        boolean due=false; for(int i=0;i<(f1Only?1:3);i++) if(System.currentTimeMillis()-fetched[i]>6*3600000L) due=true;
-        if(!due) return;
-        attempted=System.currentTimeMillis(); busy=true;
+        if(closed||busy) return;
+        long now=System.currentTimeMillis();boolean anyDue=false;boolean[] due=new boolean[3];
+        for(int i=0;i<(f1Only?1:3);i++){
+            long interval=i==0?15*60000L:6*3600000L;
+            due[i]=(fetched[i]==0||now-fetched[i]>=interval||now<fetched[i])
+                    &&(attempted[i]==0||now-attempted[i]>=5*60000L||now<attempted[i]);
+            if(due[i]){anyDue=true;attempted[i]=now;}
+        }
+        if(!anyDue) return;
+        busy=true;
         worker.execute(()->{
             for(int i=0;i<(f1Only?1:3);i++) {
+                if(!due[i]||closed)continue;
                 try {
                     String url=i==0?"https://api.jolpi.ca/ergast/f1/current.json":i==1?
                         "https://site.api.espn.com/apis/site/v2/sports/soccer/bra.1/teams/2029/schedule?fixture=true":
@@ -88,9 +95,9 @@ final class RacingAgenda {
                         int year=java.time.ZonedDateTime.now(ZONE).getYear()+1;
                         body=get("https://api.jolpi.ca/ergast/f1/"+year+".json"); parse(0,body);
                     }
-                    long now=System.currentTimeMillis();
-                    synchronized(this){fetched[i]=now;failed[i]=false;}
-                    JSONObject cache=new JSONObject().put("at",now).put("body",body);
+                    long fetchedAt=System.currentTimeMillis();
+                    synchronized(this){fetched[i]=fetchedAt;failed[i]=false;}
+                    JSONObject cache=new JSONObject().put("at",fetchedAt).put("body",body);
                     try(FileOutputStream out=new FileOutputStream(cache(i))){out.write(cache.toString().getBytes(StandardCharsets.UTF_8));}
                 } catch(Exception e){synchronized(this){failed[i]=true;} android.util.Log.w("RacingAgenda","source "+i+": "+e.getClass().getSimpleName());}
             }

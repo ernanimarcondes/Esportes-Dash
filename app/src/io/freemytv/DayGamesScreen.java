@@ -6,7 +6,7 @@ import android.view.KeyEvent;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-/** Shared six-card match panel: daily status tabs or recent-result date tabs, with independent themes. */
+/** Shared match panel: chronological All lists and six-card filtered tabs, with independent themes. */
 final class DayGamesScreen {
     private static final int FOCUS=0xFFF4F7F5,AMBER=0xFFFFCA5C,TEXT=0xFFF4F7F5,GREEN=0xFF7DF0B7;
     private final int ACCENT,MUTED,PANEL,BORDER,ACTIVE,DIVIDER;
@@ -33,9 +33,9 @@ final class DayGamesScreen {
     void reset(){focus=1;filter=DayGames.ALL;goalRotation.reset();rotation.enter(SystemClock.elapsedRealtime());}
     void reset(List<SportsFeedParser.Game> source){reset();if(results){filter=RecentGames.ALL;focus=1;}}
     void draw(Canvas c,List<SportsFeedParser.Game> source){
-        long now=System.currentTimeMillis();boolean list=results&&filter==RecentGames.ALL;List<SportsFeedParser.Game> games=results?RecentGames.select(source,filter,now):DayGames.select(source,filter);count=games.size();rotation.tick(count,SystemClock.elapsedRealtime(),list?RecentGames.LIST_PER_PAGE:DayGames.PER_PAGE);int page=rotation.page;
+        long now=System.currentTimeMillis();boolean list=results?filter==RecentGames.ALL:filter==DayGames.ALL;List<SportsFeedParser.Game> games=results?RecentGames.select(source,filter,now):DayGames.select(source,filter);count=games.size();rotation.tick(count,SystemClock.elapsedRealtime(),list?DayGames.LIST_PER_PAGE:DayGames.PER_PAGE);int page=rotation.page;
         text(c,results?"RESULTADOS RECENTES":"JOGOS DO DIA",48,67,44,ACCENT,true);
-        text(c,list?"Últimos 3 dias · ordem de data e horário":date.format(new Date(results?RecentGames.dateAt(filter,now):now)),48,103,23,MUTED,false);
+        text(c,results&&list?"Últimos 3 dias · ordem de data e horário":date.format(new Date(results?RecentGames.dateAt(filter,now):now)),48,103,23,MUTED,false);
         right(c,clock.format(new Date()),1872,65,48,TEXT,false);
         right(c,"Horários de Brasília",1872,101,20,MUTED,false);
         button(c,nav[0],"‹ Esportes Dash",focus==0,false,true);
@@ -50,7 +50,7 @@ final class DayGamesScreen {
             fill(c,new RectF(48,226,1872,1024),PANEL,17);
             center(c,results?(list?"Nenhum resultado disponível":"Nenhuma partida encerrada nesta data"):source.isEmpty()?"Nenhum jogo na programação recebida":"Nenhuma partida neste filtro",960,555,38,TEXT,true);
             center(c,results?(source.isEmpty()?sports.gamesStatus(true):"Escolha outra data acima"):source.isEmpty()?sports.gamesStatus(false):"Escolha Todos para ver a programação completa",960,601,23,MUTED,false);
-        }else if(list){resultsList(c,games,page);}else{
+        }else if(list){matchesList(c,games,page);}else{
             int from=page*DayGames.PER_PAGE,to=Math.min(from+DayGames.PER_PAGE,count);
             for(int i=from;i<to;i++){
                 int position=i-from;float x=48+(position%2)*924,y=226+(position/2)*272;
@@ -62,33 +62,36 @@ final class DayGamesScreen {
                 SportsFeedParser.Game g=games.get(i);sports.logo(g.homeLogo,pixels(c,82));sports.logo(g.awayLogo,pixels(c,82));
             }
         }
-        text(c,list?"Atualização periódica · resultados em ordem cronológica":"Atualização periódica · (P): pênalti · (GC): gol contra · P1–P3/PR: NHL",48,1066,17,MUTED,false);
+        text(c,list?(results?"Atualização periódica · resultados em ordem cronológica":"Atualização periódica · jogos em ordem de horário"):"Atualização periódica · (P): pênalti · (GC): gol contra · P1–P3/PR: NHL",48,1066,17,MUTED,false);
         right(c,"SETAS navegar · OK selecionar · VOLTAR Esportes Dash",1872,1066,17,MUTED,false);
     }
-    private void resultsList(Canvas c,List<SportsFeedParser.Game> games,int page){
-        int from=page*RecentGames.LIST_PER_PAGE,to=Math.min(from+RecentGames.LIST_PER_PAGE,games.size()),perColumn=(to-from+1)/2;
+    private void matchesList(Canvas c,List<SportsFeedParser.Game> games,int page){
+        int from=page*DayGames.LIST_PER_PAGE,to=Math.min(from+DayGames.LIST_PER_PAGE,games.size()),perColumn=(to-from+1)/2;
         for(int col=0;col<2;col++){
             float x=48+col*924;RectF bounds=new RectF(x,226,x+900,1024);fill(c,bounds,PANEL,15);border(c,bounds,BORDER,1.5f,15);
-            text(c,"DATA / HORA",x+15,260,16,MUTED,true);text(c,"COMP.",x+129,260,16,MUTED,true);
-            text(c,"MANDANTE",x+226,260,16,MUTED,true);center(c,"PLACAR",x+486,260,16,MUTED,true);right(c,"VISITANTE",x+824,260,16,MUTED,true);
+            text(c,results?"DATA / HORA":"HORA",x+15,260,16,MUTED,true);text(c,"COMP.",x+129,260,16,MUTED,true);
+            text(c,"MANDANTE",x+226,260,16,MUTED,true);center(c,results?"PLACAR":"PLACAR / STATUS",x+486,260,16,MUTED,true);right(c,"VISITANTE",x+824,260,16,MUTED,true);
             line(c,x+14,276,x+886,276,DIVIDER,1);
         }
         for(int i=from;i<to;i++){
             int index=i-from,col=index/perColumn,row=index%perColumn;SportsFeedParser.Game game=games.get(i);float x=48+col*924,y=303+row*30;
-            if(row%2==0)fill(c,new RectF(x+9,y-22,x+891,y+8),0xFF241E2D,3);
-            text(c,shortDate.format(new Date(game.at))+(game.timeValid?" "+hour.format(new Date(game.at)):" —"),x+15,y,16,MUTED,false);
+            if(row%2==0)fill(c,new RectF(x+9,y-22,x+891,y+8),results?0xFF241E2D:0xFF1E2B24,3);
+            String kickoff=game.timeValid?hour.format(new Date(game.at)):"—";
+            text(c,results?shortDate.format(new Date(game.at))+" "+kickoff:kickoff,x+15,y,16,MUTED,false);
             text(c,fit(RecentGames.competition(game),16,62,true),x+129,y,16,ACCENT,true);
             logo(c,game.homeLogo,game.homeAbbr,new RectF(x+190,y-20,x+216,y+6));
             text(c,fit(game.home,20,200,true),x+226,y,20,TEXT,true);
-            String score=game.homeScore+" – "+game.awayScore;
-            if(game.note.startsWith("Pênaltis "))score+=" ("+game.note.substring(9)+")";
-            float size=22;p.setTypeface(bold);p.setTextSize(size);if(p.measureText(score)>112)size=Math.max(14,size*112/p.measureText(score));
-            center(c,score,x+486,y,size,TEXT,true);
+            boolean hasScore=game.complete||game.state.equals("in");
+            String score=hasScore?game.homeScore+" – "+game.awayScore:DayGames.status(game,System.currentTimeMillis());
+            if(hasScore&&game.note.startsWith("Pênaltis "))score+=" ("+game.note.substring(9)+")";
+            float size=hasScore?22:16;p.setTypeface(bold);p.setTextSize(size);if(p.measureText(score)>112)size=Math.max(12,size*112/p.measureText(score));
+            int scoreColor=!game.complete&&game.state.equals("in")?GREEN:DayGames.unavailable(game)?AMBER:hasScore?TEXT:MUTED;
+            center(c,score,x+486,y,size,scoreColor,true);
             right(c,fit(game.away,20,270,true),x+824,y,20,TEXT,true);
             logo(c,game.awayLogo,game.awayAbbr,new RectF(x+840,y-20,x+866,y+6));
         }
-        int next=((page+1)%DayGames.pages(games.size(),RecentGames.LIST_PER_PAGE))*RecentGames.LIST_PER_PAGE;
-        if(games.size()>RecentGames.LIST_PER_PAGE)for(int i=next;i<Math.min(next+RecentGames.LIST_PER_PAGE,games.size());i++){SportsFeedParser.Game game=games.get(i);sports.logo(game.homeLogo,pixels(c,26));sports.logo(game.awayLogo,pixels(c,26));}
+        int next=((page+1)%DayGames.pages(games.size(),DayGames.LIST_PER_PAGE))*DayGames.LIST_PER_PAGE;
+        if(games.size()>DayGames.LIST_PER_PAGE)for(int i=next;i<Math.min(next+DayGames.LIST_PER_PAGE,games.size());i++){SportsFeedParser.Game game=games.get(i);sports.logo(game.homeLogo,pixels(c,26));sports.logo(game.awayLogo,pixels(c,26));}
     }
     private void fixture(Canvas c,SportsFeedParser.Game g,RectF b){
         fill(c,b,PANEL,17);border(c,b,BORDER,1.5f,17);

@@ -33,6 +33,7 @@ final class SportsData {
     private final ExecutorService feeds=Executors.newFixedThreadPool(3),pictures=Executors.newFixedThreadPool(2);
     private final Map<String,List<SportsFeedParser.Table>> tables=new ConcurrentHashMap<>();
     private final Map<String,Snapshot> snapshots=new ConcurrentHashMap<>();
+    private final Map<String,Snapshot> nbaCalendars=new ConcurrentHashMap<>();
     private static final class GoalSnapshot {final long at;final SportsFeedParser.Game game;GoalSnapshot(long at,SportsFeedParser.Game game){this.at=at;this.game=game;}}
     private final Map<String,GoalSnapshot> matchGoals=new ConcurrentHashMap<>();
     private final Map<String,Long> attempts=new ConcurrentHashMap<>();
@@ -45,8 +46,10 @@ final class SportsData {
         @Override protected boolean removeEldestEntry(Map.Entry<String,Bitmap> e){return size()>256;}
     });
     private volatile boolean closed,cacheLoaded;
+    private final Runnable saveLeagueCache=()->{if(!closed)try{feeds.execute(this::save);}catch(RejectedExecutionException ignored){}};
     volatile F1SeasonStats f1Stats;
     volatile F1RaceResults f1Results;
+    private volatile NFLRounds nflRounds;
     volatile float[] track;
     volatile String trackId="vegas",trackLength="6,201 km";
     SportsData(Context c,Runnable changed){
@@ -62,6 +65,7 @@ final class SportsData {
     }
     private void load(JSONObject root){
         if(root.optInt("schema")!=2)return;
+        try{NFLRounds incoming=NFLRounds.read(root.optJSONObject("nflRounds"));if(incoming!=null&&incoming.current!=null&&(nflRounds==null||incoming.current.at>nflRounds.current.at))nflRounds=incoming;}catch(Exception ignored){}
         JSONObject stats=root.optJSONObject("f1Stats");
         if(stats!=null)try{F1SeasonStats incoming=new F1SeasonStats(stats);if(f1Stats==null||incoming.at>f1Stats.at)f1Stats=incoming;}catch(Exception ignored){}
         JSONObject results=root.optJSONObject("f1Results");
@@ -76,8 +80,69 @@ final class SportsData {
         JSONArray ss=root.optJSONArray("snapshots");for(int i=0;ss!=null&&i<ss.length();i++){
             Snapshot s=Snapshot.read(ss.optJSONObject(i));Snapshot old=snapshots.get(s.key);if(old==null||s.at>old.at)snapshots.put(s.key,s);
         }
+        JSONArray calendars=root.optJSONArray("nbaCalendars");for(int i=0;calendars!=null&&i<calendars.length();i++){
+            JSONObject entry=calendars.optJSONObject(i);if(entry==null)continue;
+            Snapshot saved=Snapshot.read(entry);Snapshot old=nbaCalendars.get(saved.key);
+            if(old==null||saved.at>old.at)nbaCalendars.put(saved.key,saved);
+        }
     }
     List<SportsFeedParser.Table> tables(String key){List<SportsFeedParser.Table> t=tables.get(key);return t==null?Collections.emptyList():t;}
+    void refreshLeague(String league){
+        if(closed||!cacheLoaded||(!league.equals("nba")&&!league.equals("nfl")))return;
+        if(league.equals("nfl")){refreshNFLRounds();return;}
+        long now=System.currentTimeMillis();
+        for(SportsFeedParser.Table table:tables("nba"))for(SportsFeedParser.Row team:table.rows){
+            Snapshot saved=nbaCalendars.get(team.id);
+            if(saved==null||now-saved.at>=6*3600000L)fetchNBACalendar(team.id);
+        }
+    }
+    List<SportsFeedParser.Game> leagueGames(String league,boolean results){
+        if(league.equals("nfl")){
+            NFLRounds rounds=nflRounds;NFLRounds.Round round=rounds==null?null:results?rounds.previous:rounds.current;
+            return round==null?Collections.emptyList():round.games;
+        }
+        List<SportsFeedParser.Game> games=new ArrayList<>();
+        if(league.equals("nba"))for(Snapshot calendar:nbaCalendars.values())games.addAll(calendar.games);
+        for(Snapshot snapshot:snapshots.values())for(SportsFeedParser.Game game:snapshot.games)if(game.source.equals(league))games.add(game);
+        return games;
+    }
+    String leagueRoundLabel(String league,boolean results){
+        if(league.equals("nba"))return results?"Último confronto de cada time":"Confronto atual de cada time";
+        NFLRounds rounds=nflRounds;NFLRounds.Round round=rounds==null?null:results?rounds.previous:rounds.current;
+        return round==null?(rounds==null?"Consultando rodada":"Rodada anterior indisponível"):round.ref.label;
+    }
+    String nbaCalendarStatus(){
+        synchronized(pending){for(String task:pending)if(task.startsWith("nba-calendar:"))return "Carregando confrontos…";}
+        for(SportsFeedParser.Table table:tables("nba"))for(SportsFeedParser.Row team:table.rows)if(!nbaCalendars.containsKey(team.id))return "Cobertura parcial dos confrontos";
+        return "";
+    }
+    private void fetchNBACalendar(String team){
+        if(!team.matches("[0-9]+"))return;String task="nba-calendar:"+team;if(!begin(task))return;
+        feeds.execute(()->{try{
+            String body=get("https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/"+team+"/schedule?fixture=true");
+            JSONObject root=new JSONObject(body),identity=root.getJSONObject("team");
+            if(!identity.getString("id").equals(team))throw new IOException("Different NBA team calendar");
+            Snapshot calendar=new Snapshot();calendar.key=team;calendar.at=System.currentTimeMillis();calendar.games=LeaguePanelModel.trimCalendar(SportsFeedParser.scoreboard("nba",root,calendar.at),team,calendar.at);
+            if(!closed){nbaCalendars.put(team,calendar);failed.remove(task);
+                main.post(()->{if(!closed){main.removeCallbacks(saveLeagueCache);main.postDelayed(saveLeagueCache,2000);}});}
+        }catch(Exception error){failed.add(task);android.util.Log.w("SportsData","NBA team calendar unavailable");}
+            finally{pending.remove(task);notifyDataChanged();}});
+    }
+    private void refreshNFLRounds(){
+        NFLRounds saved=nflRounds;if(saved!=null&&System.currentTimeMillis()-saved.current.at<5*60000L)return;
+        String task="nfl-rounds";if(!begin(task))return;
+        feeds.execute(()->{try{
+            String base="https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard";
+            NFLRounds.Round current=NFLRounds.parse(get(base),System.currentTimeMillis()),previous=saved==null?null:saved.previous;
+            if(current.previous==null)previous=null;
+            else if(previous==null||!current.previous.same(previous.ref)||System.currentTimeMillis()-previous.at>=30*60000L){
+                try{NFLRounds.Round fetched=NFLRounds.parse(get(base+"?"+current.previous.query()),System.currentTimeMillis());if(!fetched.ref.same(current.previous))throw new IOException("Unexpected NFL week");previous=fetched;}
+                catch(Exception error){if(previous==null||!current.previous.same(previous.ref))previous=null;}
+            }
+            nflRounds=new NFLRounds(current,previous);failed.remove(task);save();
+        }catch(Exception error){failed.add(task);android.util.Log.w("SportsData","NFL rounds unavailable");}
+            finally{pending.remove(task);notifyDataChanged();}});
+    }
     List<SportsFeedParser.Game> games(boolean recent){
         long now=System.currentTimeMillis();LocalDate today=Instant.ofEpochMilli(now).atZone(ZONE).toLocalDate();
         Map<String,SportsFeedParser.Game> unique=new HashMap<>();Set<String> clubs=new HashSet<>();
@@ -96,7 +161,7 @@ final class SportsData {
     void refresh(){
         if(closed||!cacheLoaded)return;long now=System.currentTimeMillis();LocalDate today=LocalDate.now(ZONE);
         for(String key:SportsFeedParser.TABLE_KEYS){List<SportsFeedParser.Table> list=tables(key);long at=list.isEmpty()?0:list.get(0).at;
-            if(now-at>6*3600000L)fetchTable(key);}
+            if(now-at>15*60000L)fetchTable(key);}
         for(String kind:new String[]{"driver","constructor"}){List<SportsFeedParser.Table> list=tables("f1-"+kind+"s");
             if(list.isEmpty()||now-list.get(0).at>15*60000L)fetchF1(kind);}
         List<SportsFeedParser.Table> driverTables=tables("f1-drivers");
@@ -184,8 +249,9 @@ final class SportsData {
     private static String path(String key){switch(key){case "nba":return "basketball/nba";case "nfl":return "football/nfl";
         case "nhl":return "hockey/nhl";case "mlb":return "baseball/mlb";default:return "soccer/"+key;}}
     private synchronized void save(){if(closed)return;try{
-        JSONArray ts=new JSONArray(),ss=new JSONArray();for(List<SportsFeedParser.Table> list:tables.values())for(SportsFeedParser.Table t:list)ts.put(t.json());
-        for(Snapshot s:snapshots.values())ss.put(s.json());byte[] body=new JSONObject().put("schema",2).put("tables",ts).put("snapshots",ss).put("f1Stats",f1Stats==null?JSONObject.NULL:f1Stats.json()).put("f1Results",f1Results==null?JSONObject.NULL:f1Results.json()).toString().getBytes(StandardCharsets.UTF_8);
+        JSONArray ts=new JSONArray(),ss=new JSONArray(),calendars=new JSONArray();for(List<SportsFeedParser.Table> list:tables.values())for(SportsFeedParser.Table t:list)ts.put(t.json());
+        for(Snapshot calendar:nbaCalendars.values())calendars.put(calendar.json());
+        for(Snapshot s:snapshots.values())ss.put(s.json());byte[] body=new JSONObject().put("schema",2).put("tables",ts).put("snapshots",ss).put("nbaCalendars",calendars).put("nflRounds",nflRounds==null?JSONObject.NULL:nflRounds.json()).put("f1Stats",f1Stats==null?JSONObject.NULL:f1Stats.json()).put("f1Results",f1Results==null?JSONObject.NULL:f1Results.json()).toString().getBytes(StandardCharsets.UTF_8);
         File temp=new File(context.getFilesDir(),"sports-dashboard.tmp");try(FileOutputStream out=new FileOutputStream(temp)){out.write(body);}temp.renameTo(file());
     }catch(Exception ignored){}}
     private File file(){return new File(context.getFilesDir(),"sports-dashboard.json");}
@@ -262,5 +328,5 @@ final class SportsData {
         byte[] buffer=new byte[8192];int n;while((n=in.read(buffer))!=-1){if(out.size()+n>limit)throw new IOException("Response limit");out.write(buffer,0,n);}return out.toByteArray();}}
     private void notifyDataChanged(){modelVersion.incrementAndGet();notifyChanged();}
     private void notifyChanged(){main.post(()->{if(!closed)changed.run();});}
-    void close(){closed=true;feeds.shutdownNow();pictures.shutdownNow();logos.clear();sourceLogos.clear();matchGoals.clear();}
+    void close(){closed=true;main.removeCallbacks(saveLeagueCache);feeds.shutdownNow();pictures.shutdownNow();logos.clear();sourceLogos.clear();matchGoals.clear();nbaCalendars.clear();}
 }

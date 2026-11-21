@@ -32,3 +32,7 @@ Os pódios são agregados dos resultados públicos de GPs fornecidos por Jolpica
 O carregador compartilhado consulta arquivos ESPN de futebol, seleções e ligas americanas, mantendo o original como alternativa. Na revisão de 17/11/2026, algumas variantes escuras ainda traziam marcas anteriores; Athletico-PR, New York Jets e Cleveland Guardians conservam o arquivo da identidade atual. Referências oficiais: [manual de marca do Athletico](https://static.athletico.com.br/downloads/MIV_CAP_01.pdf), [marca dos Jets em 2024](https://www.newyorkjets.com/news/jets-logo-new-uniforms-jim-pons) e [identidade dos Guardians](https://www.mlb.com/guardians/press-release/press-release-cleveland-guardians-era-launches-at-progressive-field?t=guardians-press-releases). Essas exceções podem precisar de revisão quando as fontes atualizarem os arquivos.
 
 Os exemplos mínimos de placares e resumos em `tools/fixtures` são usados somente para testes do parser, incluindo futebol e NHL. Os autores e tempos dos gols pertencem às fontes e aos respectivos titulares; não são dados de contas do usuário.
+
+## Logos das ligas NBA e NFL
+
+Os logos originais das ligas em `app/assets/sports/leagues` são distribuídos publicamente pela CDN ESPN. URLs e titulares são registrados em `SOURCES.json`. As marcas pertencem à NBA e à NFL e não são relicenciadas pela licença MIT do código. O aplicativo preserva cores e proporções e apenas reduz as imagens para exibição.

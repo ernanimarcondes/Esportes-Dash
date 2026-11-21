@@ -23,6 +23,8 @@ final class SportsHomeView extends RacingHomeView {
     private final F1CircuitDiagram f1Circuit;
     private F1DetailsScreen f1Details;
     private boolean f1Open;
+    private LeagueDetailsScreen nbaDetails,nflDetails,leagueDetails;
+    private boolean leagueOpen;
     private DayGamesScreen dayGames;
     private boolean dayOpen;
     private DayGamesScreen recentGames;
@@ -35,8 +37,8 @@ final class SportsHomeView extends RacingHomeView {
     private final Runnable tick=new Runnable(){@Override public void run(){
         if(!running)return;long now=SystemClock.elapsedRealtime();
         if(now-lastGames>=5000)refreshGames();
-        if(now>=nextRefresh){sports.refresh();nextRefresh=now+60000;}
-        if(cadence.due(elapsed(),System.currentTimeMillis(),f1Open||dayOpen||recentOpen))invalidate();postDelayed(this,1000);
+        if(now>=nextRefresh){sports.refresh();if(leagueOpen)sports.refreshLeague(leagueDetails.league());nextRefresh=now+60000;}
+        if(cadence.due(elapsed(),System.currentTimeMillis(),f1Open||dayOpen||recentOpen||leagueOpen))invalidate();postDelayed(this,1000);
     }};
     SportsHomeView(Activity activity){
         super(activity);normal=Ui.medium;Typeface strong;
@@ -55,8 +57,8 @@ final class SportsHomeView extends RacingHomeView {
     private static SimpleDateFormat fmt(String pattern){SimpleDateFormat f=new SimpleDateFormat(pattern,new Locale("pt","BR"));f.setTimeZone(TimeZone.getTimeZone("America/Sao_Paulo"));return f;}
     @Override void resume(){super.resume();if(running)return;running=true;startTime=SystemClock.elapsedRealtime();nextRefresh=lastGames=0;cadence.reset();post(tick);}
     @Override void pause(){if(running)activeTime+=SystemClock.elapsedRealtime()-startTime;running=false;removeCallbacks(tick);super.pause();}
-    @Override void destroy(){pause();sports.close();f1Logos.close();f1Circuit.close();if(f1Details!=null)f1Details.close();super.destroy();}
-    @Override void reset(boolean animate){f1Open=false;dayOpen=false;recentOpen=false;focus=7;invalidate();}
+    @Override void destroy(){pause();sports.close();f1Logos.close();f1Circuit.close();if(f1Details!=null)f1Details.close();if(nbaDetails!=null)nbaDetails.close();if(nflDetails!=null)nflDetails.close();super.destroy();}
+    @Override void reset(boolean animate){f1Open=false;dayOpen=false;recentOpen=false;leagueOpen=false;focus=7;invalidate();}
     @Override public void onData(){invalidate();}
     private long elapsed(){return activeTime+(running?SystemClock.elapsedRealtime()-startTime:0);}
     @Override protected void onSizeChanged(int w,int h,int oldw,int oldh){zoom=Math.min(w/1920f,h/1080f);ox=(w-1920*zoom)/2;oy=(h-1080*zoom)/2;}
@@ -65,6 +67,7 @@ final class SportsHomeView extends RacingHomeView {
         if(f1Open){f1Details.draw(c);c.restore();return;}
         if(dayOpen){dayGames.draw(c,today);c.restore();return;}
         if(recentOpen){recentGames.draw(c,recent);c.restore();return;}
+        if(leagueOpen){leagueDetails.draw(c);c.restore();return;}
         header(c);football(c);games(c,1,false);games(c,2,true);formula(c);narrow(c,4);narrow(c,5);narrow(c,6);
         String[] dock={"YouTube","Prime Video","Spotify","Aplicativos","TV / HDMI","Ajustes"};
         for(int i=0;i<dock.length;i++){panel(c,7+i);text(c,dock[i],areas[7+i].left+23,998,23,WHITE,true);right(c,"›",areas[7+i].right-23,998,28,ACCENT,false);}
@@ -285,6 +288,7 @@ final class SportsHomeView extends RacingHomeView {
     private void weatherIcon(Canvas c,float x,float y,float s,int code){p.setColor(code==0?AMBER:0xFFD7E1ED);if(code==0)c.drawCircle(x,y,s,p);
         else{x-=s*.2f;y+=s*.25f;c.drawCircle(x-s*.5f,y,s*.55f,p);c.drawCircle(x,y-s*.3f,s*.7f,p);c.drawCircle(x+s*.6f,y,s*.5f,p);c.drawRoundRect(x-s*.7f,y,x+s*.8f,y+s*.5f,6,6,p);}}
     @Override boolean onKey(KeyEvent e){
+        if(leagueOpen){int action=leagueDetails.onKey(e);if(action>=0){if(action==1){leagueOpen=false;focus=leagueDetails.league().equals("nba")?4:5;}invalidate();return true;}}
         if(recentOpen){int action=recentGames.onKey(e);if(action>=0){if(action==1){recentOpen=false;focus=2;}invalidate();return true;}}
         if(dayOpen){int action=dayGames.onKey(e);if(action>=0){if(action==1){dayOpen=false;focus=1;}invalidate();return true;}}
         if(f1Open){int action=f1Details.onKey(e);if(action>=0){if(action==1){f1Open=false;focus=3;}invalidate();return true;}}
@@ -298,6 +302,7 @@ final class SportsHomeView extends RacingHomeView {
         focus=target;invalidate();return true;
     }
     @Override public boolean onTouchEvent(MotionEvent e){if(e.getAction()!=MotionEvent.ACTION_UP)return true;float x=(e.getX()-ox)/zoom,y=(e.getY()-oy)/zoom;
+        if(leagueOpen){if(leagueDetails.touch(x,y)){leagueOpen=false;focus=leagueDetails.league().equals("nba")?4:5;}invalidate();performClick();return true;}
         if(recentOpen){if(recentGames.touch(x,y)){recentOpen=false;focus=2;}invalidate();performClick();return true;}
         if(dayOpen){if(dayGames.touch(x,y)){dayOpen=false;focus=1;}invalidate();performClick();return true;}
         if(f1Open){if(f1Details.touch(x,y)){f1Open=false;focus=3;}invalidate();performClick();return true;}
@@ -307,7 +312,12 @@ final class SportsHomeView extends RacingHomeView {
         else if(focus==1){if(dayGames==null)dayGames=new DayGamesScreen(sports,normal,bold);dayGames.reset();dayOpen=true;invalidate();}
         else if(focus==2){if(recentGames==null)recentGames=new DayGamesScreen(sports,normal,bold,true);recentGames.reset(recent);recentOpen=true;invalidate();}
         else if(focus==3){if(f1Details==null)f1Details=new F1DetailsScreen(getContext(),sports,agenda,normal,bold,()->invalidate());f1Details.reset();f1Open=true;invalidate();}
-        else if(focus>=4&&focus<=6){SportsFeedParser.Table t=narrowPage(focus,elapsed()).table;if(!t.rows.isEmpty())tableDetails(t);}
+        else if(focus==4||focus==5){
+            if(focus==4){if(nbaDetails==null)nbaDetails=new LeagueDetailsScreen(getContext(),sports,"nba",normal,bold);leagueDetails=nbaDetails;}
+            else{if(nflDetails==null)nflDetails=new LeagueDetailsScreen(getContext(),sports,"nfl",normal,bold);leagueDetails=nflDetails;}
+            leagueDetails.reset();leagueOpen=true;sports.refreshLeague(leagueDetails.league());invalidate();
+        }
+        else if(focus==6){SportsFeedParser.Table t=narrowPage(focus,elapsed()).table;if(!t.rows.isEmpty())tableDetails(t);}
         else if(focus<10)openApp(focus-7);else if(focus==10)showAllApps();else if(focus==11)showInputs();else settings();
     }
     private void tableDetails(SportsFeedParser.Table t){StringBuilder message=new StringBuilder("Temporada "+t.season+"\nAtualizado: "+stamp.format(new Date(t.at))+"\n\n");

@@ -2,9 +2,9 @@ package io.freemytv;
 
 import java.util.*;
 
-/** A single chronological schedule, with optional status filters and manual pages. */
+/** A chronological schedule with status filters, compact list pages and card pages. */
 final class DayGames {
-    static final int ALL=0,UPCOMING=1,LIVE=2,FINISHED=3,PER_PAGE=6;
+    static final int ALL=0,UPCOMING=1,LIVE=2,FINISHED=3,PER_PAGE=6,LIST_PER_PAGE=48;
     static boolean unavailable(SportsFeedParser.Game g){
         return g.status.contains("POSTPONED")||g.status.contains("CANCELED")||g.status.contains("CANCELLED")||g.status.contains("SUSPEND");
     }

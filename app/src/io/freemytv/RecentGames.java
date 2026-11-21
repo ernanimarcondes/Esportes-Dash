@@ -6,7 +6,7 @@ import java.util.*;
 
 /** Date tabs over the existing recent-results window, using the viewer's Brazilian match date. */
 final class RecentGames {
-    static final int DAYS=4,ALL=-1,LIST_ROWS=24,LIST_PER_PAGE=48;
+    static final int DAYS=4,ALL=-1,LIST_ROWS=24,LIST_PER_PAGE=DayGames.LIST_PER_PAGE;
     static final ZoneId ZONE=ZoneId.of("America/Sao_Paulo");
     private static final DateTimeFormatter DATE=DateTimeFormatter.ofPattern("dd/MM"),WEEKDAY=DateTimeFormatter.ofPattern("EEE",new Locale("pt","BR"));
     static int offsetForTab(int tab){return tab<=0?ALL:DAYS-Math.min(tab,DAYS-1);}

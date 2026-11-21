@@ -18,10 +18,11 @@ def main():
         candidate=Path(os.environ['JAVA_HOME'])/'bin'/(name+('.exe' if os.name=='nt' else '')) if os.environ.get('JAVA_HOME') else shutil.which(name)
         if not candidate or not Path(candidate).is_file():raise SystemExit('JDK 17+ required: '+name)
         return str(candidate)
-    sources=['SportsFeedParser','FootballGoals','MatchGoalsSummary','DayGames','RecentGames','DayGamesRotation','GoalLinesRotation','SportsRenderCadence','TeamLogoPolicy','StandingsRotation']
-    checks=['DayGamesCheck','RecentGamesCheck','FootballGoalsCheck','MatchGoalsSummaryCheck','SportsRenderCadenceCheck','TeamLogoPolicyCheck','StandingsRotationCheck']
+    sources=['SportsFeedParser','FootballGoals','MatchGoalsSummary','DayGames','RecentGames','DayGamesRotation','GoalLinesRotation','SportsRenderCadence','TeamLogoPolicy','StandingsRotation','LeaguePanelModel','NFLRounds']
+    checks=['DayGamesCheck','RecentGamesCheck','FootballGoalsCheck','MatchGoalsSummaryCheck','SportsRenderCadenceCheck','TeamLogoPolicyCheck','StandingsRotationCheck','LeaguePanelModelCheck','NFLRoundsCheck']
     fixtures=ROOT/'tools/fixtures'
-    arguments={'FootballGoalsCheck':[fixtures/'soccer-goals.json'],
+    arguments={'NFLRoundsCheck':[fixtures/'nfl-round-current.json',fixtures/'nfl-round-previous.json'],
+               'FootballGoalsCheck':[fixtures/'soccer-goals.json'],
                'MatchGoalsSummaryCheck':[fixtures/'nhl-summary.json',fixtures/'nhl-scoreboard.json',fixtures/'soccer-goals.json',fixtures/'soccer-summary.json']}
     with tempfile.TemporaryDirectory(prefix='sports-panels-check-') as directory:
         paths=[ROOT/'app/src/io/freemytv'/(name+'.java') for name in sources]+[ROOT/'tools'/(name+'.java') for name in checks]

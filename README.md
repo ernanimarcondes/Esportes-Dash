@@ -10,14 +10,16 @@ Este é o projeto independente do painel esportivo. Para a base com Dash Pessoal
 
 ![Esportes Dash com o mapa compacto de F1 e setores coloridos](docs/images/esportes-dashboard.png)
 
-- Classificações: Brasileirão Série A e B, Premier League, Ligue 1, LaLiga, Liga Portugal e Bundesliga. Troca a cada 30 segundos.
+- Classificações: Brasileirão Série A e B, Premier League, Ligue 1, LaLiga, Liga Portugal e Bundesliga. Troca a cada 30 segundos. As classificações de futebol são consultadas novamente a cada 15 minutos enquanto o painel está aberto.
 - Jogos do dia: dois confrontos por página, escudos e horários de Brasília, em ordem de horário. Troca a cada 10 segundos.
 - Resultados: partidas encerradas nas últimas 72 horas em ordem de data e horário, dois confrontos por página e troca a cada 10 segundos.
 - Futebol de clubes e seleções: ligas selecionadas, Libertadores, Sul-Americana, Champions, Europa League, Conference League, copas nacionais e outras competições importantes disponíveis na fonte. Nas copas nacionais, prioriza os clubes das ligas acompanhadas; amistosos priorizam seleções de maior destaque.
 - Fórmula 1: programação e traçado vetorial compacto do próximo GP por 30 segundos; classificação de pilotos em páginas consecutivas de dez nomes, com 15 segundos por página; construtores por 15 segundos. A próxima sessão permanece visível. Os 26 circuitos usam o mesmo enquadramento proporcional, setores coloridos e desenho vetorial na resolução da tela; os números das curvas ficam no painel exclusivo de F1. As classificações de pilotos e construtores mostram as logos das equipes em alta qualidade.
-- NBA e NFL: até oito times por página, com troca a cada 15 segundos. Todas as páginas da conferência atual são mostradas antes da próxima. NHL e MLB compartilham o quadro: primeiro são exibidas todas as páginas de cada conferência da NHL, depois de cada liga da MLB. OK abre a classificação completa.
+- NBA e NFL: até oito times por página, com troca a cada 15 segundos. Todas as páginas da conferência atual são mostradas antes da próxima. NHL e MLB compartilham o quadro: primeiro são exibidas todas as páginas de cada conferência da NHL, depois de cada liga da MLB. OK nos quadros NBA e NFL abre seus respectivos painéis exclusivos; NHL/MLB continuam com a classificação completa em diálogo.
 - Relógio, data, clima da cidade configurada e atalhos para aplicativos, TV/HDMI e ajustes.
 - Escudos de futebol, seleções, NBA, NFL, NHL e MLB priorizam as versões da ESPN próprias para fundo escuro em todos os quadros, incluindo jogos do dia e resultados recentes. O original é usado como alternativa se a variante não estiver disponível. O carregador mantém o recorte transparente e a redução de alta qualidade para o tamanho real da tela, sem recolorir os escudos. Variantes antigas de Athletico-PR, New York Jets e Cleveland Guardians são evitadas para preservar as identidades atuais.
+
+As classificações de futebol, NBA, NFL, NHL e MLB, os dados de resultados/classificação de F1 e a programação das sessões de F1 são consultados aproximadamente a cada 15 minutos, enquanto o dashboard está aberto. Os jogos de hoje mantêm cinco minutos; os resultados de dias anteriores e o clima, 30 minutos.
 
 Os tempos acima controlam a rotação visual. As consultas de dados são periódicas, com cache local e conservação da última resposta válida. Não é um serviço de placar em tempo real. Não há grade de transmissão de TV. A cobertura depende das fontes e pode ter jogos ausentes, dados indisponíveis ou programação alterada.
 
@@ -44,9 +46,11 @@ O painel de F1 usa fundo preto, grafite e vermelho. Os pódios são calculados p
 
 Selecione **Jogos do dia** ou **Resultados recentes** na tela principal e pressione **OK**. **Voltar** retorna ao mesmo quadro do Esportes Dash.
 
-![Jogos do dia: seis confrontos com escudos, placares e autores dos gols](docs/images/jogos-do-dia.png)
+![Jogos do dia: aba Todos em lista cronológica](docs/images/jogos-do-dia-lista.png)
 
-- **Jogos do dia:** fundo preto e verde-esmeralda, seis confrontos por página e filtros Todos, A seguir, Em andamento e Encerrados. Os jogos seguem a ordem de horário; horários desconhecidos ficam no final. As páginas mudam automaticamente a cada 20 segundos, sem controles de próxima página.
+![Filtros de jogos com cartões e autores dos gols](docs/images/jogos-do-dia.png)
+
+- **Jogos do dia:** fundo preto e verde-esmeralda. A aba Todos mostra uma lista cronológica em duas colunas, com até 48 partidas por página, horários, escudos e placares/status. Os filtros A seguir, Em andamento e Encerrados mantêm seis cartões por página. Os jogos seguem a ordem de horário; horários desconhecidos ficam no final. As páginas mudam automaticamente a cada 20 segundos, sem controles de próxima página.
 - **Autores dos gols:** os cartões de futebol e NHL mostram os autores e os momentos dos gols quando a fonte oferece esses dados. No futebol, inclui acréscimos, pênaltis e gols contra; na NHL, período e tempo. Assistências e cobranças de shootout não são apresentadas como gols. Mais de quatro linhas por time alternam a cada cinco segundos. Sem cobertura, informa a indisponibilidade em vez de completar com dados estimados.
 - **Resultados recentes:** identidade roxa e aba **Todos** primeiro, seguida pelas datas do mais antigo para o mais novo, sem aba exclusiva para hoje. A janela de resultados é móvel de 72 horas e pode alcançar partes de quatro datas. Todos inclui também os jogos de hoje já encerrados dentro dessa janela.
 - **Todos em lista:** até 48 partidas por página, distribuídas em duas colunas, em ordem de data e horário. Quando necessário, muda a página a cada 20 segundos. As abas por data usam os seis cartões com detalhes dos gols.
@@ -59,6 +63,30 @@ Selecione **Jogos do dia** ou **Resultados recentes** na tela principal e pressi
 Os novos painéis compartilham os dados e o carregador de escudos da tela principal. As consultas e o processamento de imagens ocorrem em segundo plano, com limites de concorrência e cache local. A tela principal evita redesenhos repetidos quando não há mudança; comandos do controle, imagens e dados novos continuam provocando atualização imediata. Nos detalhes, os temporizadores mantêm as transições de cinco e vinte segundos.
 
 **Continuaremos melhorando os demais quadros do Esportes Dash**, com novos painéis de detalhes e ajustes de visualização e navegação.
+
+## Painéis exclusivos de NBA e NFL
+
+Selecione o quadro **NBA** ou **NFL** e pressione **OK**. **Voltar** retorna ao mesmo quadro da tela principal. A NBA usa azul e vermelho; a NFL, vermelho e azul-marinho, sempre sobre fundo preto.
+
+- **Visão geral:** líderes das duas conferências e resumos dos confrontos atuais e últimos resultados selecionados.
+- **Leste/Oeste (NBA) e AFC/NFC (NFL):** classificação completa em duas colunas, com escudos, campanha e aproveitamento. Empates da NFL contam como meia vitória no aproveitamento.
+- **Jogos:** na NFL, usa a semana oficial da fonte, incluindo os jogos já encerrados dessa semana. Na NBA, reúne o confronto em andamento de cada time ou seu próximo confronto, sem limitar a um dia ou a um intervalo de datas. Partidas compartilhadas são exibidas uma única vez. Os horários exibidos continuam sendo de Brasília.
+- **Resultados:** semana oficial anterior na NFL; na NBA, reúne o último confronto encerrado de cada time, mesmo que tenha ocorrido em datas diferentes, sem duplicar partidas compartilhadas.
+- Páginas de jogos e resultados mudam a cada 20 segundos quando necessário, sem botões de próxima página.
+- Logos originais das ligas em 500 px, recorte transparente e redução com tratamento de alfa para a resolução física da TV. Os escudos compartilham o carregador de alta qualidade e o cache dos demais quadros.
+- Consultas adicionais são feitas somente para a liga aberta. A semana atual da NFL e os placares de hoje são verificados a cada cinco minutos; a semana anterior da NFL é conservada por 30 minutos. Na NBA, os calendários dos times são consultados na abertura e conservados por seis horas; ficam em cache somente os dois últimos confrontos encerrados e até três confrontos atuais/futuros de cada time. Isso limita o processamento sem criar um recorte de datas. Os placares diários mais recentes complementam esse cache. Classificações mantêm 15 minutos. As identidades das semanas da NFL são persistidas no cache, sem inferi-las por intervalos de datas. A cobertura depende da fonte.
+
+![Classificação completa do Leste no painel exclusivo da NBA](docs/images/nba-classificacao.png)
+
+![NBA: confrontos atuais de cada time](docs/images/nba-jogos.png)
+
+![NBA: último confronto encerrado de cada time](docs/images/nba-resultados.png)
+
+![Classificação completa da AFC no painel exclusivo da NFL](docs/images/nfl-classificacao.png)
+
+![NFL: jogos da semana oficial atual](docs/images/nfl-jogos.png)
+
+![NFL: resultados da semana anterior](docs/images/nfl-resultados.png)
 
 ## Compilar
 

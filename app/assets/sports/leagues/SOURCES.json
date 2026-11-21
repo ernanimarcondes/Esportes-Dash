@@ -1,0 +1,12 @@
+{
+  "nba": {
+    "url": "https://a.espncdn.com/i/teamlogos/leagues/500/nba.png",
+    "owner": "NBA",
+    "notes": "Original league mark, unmodified. Alpha-aware reduction only at render time."
+  },
+  "nfl": {
+    "url": "https://a.espncdn.com/i/teamlogos/leagues/500/nfl.png",
+    "owner": "NFL",
+    "notes": "Original league mark, unmodified. Alpha-aware reduction only at render time."
+  }
+}
