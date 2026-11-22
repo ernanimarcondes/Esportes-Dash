@@ -1,13 +1,15 @@
 """Build Esportes-Dash with Python 3, JDK 17 and Android SDK 34. No Gradle required."""
 from pathlib import Path
-import argparse,json,os,re,shutil,subprocess,sys,zipfile
+import argparse,json,os,re,secrets,shutil,subprocess,sys,zipfile
 
 ROOT=Path(__file__).resolve().parent
 def version(path):return tuple(int(x) for x in re.findall(r'\d+',path.name))
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--personal',action='store_true',help='Use ignored local config.properties and channel settings')
+    parser.add_argument('--release',action='store_true',help='Sign with the persistent private release key in .local')
     args=parser.parse_args()
+    if args.release and args.personal:parser.error('Public releases cannot include personal configuration')
     sdk_value=os.environ.get('ANDROID_HOME') or os.environ.get('ANDROID_SDK_ROOT')
     if not sdk_value:raise SystemExit('Set ANDROID_HOME to your Android SDK directory.')
     sdk=Path(sdk_value).resolve();ext='.exe' if os.name=='nt' else ''
@@ -68,10 +70,22 @@ def main():
     run(java_tool('java'),'-Xmx1024M','-cp',bt/'lib/d8.jar','com.android.tools.r8.D8','--release','--min-api','26','--lib',android,'--output',out,out/'classes.jar')
     with zipfile.ZipFile(out/'base.apk','a',compression=zipfile.ZIP_DEFLATED) as apk:apk.write(out/'classes.dex','classes.dex')
     run(bt/('zipalign'+ext),'-f','-p','4',out/'base.apk',out/'aligned.apk')
-    key=ROOT/'.local/debug.keystore';key.parent.mkdir(exist_ok=True)
-    if not key.exists():run(java_tool('keytool'),'-genkeypair','-keystore',key,'-alias','androiddebugkey','-keyalg','RSA','-keysize','2048','-validity','10000','-storepass','android','-keypass','android','-dname','CN=Android Debug,O=Android,C=US')
+    private=ROOT/'.local';private.mkdir(exist_ok=True)
+    if args.release:
+        key=private/'release.keystore';credentials=private/'release-signing.json';alias='esportesdash'
+        if key.exists()!=credentials.exists():raise SystemExit('Release key and password backup must both exist; restore the missing file before building.')
+        if not key.exists():
+            credentials.write_text(json.dumps({'password':secrets.token_urlsafe(48)}),encoding='utf-8')
+        password=json.loads(credentials.read_text(encoding='utf-8'))['password']
+    else:
+        key=private/'debug.keystore';alias='androiddebugkey';password='android'
+    os.environ['ESPORTES_SIGNING_PASSWORD']=password
+    if not key.exists():run(java_tool('keytool'),'-genkeypair','-keystore',key,'-alias',alias,'-keyalg','RSA','-keysize','2048','-validity','10000','-storepass:env','ESPORTES_SIGNING_PASSWORD','-keypass:env','ESPORTES_SIGNING_PASSWORD','-dname','CN=Esportes-Dash,O=Esportes-Dash,C=BR')
     apk=out/'Esportes-Dash.apk'
-    run(java_tool('java'),'-jar',bt/'lib/apksigner.jar','sign','--ks',key,'--ks-key-alias','androiddebugkey','--ks-pass','pass:android','--key-pass','pass:android','--out',apk,out/'aligned.apk')
+    try:
+        run(java_tool('java'),'-jar',bt/'lib/apksigner.jar','sign','--ks',key,'--ks-key-alias',alias,'--ks-pass','env:ESPORTES_SIGNING_PASSWORD','--key-pass','env:ESPORTES_SIGNING_PASSWORD','--out',apk,out/'aligned.apk')
+    finally:
+        os.environ.pop('ESPORTES_SIGNING_PASSWORD',None)
     run(java_tool('java'),'-jar',bt/'lib/apksigner.jar','verify','--verbose',apk)
     print('Built:',apk)
     print('Configuration:', 'personal local files' if args.personal else 'public defaults; no local settings included')

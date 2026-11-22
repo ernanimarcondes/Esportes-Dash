@@ -6,6 +6,21 @@ Painel de esportes para Android TV, com fundo preto, cartões em grafite, azul-g
 
 Este é o projeto independente do painel esportivo. Para a base com Dash Pessoal e suporte à implementação de outros perfis, consulte TV-Dashboard.
 
+## Baixar e instalar
+
+Baixe **[Esportes-Dash-v1.4.1.apk](https://github.com/ernanimarcondes/Esportes-Dash/releases/download/v1.4.1/Esportes-Dash-v1.4.1.apk)** na [página da versão](https://github.com/ernanimarcondes/Esportes-Dash/releases/tag/v1.4.1). O APK é público, sem configurações pessoais, e dispensa compilação. Requer Android TV 8 ou superior; veja as orientações e limitações em **Compatibilidade e instalação** abaixo.
+
+Com a depuração habilitada e autorizada na sua TV, use o ADB oficial:
+
+```text
+adb connect ENDERECO_DA_TV:5555
+adb install -r Esportes-Dash-v1.4.1.apk
+```
+
+Abra Free My TV → Home Screen → Esportes Dash. Configure sua cidade no aplicativo. Para voltar à tela de fábrica, selecione Original. As próximas versões públicas usarão a mesma chave de assinatura para permitir atualização sem desinstalar. APKs compilados por outras pessoas ou das variantes Free My TV e TV-Dashboard podem ter assinatura diferente: nesse caso, volte a Original antes de remover a variante anterior. Este APK público não substitui por atualização a instalação personalizada do autor.
+
+O arquivo **SHA256SUMS.txt** da versão permite conferir a integridade do download. As chaves de assinatura ficam fora do repositório e não são distribuídas.
+
 ## TV e entradas HDMI
 
 Na tela inicial, **TV / HDMI** abre o seletor de entradas. **TV · canais / antena** solicita os canais da televisão; cada HDMI abre a entrada correspondente, com o nome e o estado informados pelo aparelho. Entradas em espera continuam disponíveis para seleção. A disponibilidade dos canais depende da antena e da sintonia já configuradas na TV.
@@ -100,9 +115,11 @@ Requisitos: Python 3, JDK 17+, Android SDK com `build-tools;34.0.0` e `platforms
 python build.py
 ```
 
-O APK genérico fica em `out/Esportes-Dash.apk`. A compilação usa uma chave de desenvolvimento criada localmente em `.local/debug.keystore`. A chave e o APK ficam fora do Git. Guarde sua própria chave para assinar futuras atualizações; não publique a chave.
+O APK genérico fica em `out/Esportes-Dash.apk`. A compilação usa uma chave de desenvolvimento criada localmente em `.local/debug.keystore`. A chave e o APK ficam fora do histórico de código do Git; o APK público pronto é distribuído em Releases. Guarde sua própria chave para assinar futuras atualizações; não publique a chave.
 
 O build padrão ignora `config.properties` e não contém cidade, coordenadas ou credenciais pessoais. Para definir padrões locais, copie `config.example.properties` para `config.properties` e compile com `python build.py --personal`. A cidade também pode ser escolhida no aplicativo.
+
+Para preparar uma distribuição pública com chave persistente própria, use `python build.py --release`. Essa opção ignora configurações pessoais e não pode ser combinada com `--personal`. Guarde em segurança os dois arquivos locais `.local/release.keystore` e `.local/release-signing.json`; são necessários para assinar atualizações compatíveis. Não os publique.
 
 ## Compatibilidade e instalação
 

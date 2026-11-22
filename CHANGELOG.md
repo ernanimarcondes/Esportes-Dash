@@ -2,6 +2,8 @@
 
 ## 1.4.1 — 2026-11-22
 
+- Primeiro APK público pronto para instalar em Releases, com assinatura própria persistente, checksum SHA-256 e instruções de instalação sem compilação.
+
 - Corrigido o botão TV / HDMI da tela inicial, que agora abre um seletor de entradas independente do menu original.
 - TV · canais / antena solicita o sintonizador, evitando retomar a última entrada HDMI nas TCL compatíveis.
 - Entradas HDMI usam o nome do dispositivo e o estado de conexão informado pela televisão; entradas em espera continuam selecionáveis.
