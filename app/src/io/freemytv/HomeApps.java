@@ -600,7 +600,12 @@ final class HomeApps {
             return new Intent(XIAOMI_SOURCES_ACTION).setComponent(XIAOMI_SOURCES)
                     .putExtra("input", XIAOMI_HDMI[port(it) - 1]);
         }
-        return new Intent(Intent.ACTION_VIEW, TvContract.buildChannelUriForPassthroughInput(it.inputId));
+        Intent standard = new Intent(Intent.ACTION_VIEW, TvContract.buildChannelUriForPassthroughInput(it.inputId));
+        if (standard.resolveActivity(c.getPackageManager()) == null) {
+            Intent typed = new Intent(standard).setDataAndType(standard.getData(), TvContract.Channels.CONTENT_ITEM_TYPE);
+            if (typed.resolveActivity(c.getPackageManager()) != null) return typed;
+        }
+        return standard;
     }
 
     /** Words in a device's name, by the icon they pick: a game console, a streaming box, a sound system, a TV box. */
@@ -783,6 +788,10 @@ final class HomeApps {
         if (tuner != null) {
             Intent channels = new Intent(Intent.ACTION_VIEW, TvContract.buildChannelsUriForInput(tuner));
             if (channels.resolveActivity(pm) != null) return channels;
+            // TCL exposes the channels route through its MIME filter only; opening the app
+            // itself would restore the last HDMI source instead of the antenna.
+            Intent typed = new Intent(channels).setDataAndType(channels.getData(), TvContract.Channels.CONTENT_TYPE);
+            if (typed.resolveActivity(pm) != null) return typed;
         }
         if (mediaTek != null) return mediaTek;
         for (String pkg : LIVE_TV_APPS) {

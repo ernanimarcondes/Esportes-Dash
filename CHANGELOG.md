@@ -1,5 +1,12 @@
 # Alterações
 
+## 1.4.1 — 2026-11-22
+
+- Corrigido o botão TV / HDMI da tela inicial, que agora abre um seletor de entradas independente do menu original.
+- TV · canais / antena solicita o sintonizador, evitando retomar a última entrada HDMI nas TCL compatíveis.
+- Entradas HDMI usam o nome do dispositivo e o estado de conexão informado pela televisão; entradas em espera continuam selecionáveis.
+- Compatibilidade com os filtros MIME de canais e entradas da TCL, preservando os caminhos específicos dos demais fabricantes.
+
 ## 1.4.0 — 2026-11-21
 
 - Novos painéis exclusivos da NBA e NFL, abertos com OK nos quadros da tela inicial e retorno por Voltar ao quadro selecionado.

@@ -61,5 +61,5 @@ abstract class RacingHomeView extends View implements HomeData.Listener {
             activity.startActivity(new Intent(Intent.ACTION_MAIN).setClassName(app.activityInfo.packageName,app.activityInfo.name).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         }catch(Exception e){showToast("Não foi possível abrir o aplicativo");}}).show();
     }
-    void showInputs(){HomeApps.open(activity,HomeApps.action(HomeApps.INPUTS,HomeApps.TOP_INPUTS,"TV / HDMI","hdmi"),null);}
+    void showInputs(){TVInputPicker.show(activity);}
 }

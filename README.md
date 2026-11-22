@@ -6,6 +6,10 @@ Painel de esportes para Android TV, com fundo preto, cartões em grafite, azul-g
 
 Este é o projeto independente do painel esportivo. Para a base com Dash Pessoal e suporte à implementação de outros perfis, consulte TV-Dashboard.
 
+## TV e entradas HDMI
+
+Na tela inicial, **TV / HDMI** abre o seletor de entradas. **TV · canais / antena** solicita os canais da televisão; cada HDMI abre a entrada correspondente, com o nome e o estado informados pelo aparelho. Entradas em espera continuam disponíveis para seleção. A disponibilidade dos canais depende da antena e da sintonia já configuradas na TV.
+
 ## O painel
 
 ![Esportes Dash com o mapa compacto de F1 e setores coloridos](docs/images/esportes-dashboard.png)
