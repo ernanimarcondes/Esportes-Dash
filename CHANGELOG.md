@@ -2,6 +2,8 @@
 
 ## 1.5.0 — 2026-11-26
 
+- Galeria de capturas reais de NHL e MLB, classificações alinhadas, resultados e exemplo da troca automática dos resumos na NBA; Visão geral da NFL atualizada.
+
 - Novas telas exclusivas da NHL e MLB, com Visão geral, classificações completas das duas conferências/ligas, Jogos e Resultados.
 - OK no quadro compartilhado abre a liga exibida no momento do clique; Voltar retorna ao mesmo quadro.
 - Identidade visual própria: NHL em prata/grafite e MLB em azul-marinho/vermelho, sempre com fundo preto e logos originais de 500 px.

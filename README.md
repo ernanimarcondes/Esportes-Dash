@@ -95,6 +95,36 @@ Selecione o quadro **NBA** ou **NFL** e pressione **OK**. No quadro compartilhad
 - Logos originais das ligas em 500 px, recorte transparente e redução com tratamento de alfa para a resolução física da TV. Os escudos compartilham o carregador de alta qualidade e o cache dos demais quadros.
 - Consultas adicionais são feitas somente para a liga aberta. A semana atual da NFL e os placares de hoje são verificados a cada cinco minutos; a semana anterior da NFL é conservada por 30 minutos. Na NBA, NHL e MLB, os calendários dos times são consultados na abertura e conservados por seis horas; ficam em cache somente os dois últimos confrontos encerrados e até três confrontos atuais/futuros de cada time. Isso limita o processamento sem criar um recorte de datas. Os placares diários mais recentes complementam esse cache. Classificações mantêm 15 minutos. As identidades das semanas da NFL são persistidas no cache, sem inferi-las por intervalos de datas. Na MLB, durante o intervalo entre temporadas, a consulta combina a programação futura disponível com os jogos da última temporada regular e pós-temporada. Datas em outro ano mostram o ano abreviado. O cache antigo da NBA é migrado e calendários não substituem placares finais ou em andamento por um estado pré-jogo atrasado. A cobertura depende da fonte.
 
+### Amostras da versão 1.5.0
+
+Capturas reais da validação na TV em 26/11/2026. Os placares e as classificações retratam aquele momento; as imagens não são dados ao vivo. Clique para ampliar.
+
+| NHL — prata e grafite | MLB — azul-marinho e vermelho |
+| --- | --- |
+| ![NHL: Visão geral com as duas conferências e resumos automáticos](docs/images/nhl-dashboard.png) | ![MLB: Visão geral com as duas ligas e resumos automáticos](docs/images/mlb-dashboard.png) |
+| ![NHL: classificação completa do Oeste com linhas e escudos alinhados](docs/images/nhl-classificacao.png) | ![MLB: classificação completa da Nacional com linhas e escudos alinhados](docs/images/mlb-classificacao.png) |
+
+Os dois lados da Visão geral mantêm as mesmas dimensões, margens e colunas. As classificações usam espaçamento uniforme e preservam as proporções dos escudos.
+
+### Resumos que alternam a cada 15 segundos
+
+Estas duas capturas da NBA mostram pares diferentes de confrontos após uma troca automática. O comportamento é compartilhado por **NBA, NFL, NHL e MLB**: até dois jogos por quadro, listas independentes e reinício somente depois de percorrer todos os confrontos.
+
+| Antes da troca | Após a troca automática |
+| --- | --- |
+| ![NBA: pares de confrontos antes da rotação](docs/images/nba-resumos-inicio.png) | ![NBA: próximos pares de confrontos após a rotação de 15 segundos](docs/images/nba-resumos-15s.png) |
+
+<details>
+<summary>Ver resultados da NHL e MLB e a Visão geral atualizada da NFL</summary>
+
+![NHL: último resultado de cada time em lista](docs/images/nhl-resultados.png)
+
+![MLB: último resultado de cada time, incluindo a pausa entre temporadas](docs/images/mlb-resultados.png)
+
+![NFL: Visão geral com as duas conferências e resumos da semana atual e anterior](docs/images/nfl-visao-geral.png)
+
+</details>
+
 ![Classificação completa do Leste no painel exclusivo da NBA](docs/images/nba-classificacao.png)
 
 ![NBA: confrontos atuais de cada time](docs/images/nba-jogos.png)
