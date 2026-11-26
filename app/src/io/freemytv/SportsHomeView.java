@@ -23,7 +23,9 @@ final class SportsHomeView extends RacingHomeView {
     private final F1CircuitDiagram f1Circuit;
     private F1DetailsScreen f1Details;
     private boolean f1Open;
-    private LeagueDetailsScreen nbaDetails,nflDetails,leagueDetails;
+    private LeagueDetailsScreen nbaDetails,nflDetails,nhlDetails,mlbDetails,leagueDetails;
+    private String displayedSharedLeague="nhl";
+    private int leagueReturnFocus=4;
     private boolean leagueOpen;
     private DayGamesScreen dayGames;
     private boolean dayOpen;
@@ -57,7 +59,7 @@ final class SportsHomeView extends RacingHomeView {
     private static SimpleDateFormat fmt(String pattern){SimpleDateFormat f=new SimpleDateFormat(pattern,new Locale("pt","BR"));f.setTimeZone(TimeZone.getTimeZone("America/Sao_Paulo"));return f;}
     @Override void resume(){super.resume();if(running)return;running=true;startTime=SystemClock.elapsedRealtime();nextRefresh=lastGames=0;cadence.reset();post(tick);}
     @Override void pause(){if(running)activeTime+=SystemClock.elapsedRealtime()-startTime;running=false;removeCallbacks(tick);super.pause();}
-    @Override void destroy(){pause();sports.close();f1Logos.close();f1Circuit.close();if(f1Details!=null)f1Details.close();if(nbaDetails!=null)nbaDetails.close();if(nflDetails!=null)nflDetails.close();super.destroy();}
+    @Override void destroy(){pause();sports.close();f1Logos.close();f1Circuit.close();if(f1Details!=null)f1Details.close();if(nbaDetails!=null)nbaDetails.close();if(nflDetails!=null)nflDetails.close();if(nhlDetails!=null)nhlDetails.close();if(mlbDetails!=null)mlbDetails.close();super.destroy();}
     @Override void reset(boolean animate){f1Open=false;dayOpen=false;recentOpen=false;leagueOpen=false;focus=7;invalidate();}
     @Override public void onData(){invalidate();}
     private long elapsed(){return activeTime+(running?SystemClock.elapsedRealtime()-startTime:0);}
@@ -140,6 +142,7 @@ final class SportsHomeView extends RacingHomeView {
     }
     private void narrow(Canvas c,int id){
         RectF b=areas[id];panel(c,id);NarrowPage current=narrowPage(id,elapsed());SportsFeedParser.Table t=current.table;
+        if(id==6)displayedSharedLeague=t.key;
         String league=t.key.toUpperCase(Locale.ROOT),group=t.group.isEmpty()?"Classificação":t.group;
         text(c,league,b.left+17,b.top+39,28,ACCENT,true);text(c,group,b.left+17,b.top+73,23,WHITE,true);
         if(t.rows.isEmpty()){text(c,"Consultando…",b.left+17,b.top+153,19,MUTED,false);return;}
@@ -288,7 +291,7 @@ final class SportsHomeView extends RacingHomeView {
     private void weatherIcon(Canvas c,float x,float y,float s,int code){p.setColor(code==0?AMBER:0xFFD7E1ED);if(code==0)c.drawCircle(x,y,s,p);
         else{x-=s*.2f;y+=s*.25f;c.drawCircle(x-s*.5f,y,s*.55f,p);c.drawCircle(x,y-s*.3f,s*.7f,p);c.drawCircle(x+s*.6f,y,s*.5f,p);c.drawRoundRect(x-s*.7f,y,x+s*.8f,y+s*.5f,6,6,p);}}
     @Override boolean onKey(KeyEvent e){
-        if(leagueOpen){int action=leagueDetails.onKey(e);if(action>=0){if(action==1){leagueOpen=false;focus=leagueDetails.league().equals("nba")?4:5;}invalidate();return true;}}
+        if(leagueOpen){int action=leagueDetails.onKey(e);if(action>=0){if(action==1){leagueOpen=false;focus=leagueReturnFocus;}invalidate();return true;}}
         if(recentOpen){int action=recentGames.onKey(e);if(action>=0){if(action==1){recentOpen=false;focus=2;}invalidate();return true;}}
         if(dayOpen){int action=dayGames.onKey(e);if(action>=0){if(action==1){dayOpen=false;focus=1;}invalidate();return true;}}
         if(f1Open){int action=f1Details.onKey(e);if(action>=0){if(action==1){f1Open=false;focus=3;}invalidate();return true;}}
@@ -302,7 +305,7 @@ final class SportsHomeView extends RacingHomeView {
         focus=target;invalidate();return true;
     }
     @Override public boolean onTouchEvent(MotionEvent e){if(e.getAction()!=MotionEvent.ACTION_UP)return true;float x=(e.getX()-ox)/zoom,y=(e.getY()-oy)/zoom;
-        if(leagueOpen){if(leagueDetails.touch(x,y)){leagueOpen=false;focus=leagueDetails.league().equals("nba")?4:5;}invalidate();performClick();return true;}
+        if(leagueOpen){if(leagueDetails.touch(x,y)){leagueOpen=false;focus=leagueReturnFocus;}invalidate();performClick();return true;}
         if(recentOpen){if(recentGames.touch(x,y)){recentOpen=false;focus=2;}invalidate();performClick();return true;}
         if(dayOpen){if(dayGames.touch(x,y)){dayOpen=false;focus=1;}invalidate();performClick();return true;}
         if(f1Open){if(f1Details.touch(x,y)){f1Open=false;focus=3;}invalidate();performClick();return true;}
@@ -312,12 +315,14 @@ final class SportsHomeView extends RacingHomeView {
         else if(focus==1){if(dayGames==null)dayGames=new DayGamesScreen(sports,normal,bold);dayGames.reset();dayOpen=true;invalidate();}
         else if(focus==2){if(recentGames==null)recentGames=new DayGamesScreen(sports,normal,bold,true);recentGames.reset(recent);recentOpen=true;invalidate();}
         else if(focus==3){if(f1Details==null)f1Details=new F1DetailsScreen(getContext(),sports,agenda,normal,bold,()->invalidate());f1Details.reset();f1Open=true;invalidate();}
-        else if(focus==4||focus==5){
+        else if(focus==4||focus==5||focus==6){
+            leagueReturnFocus=focus;
             if(focus==4){if(nbaDetails==null)nbaDetails=new LeagueDetailsScreen(getContext(),sports,"nba",normal,bold);leagueDetails=nbaDetails;}
-            else{if(nflDetails==null)nflDetails=new LeagueDetailsScreen(getContext(),sports,"nfl",normal,bold);leagueDetails=nflDetails;}
+            else if(focus==5){if(nflDetails==null)nflDetails=new LeagueDetailsScreen(getContext(),sports,"nfl",normal,bold);leagueDetails=nflDetails;}
+            else if(displayedSharedLeague.equals("mlb")){if(mlbDetails==null)mlbDetails=new LeagueDetailsScreen(getContext(),sports,"mlb",normal,bold);leagueDetails=mlbDetails;}
+            else{if(nhlDetails==null)nhlDetails=new LeagueDetailsScreen(getContext(),sports,"nhl",normal,bold);leagueDetails=nhlDetails;}
             leagueDetails.reset();leagueOpen=true;sports.refreshLeague(leagueDetails.league());invalidate();
         }
-        else if(focus==6){SportsFeedParser.Table t=narrowPage(focus,elapsed()).table;if(!t.rows.isEmpty())tableDetails(t);}
         else if(focus<10)openApp(focus-7);else if(focus==10)showAllApps();else if(focus==11)showInputs();else settings();
     }
     private void tableDetails(SportsFeedParser.Table t){StringBuilder message=new StringBuilder("Temporada "+t.season+"\nAtualizado: "+stamp.format(new Date(t.at))+"\n\n");

@@ -8,13 +8,13 @@ Este é o projeto independente do painel esportivo. Para a base com Dash Pessoal
 
 ## Baixar e instalar
 
-Baixe **[Esportes-Dash-v1.4.1.apk](https://github.com/ernanimarcondes/Esportes-Dash/releases/download/v1.4.1/Esportes-Dash-v1.4.1.apk)** na [página da versão](https://github.com/ernanimarcondes/Esportes-Dash/releases/tag/v1.4.1). O APK é público, sem configurações pessoais, e dispensa compilação. Requer Android TV 8 ou superior; veja as orientações e limitações em **Compatibilidade e instalação** abaixo.
+Baixe **[Esportes-Dash-v1.5.0.apk](https://github.com/ernanimarcondes/Esportes-Dash/releases/download/v1.5.0/Esportes-Dash-v1.5.0.apk)** na [página da versão](https://github.com/ernanimarcondes/Esportes-Dash/releases/tag/v1.5.0). O APK é público, sem configurações pessoais, e dispensa compilação. Requer Android TV 8 ou superior; veja as orientações e limitações em **Compatibilidade e instalação** abaixo.
 
 Com a depuração habilitada e autorizada na sua TV, use o ADB oficial:
 
 ```text
 adb connect ENDERECO_DA_TV:5555
-adb install -r Esportes-Dash-v1.4.1.apk
+adb install -r Esportes-Dash-v1.5.0.apk
 ```
 
 Abra Free My TV → Home Screen → Esportes Dash. Configure sua cidade no aplicativo. Para voltar à tela de fábrica, selecione Original. As próximas versões públicas usarão a mesma chave de assinatura para permitir atualização sem desinstalar. APKs compilados por outras pessoas ou das variantes Free My TV e TV-Dashboard podem ter assinatura diferente: nesse caso, volte a Original antes de remover a variante anterior. Este APK público não substitui por atualização a instalação personalizada do autor.
@@ -34,7 +34,7 @@ Na tela inicial, **TV / HDMI** abre o seletor de entradas. **TV · canais / ante
 - Resultados: partidas encerradas nas últimas 72 horas em ordem de data e horário, dois confrontos por página e troca a cada 10 segundos.
 - Futebol de clubes e seleções: ligas selecionadas, Libertadores, Sul-Americana, Champions, Europa League, Conference League, copas nacionais e outras competições importantes disponíveis na fonte. Nas copas nacionais, prioriza os clubes das ligas acompanhadas; amistosos priorizam seleções de maior destaque.
 - Fórmula 1: programação e traçado vetorial compacto do próximo GP por 30 segundos; classificação de pilotos em páginas consecutivas de dez nomes, com 15 segundos por página; construtores por 15 segundos. A próxima sessão permanece visível. Os 26 circuitos usam o mesmo enquadramento proporcional, setores coloridos e desenho vetorial na resolução da tela; os números das curvas ficam no painel exclusivo de F1. As classificações de pilotos e construtores mostram as logos das equipes em alta qualidade.
-- NBA e NFL: até oito times por página, com troca a cada 15 segundos. Todas as páginas da conferência atual são mostradas antes da próxima. NHL e MLB compartilham o quadro: primeiro são exibidas todas as páginas de cada conferência da NHL, depois de cada liga da MLB. OK nos quadros NBA e NFL abre seus respectivos painéis exclusivos; NHL/MLB continuam com a classificação completa em diálogo.
+- NBA e NFL: até oito times por página, com troca a cada 15 segundos. Todas as páginas da conferência atual são mostradas antes da próxima. NHL e MLB compartilham o quadro: primeiro são exibidas todas as páginas de cada conferência da NHL, depois de cada liga da MLB. OK nos quadros NBA e NFL abre seus respectivos painéis exclusivos; o quadro compartilhado NHL/MLB abre a tela exclusiva da liga que estiver sendo exibida no momento do clique.
 - Relógio, data, clima da cidade configurada e atalhos para aplicativos, TV/HDMI e ajustes.
 - Escudos de futebol, seleções, NBA, NFL, NHL e MLB priorizam as versões da ESPN próprias para fundo escuro em todos os quadros, incluindo jogos do dia e resultados recentes. O original é usado como alternativa se a variante não estiver disponível. O carregador mantém o recorte transparente e a redução de alta qualidade para o tamanho real da tela, sem recolorir os escudos. Variantes antigas de Athletico-PR, New York Jets e Cleveland Guardians são evitadas para preservar as identidades atuais.
 
@@ -83,17 +83,17 @@ Os novos painéis compartilham os dados e o carregador de escudos da tela princi
 
 **Continuaremos melhorando os demais quadros do Esportes Dash**, com novos painéis de detalhes e ajustes de visualização e navegação.
 
-## Painéis exclusivos de NBA e NFL
+## Painéis exclusivos de NBA, NFL, NHL e MLB
 
-Selecione o quadro **NBA** ou **NFL** e pressione **OK**. **Voltar** retorna ao mesmo quadro da tela principal. A NBA usa azul e vermelho; a NFL, vermelho e azul-marinho, sempre sobre fundo preto.
+Selecione o quadro **NBA** ou **NFL** e pressione **OK**. No quadro compartilhado **NHL/MLB**, OK abre a liga que está visível naquele momento. **Voltar** retorna ao mesmo quadro da tela principal. A NBA usa azul e vermelho; a NFL, vermelho e azul-marinho; a NHL, prata e grafite; a MLB, azul-marinho e vermelho. Todas mantêm o fundo preto e os logos originais das ligas.
 
-- **Visão geral:** líderes das duas conferências e resumos dos confrontos atuais e últimos resultados selecionados.
-- **Leste/Oeste (NBA) e AFC/NFC (NFL):** classificação completa em duas colunas, com escudos, campanha e aproveitamento. Empates da NFL contam como meia vitória no aproveitamento.
-- **Jogos:** na NFL, usa a semana oficial da fonte, incluindo os jogos já encerrados dessa semana. Na NBA, reúne o confronto em andamento de cada time ou seu próximo confronto, sem limitar a um dia ou a um intervalo de datas. Partidas compartilhadas são exibidas uma única vez. Os horários exibidos continuam sendo de Brasília.
-- **Resultados:** semana oficial anterior na NFL; na NBA, reúne o último confronto encerrado de cada time, mesmo que tenha ocorrido em datas diferentes, sem duplicar partidas compartilhadas.
+- **Visão geral:** líderes das duas conferências/ligas e dois resumos independentes com até dois confrontos por quadro. Eles alternam a cada **15 segundos**, percorrendo toda a lista antes de reiniciar. Resultados começam pelo par mais recente e seguem para os anteriores; quantidade ímpar deixa um confronto na última página. Com até dois jogos, o quadro permanece fixo. Ao retornar à Visão geral, os ciclos recomeçam.
+- **Classificações:** Leste/Oeste para NBA e NHL, AFC/NFC para NFL e Americana/Nacional para MLB. As tabelas completas usam duas colunas, linhas uniformes, escudos com tamanho visual equilibrado e textos centralizados verticalmente. NBA/MLB mostram campanha e aproveitamento; NFL inclui empates como meia vitória; NHL mostra pontos e campanha V–D–OT.
+- **Jogos:** na NFL, usa a semana oficial da fonte, incluindo os jogos já encerrados dessa semana. Na NBA, NHL e MLB, reúne o confronto em andamento de cada time ou seu próximo confronto, sem limitar a um dia ou a um intervalo de datas. Partidas compartilhadas são exibidas uma única vez. Os horários exibidos continuam sendo de Brasília.
+- **Resultados:** semana oficial anterior na NFL; na NBA, NHL e MLB, reúne o último confronto encerrado de cada time, mesmo que tenha ocorrido em datas diferentes, sem duplicar partidas compartilhadas.
 - Páginas de jogos e resultados mudam a cada 20 segundos quando necessário, sem botões de próxima página.
 - Logos originais das ligas em 500 px, recorte transparente e redução com tratamento de alfa para a resolução física da TV. Os escudos compartilham o carregador de alta qualidade e o cache dos demais quadros.
-- Consultas adicionais são feitas somente para a liga aberta. A semana atual da NFL e os placares de hoje são verificados a cada cinco minutos; a semana anterior da NFL é conservada por 30 minutos. Na NBA, os calendários dos times são consultados na abertura e conservados por seis horas; ficam em cache somente os dois últimos confrontos encerrados e até três confrontos atuais/futuros de cada time. Isso limita o processamento sem criar um recorte de datas. Os placares diários mais recentes complementam esse cache. Classificações mantêm 15 minutos. As identidades das semanas da NFL são persistidas no cache, sem inferi-las por intervalos de datas. A cobertura depende da fonte.
+- Consultas adicionais são feitas somente para a liga aberta. A semana atual da NFL e os placares de hoje são verificados a cada cinco minutos; a semana anterior da NFL é conservada por 30 minutos. Na NBA, NHL e MLB, os calendários dos times são consultados na abertura e conservados por seis horas; ficam em cache somente os dois últimos confrontos encerrados e até três confrontos atuais/futuros de cada time. Isso limita o processamento sem criar um recorte de datas. Os placares diários mais recentes complementam esse cache. Classificações mantêm 15 minutos. As identidades das semanas da NFL são persistidas no cache, sem inferi-las por intervalos de datas. Na MLB, durante o intervalo entre temporadas, a consulta combina a programação futura disponível com os jogos da última temporada regular e pós-temporada. Datas em outro ano mostram o ano abreviado. O cache antigo da NBA é migrado e calendários não substituem placares finais ou em andamento por um estado pré-jogo atrasado. A cobertura depende da fonte.
 
 ![Classificação completa do Leste no painel exclusivo da NBA](docs/images/nba-classificacao.png)
 

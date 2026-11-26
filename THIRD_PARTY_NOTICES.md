@@ -33,6 +33,6 @@ O carregador compartilhado consulta arquivos ESPN de futebol, seleções e ligas
 
 Os exemplos mínimos de placares e resumos em `tools/fixtures` são usados somente para testes do parser, incluindo futebol e NHL. Os autores e tempos dos gols pertencem às fontes e aos respectivos titulares; não são dados de contas do usuário.
 
-## Logos das ligas NBA e NFL
+## Logos das ligas NBA, NFL, NHL e MLB
 
-Os logos originais das ligas em `app/assets/sports/leagues` são distribuídos publicamente pela CDN ESPN. URLs e titulares são registrados em `SOURCES.json`. As marcas pertencem à NBA e à NFL e não são relicenciadas pela licença MIT do código. O aplicativo preserva cores e proporções e apenas reduz as imagens para exibição.
+Os logos originais das ligas em `app/assets/sports/leagues` são distribuídos publicamente pela CDN ESPN. URLs e titulares são registrados em `SOURCES.json`. As marcas pertencem à NBA, à NFL, à NHL e à MLB e não são relicenciadas pela licença MIT do código. O aplicativo preserva cores e proporções e apenas reduz as imagens para exibição.

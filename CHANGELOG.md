@@ -1,5 +1,16 @@
 # Alterações
 
+## 1.5.0 — 2026-11-26
+
+- Novas telas exclusivas da NHL e MLB, com Visão geral, classificações completas das duas conferências/ligas, Jogos e Resultados.
+- OK no quadro compartilhado abre a liga exibida no momento do clique; Voltar retorna ao mesmo quadro.
+- Identidade visual própria: NHL em prata/grafite e MLB em azul-marinho/vermelho, sempre com fundo preto e logos originais de 500 px.
+- Classificações com linhas e colunas uniformes, escudos centralizados e tamanho visual equilibrado sem distorção das proporções.
+- Resumos da Visão geral de NBA, NFL, NHL e MLB alternam até dois confrontos a cada 15 segundos, percorrem toda a lista e recomeçam ao retornar à aba. Resultados começam pelos mais recentes.
+- Calendários por time de NHL e MLB seguem o padrão da NBA: confronto em andamento ou próximo por time; último confronto encerrado por time, sem janela fixa de datas.
+- Tratamento do intervalo entre temporadas da MLB, datas com ano quando necessário, migração do cache da NBA e preservação de placares conhecidos diante de calendários atrasados.
+- APK público atualizado com a mesma assinatura da versão 1.4.1; permite atualização sem desinstalar essa distribuição pública. Configurações pessoais e chaves permanecem fora da publicação.
+
 ## 1.4.1 — 2026-11-22
 
 - Primeiro APK público pronto para instalar em Releases, com assinatura própria persistente, checksum SHA-256 e instruções de instalação sem compilação.

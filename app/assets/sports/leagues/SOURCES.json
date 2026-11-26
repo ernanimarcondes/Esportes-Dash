@@ -8,5 +8,15 @@
     "url": "https://a.espncdn.com/i/teamlogos/leagues/500/nfl.png",
     "owner": "NFL",
     "notes": "Original league mark, unmodified. Alpha-aware reduction only at render time."
+  },
+  "nhl": {
+    "url": "https://a.espncdn.com/i/teamlogos/leagues/500/nhl.png",
+    "owner": "NHL",
+    "notes": "Original league mark, unmodified. Alpha-aware reduction only at render time."
+  },
+  "mlb": {
+    "url": "https://a.espncdn.com/i/teamlogos/leagues/500/mlb.png",
+    "owner": "MLB",
+    "notes": "Original league mark, unmodified. Alpha-aware reduction only at render time."
   }
 }
