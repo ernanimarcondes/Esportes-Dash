@@ -50,6 +50,10 @@ final class SportsData {
     volatile F1SeasonStats f1Stats;
     volatile F1RaceResults f1Results;
     private volatile NFLRounds nflRounds;
+    private volatile NFLPlayoffs.Snapshot nflPlayoffs;
+    private final Map<String,LeaguePlayoffs.Snapshot> leaguePlayoffs=new ConcurrentHashMap<>();
+    private final Set<String> playoffsRequested=Collections.synchronizedSet(new HashSet<>());
+    private boolean nflPlayoffsRequested;
     volatile float[] track;
     volatile String trackId="vegas",trackLength="6,201 km";
     SportsData(Context c,Runnable changed){
@@ -65,7 +69,9 @@ final class SportsData {
     }
     private void load(JSONObject root){
         if(root.optInt("schema")!=2)return;
+        JSONArray playoffCaches=root.optJSONArray("leaguePlayoffs");for(int i=0;playoffCaches!=null&&i<playoffCaches.length();i++)try{LeaguePlayoffs.Snapshot entry=LeaguePlayoffs.Snapshot.read(playoffCaches.getJSONObject(i));LeaguePlayoffs.Snapshot old=leaguePlayoffs.get(entry.league);if(old==null||entry.at>old.at)leaguePlayoffs.put(entry.league,entry);}catch(Exception ignored){}
         try{NFLRounds incoming=NFLRounds.read(root.optJSONObject("nflRounds"));if(incoming!=null&&incoming.current!=null&&(nflRounds==null||incoming.current.at>nflRounds.current.at))nflRounds=incoming;}catch(Exception ignored){}
+        try{NFLPlayoffs.Snapshot incoming=NFLPlayoffs.Snapshot.read(root.optJSONObject("nflPlayoffs"));if(incoming!=null&&(nflPlayoffs==null||incoming.at>nflPlayoffs.at))nflPlayoffs=incoming;}catch(Exception ignored){}
         JSONObject stats=root.optJSONObject("f1Stats");
         if(stats!=null)try{F1SeasonStats incoming=new F1SeasonStats(stats);if(f1Stats==null||incoming.at>f1Stats.at)f1Stats=incoming;}catch(Exception ignored){}
         JSONObject results=root.optJSONObject("f1Results");
@@ -89,7 +95,8 @@ final class SportsData {
     List<SportsFeedParser.Table> tables(String key){List<SportsFeedParser.Table> t=tables.get(key);return t==null?Collections.emptyList():t;}
     void refreshLeague(String league){
         if(closed||!cacheLoaded||(!LeaguePanelModel.perTeam(league)&&!league.equals("nfl")))return;
-        if(league.equals("nfl")){refreshNFLRounds();return;}
+        if(playoffsRequested.contains(league))refreshLeaguePlayoffs(league);
+        if(league.equals("nfl")){refreshNFLRounds();if(nflPlayoffsRequested)refreshNFLPlayoffs();return;}
         long now=System.currentTimeMillis();
         for(SportsFeedParser.Table table:tables(league))for(SportsFeedParser.Row team:table.rows){
             Snapshot saved=teamCalendars.get(league+":"+team.id);
@@ -149,7 +156,13 @@ final class SportsData {
         String task="nfl-rounds";if(!begin(task))return;
         feeds.execute(()->{try{
             String base="https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard";
-            NFLRounds.Round current=NFLRounds.parse(get(base),System.currentTimeMillis()),previous=saved==null?null:saved.previous;
+            String body=get(base);JSONObject root=new JSONObject(body);JSONObject season=root.getJSONObject("season");
+            if(season.optInt("type")==3){
+                int week=root.getJSONObject("week").getInt("number");boolean known=false;NFLRounds.Ref next=null;
+                for(NFLRounds.Ref ref:NFLPlayoffs.calendar(root)){if(ref.week==week)known=true;if(ref.week>week&&(next==null||ref.week<next.week))next=ref;}
+                if(!known){if(next==null)throw new IOException("Noncompetitive postseason entry");body=get(base+"?"+next.query());}
+            }
+            NFLRounds.Round current=NFLRounds.parse(body,System.currentTimeMillis()),previous=saved==null?null:saved.previous;
             if(current.previous==null)previous=null;
             else if(previous==null||!current.previous.same(previous.ref)||System.currentTimeMillis()-previous.at>=30*60000L){
                 try{NFLRounds.Round fetched=NFLRounds.parse(get(base+"?"+current.previous.query()),System.currentTimeMillis());if(!fetched.ref.same(current.previous))throw new IOException("Unexpected NFL week");previous=fetched;}
@@ -157,6 +170,51 @@ final class SportsData {
             }
             nflRounds=new NFLRounds(current,previous);failed.remove(task);save();
         }catch(Exception error){failed.add(task);android.util.Log.w("SportsData","NFL rounds unavailable");}
+            finally{pending.remove(task);notifyDataChanged();}});
+    }
+    NFLPlayoffs.Snapshot nflPlayoffs(){return nflPlayoffs;}
+    LeaguePlayoffs.Snapshot leaguePlayoffs(String league){return leaguePlayoffs.get(league);}
+    void requestLeaguePlayoffs(String league){if(LeaguePlayoffs.supported(league)){playoffsRequested.add(league);refreshLeaguePlayoffs(league);}}
+    private void refreshLeaguePlayoffs(String league){
+        if(closed||!cacheLoaded)return;LeaguePlayoffs.Snapshot saved=leaguePlayoffs.get(league);long now=System.currentTimeMillis();
+        if(saved!=null&&now-saved.at<(saved.provisional?15:5)*60000L)return;
+        String task="playoffs-"+league;if(!begin(task))return;
+        feeds.execute(()->{try{
+            String sport=league.equals("nba")?"basketball":league.equals("nhl")?"hockey":"baseball";
+            String base="https://site.api.espn.com/apis/site/v2/sports/"+sport+"/"+league+"/scoreboard";
+            JSONObject current=new JSONObject(get(base)),season=current.getJSONObject("season");int year=season.getInt("year"),type=season.getInt("type");
+            String standings=get("https://site.api.espn.com/apis/v2/sports/"+sport+"/"+league+"/standings?season="+year+"&seasontype=2"+(league.equals("nba")?"":"&level=3"));
+            JSONArray events=new JSONArray();LocalDate today=LocalDate.now(ZONE);
+            boolean postseason=type==3||type==5||year<today.getYear()||year==today.getYear()&&today.getMonthValue()>=(league.equals("mlb")?9:4);
+            if(postseason){List<String> dates=new ArrayList<>();
+                if(league.equals("mlb")){for(int day=25;day<=30;day++)dates.add(year+"09"+day);dates.add(year+"10");dates.add(year+"11");}
+                else{dates.add(year+"04");dates.add(year+"05");dates.add(year+"06");if(league.equals("nhl"))dates.add(year+"07");}
+                for(String date:dates){JSONObject month=new JSONObject(get(base+"?dates="+date+"&limit=1000"));JSONArray found=month.optJSONArray("events");
+                    if(found!=null&&found.length()>=1000)throw new IOException("Truncated playoff response");
+                    for(int i=0;found!=null&&i<found.length();i++){JSONObject event=found.getJSONObject(i),metadata=event.optJSONObject("season");if(metadata!=null&&metadata.optInt("year")==year&&(metadata.optInt("type")==3||league.equals("nba")&&metadata.optInt("type")==5))events.put(event);}}
+            }
+            LeaguePlayoffs.Snapshot incoming=LeaguePlayoffs.parse(league,year,standings,events,System.currentTimeMillis());
+            if(saved!=null&&saved.year==year&&!saved.provisional&&incoming.provisional)throw new IOException("Official postseason temporarily unavailable");
+            leaguePlayoffs.put(league,incoming);failed.remove(task);save();
+        }catch(Exception error){failed.add(task);android.util.Log.w("SportsData","League playoffs unavailable: "+league);}
+            finally{pending.remove(task);notifyDataChanged();}});
+    }
+    void requestNFLPlayoffs(){nflPlayoffsRequested=true;refreshNFLPlayoffs();}
+    private void refreshNFLPlayoffs(){
+        if(closed||!cacheLoaded)return;NFLPlayoffs.Snapshot saved=nflPlayoffs;
+        if(saved!=null&&System.currentTimeMillis()-saved.at<5*60000L)return;
+        String task="nfl-playoffs";if(!begin(task))return;
+        feeds.execute(()->{try{
+            String base="https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard";
+            JSONObject root=new JSONObject(get(base)),season=root.getJSONObject("season");
+            NFLPlayoffs.Snapshot snapshot=new NFLPlayoffs.Snapshot(season.getInt("year"),season.getInt("type"),System.currentTimeMillis());
+            if(!snapshot.provisional())for(NFLRounds.Ref ref:NFLPlayoffs.calendar(root)){
+                int stage=NFLPlayoffs.stage(ref.label);
+                try{snapshot.add(ref,get(base+"?"+ref.query()));}
+                catch(Exception partial){if(saved!=null&&saved.year==snapshot.year)snapshot.rounds[stage]=saved.rounds[stage];}
+            }
+            nflPlayoffs=snapshot;failed.remove(task);save();
+        }catch(Exception error){failed.add(task);android.util.Log.w("SportsData","NFL playoff data unavailable");}
             finally{pending.remove(task);notifyDataChanged();}});
     }
     List<SportsFeedParser.Game> games(boolean recent){
@@ -265,9 +323,10 @@ final class SportsData {
     private static String path(String key){switch(key){case "nba":return "basketball/nba";case "nfl":return "football/nfl";
         case "nhl":return "hockey/nhl";case "mlb":return "baseball/mlb";default:return "soccer/"+key;}}
     private synchronized void save(){if(closed)return;try{
+        JSONArray playoffCaches=new JSONArray();for(LeaguePlayoffs.Snapshot entry:leaguePlayoffs.values())playoffCaches.put(entry.json());
         JSONArray ts=new JSONArray(),ss=new JSONArray(),calendars=new JSONArray();for(List<SportsFeedParser.Table> list:tables.values())for(SportsFeedParser.Table t:list)ts.put(t.json());
         for(Snapshot calendar:teamCalendars.values())calendars.put(calendar.json());
-        for(Snapshot s:snapshots.values())ss.put(s.json());byte[] body=new JSONObject().put("schema",2).put("tables",ts).put("snapshots",ss).put("teamCalendars",calendars).put("nflRounds",nflRounds==null?JSONObject.NULL:nflRounds.json()).put("f1Stats",f1Stats==null?JSONObject.NULL:f1Stats.json()).put("f1Results",f1Results==null?JSONObject.NULL:f1Results.json()).toString().getBytes(StandardCharsets.UTF_8);
+        for(Snapshot s:snapshots.values())ss.put(s.json());byte[] body=new JSONObject().put("schema",2).put("leaguePlayoffs",playoffCaches).put("tables",ts).put("snapshots",ss).put("teamCalendars",calendars).put("nflRounds",nflRounds==null?JSONObject.NULL:nflRounds.json()).put("nflPlayoffs",nflPlayoffs==null?JSONObject.NULL:nflPlayoffs.json()).put("f1Stats",f1Stats==null?JSONObject.NULL:f1Stats.json()).put("f1Results",f1Results==null?JSONObject.NULL:f1Results.json()).toString().getBytes(StandardCharsets.UTF_8);
         File temp=new File(context.getFilesDir(),"sports-dashboard.tmp");try(FileOutputStream out=new FileOutputStream(temp)){out.write(body);}temp.renameTo(file());
     }catch(Exception ignored){}}
     private File file(){return new File(context.getFilesDir(),"sports-dashboard.json");}

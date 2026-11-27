@@ -8,18 +8,41 @@ Este é o projeto independente do painel esportivo. Para a base com Dash Pessoal
 
 ## Baixar e instalar
 
-Baixe **[Esportes-Dash-v1.5.0.apk](https://github.com/ernanimarcondes/Esportes-Dash/releases/download/v1.5.0/Esportes-Dash-v1.5.0.apk)** na [página da versão](https://github.com/ernanimarcondes/Esportes-Dash/releases/tag/v1.5.0). O APK é público, sem configurações pessoais, e dispensa compilação. Requer Android TV 8 ou superior; veja as orientações e limitações em **Compatibilidade e instalação** abaixo.
+Baixe **[Esportes-Dash-v1.6.0.apk](https://github.com/ernanimarcondes/Esportes-Dash/releases/download/v1.6.0/Esportes-Dash-v1.6.0.apk)** na [página da versão](https://github.com/ernanimarcondes/Esportes-Dash/releases/tag/v1.6.0). O APK é público, sem configurações pessoais, e dispensa compilação. Requer Android TV 8 ou superior; veja as orientações e limitações em **Compatibilidade e instalação** abaixo.
 
 Com a depuração habilitada e autorizada na sua TV, use o ADB oficial:
 
 ```text
 adb connect ENDERECO_DA_TV:5555
-adb install -r Esportes-Dash-v1.5.0.apk
+adb install -r Esportes-Dash-v1.6.0.apk
 ```
 
 Abra Free My TV → Home Screen → Esportes Dash. Configure sua cidade no aplicativo. Para voltar à tela de fábrica, selecione Original. As próximas versões públicas usarão a mesma chave de assinatura para permitir atualização sem desinstalar. APKs compilados por outras pessoas ou das variantes Free My TV e TV-Dashboard podem ter assinatura diferente: nesse caso, volte a Original antes de remover a variante anterior. Este APK público não substitui por atualização a instalação personalizada do autor.
 
 O arquivo **SHA256SUMS.txt** da versão permite conferir a integridade do download. As chaves de assinatura ficam fora do repositório e não são distribuídas.
+
+## Novidades da versão 1.6.0: Playoffs
+
+A última aba dos painéis **NBA, NFL, NHL e MLB** agora mostra a chave dos playoffs, com a identidade visual de cada liga, logos das conferências e troféus ilustrados em alta resolução. As abas anteriores continuam disponíveis.
+
+- **NFL:** Wild Card, Divisional, finais AFC/NFC e Super Bowl; folga dos líderes e reseeding após o Wild Card. Jogos usa a rodada oficial atual e Resultados a anterior, sem incluir o Pro Bowl.
+- **NBA:** Play-In, primeira rodada, semifinais, finais de conferência e Final; séries melhor de sete na chave principal.
+- **NHL:** chave por divisões e Wild Cards, duas rodadas, finais de conferência e Stanley Cup Final; séries melhor de sete.
+- **MLB:** Wild Card (melhor de três), Division Series (melhor de cinco), finais de liga e World Series (melhor de sete), com as folgas dos dois primeiros de cada liga.
+- **Antes da definição oficial:** mostra **Panorama provisório**, uma projeção conforme a classificação disponível. Não representa vaga garantida nem previsão. A indicação é ocultada quando a fonte oferece a chave oficial completa.
+- **Durante os playoffs:** confrontos, placares e vencedores vêm dos eventos publicados pela fonte, na temporada correspondente. Fases futuras permanecem a definir até a confirmação dos classificados; a NFL preserva sua regra de reseeding.
+- **Atualização:** a aba consulta os dados ao abrir e depois aproximadamente a cada cinco minutos na NFL; nas demais ligas, cinco minutos na pós-temporada ou 15 minutos no panorama provisório, enquanto o painel está ativo. Sem resposta válida, conserva o cache. Não é um serviço de placar ao vivo.
+- **Visual:** troféus isolados de artes oficiais, proporções preservadas, redução de alta qualidade para a resolução física da TV e espaço separado para a legenda de campeão e o confronto final.
+
+Capturas reais da validação na TV em 27/11/2026. As imagens retratam aquele momento e dependem da cobertura da fonte; não são dados ao vivo.
+
+| NBA | NFL |
+| --- | --- |
+| ![Playoffs NBA com Play-In e caminho até a Final](docs/images/nba-playoffs.png) | ![Playoffs NFL com AFC, NFC e caminho até o Super Bowl](docs/images/nfl-playoffs.png) |
+
+| NHL | MLB |
+| --- | --- |
+| ![Chave NHL e Stanley Cup ilustrada](docs/images/nhl-playoffs.png) | ![Chave MLB, World Series e indicação de campeão](docs/images/mlb-playoffs.png) |
 
 ## TV e entradas HDMI
 

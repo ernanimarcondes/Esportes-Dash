@@ -1,0 +1,42 @@
+[
+  {
+    "asset": "nba-0.png",
+    "source": "https://en.wikipedia.org/wiki/Eastern_Conference_(NBA)",
+    "image_source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/96/Eastern_Conference_%28NBA%29_logo_2018.png/960px-Eastern_Conference_%28NBA%29_logo_2018.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "rights_holder": "NBA",
+    "usage": "League/conference identification only, not covered by MIT code license."
+  },
+  {
+    "asset": "nba-1.png",
+    "source": "https://en.wikipedia.org/wiki/Western_Conference_(NBA)",
+    "image_source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/45/Western_Conference_%28NBA%29_logo_2018.png/960px-Western_Conference_%28NBA%29_logo_2018.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "rights_holder": "NBA",
+    "usage": "League/conference identification only, not covered by MIT code license."
+  },
+  {
+    "asset": "mlb-0.png",
+    "source": "https://en.wikipedia.org/wiki/American_League",
+    "image_source": "https://thumb.wikimedia.org/wikipedia/en/thumb/5/54/American_League_logo.svg/960px-American_League_logo.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "rights_holder": "MLB",
+    "usage": "League/conference identification only, not covered by MIT code license."
+  },
+  {
+    "asset": "mlb-1.png",
+    "source": "https://en.wikipedia.org/wiki/National_League_(baseball)",
+    "image_source": "https://thumb.wikimedia.org/wikipedia/en/thumb/d/d4/MLB_National_League_logo.svg/960px-MLB_National_League_logo.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "rights_holder": "MLB",
+    "usage": "League/conference identification only, not covered by MIT code license."
+  },
+  {
+    "asset": "nhl-0.png",
+    "source": "https://en.wikipedia.org/wiki/Eastern_Conference_(NHL)",
+    "image_source": "https://thumb.wikimedia.org/wikipedia/en/thumb/1/16/NHL_Eastern_Conference.svg/960px-NHL_Eastern_Conference.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "rights_holder": "NHL"
+  },
+  {
+    "asset": "nhl-1.png",
+    "source": "https://en.wikipedia.org/wiki/Western_Conference_(NHL)",
+    "image_source": "https://thumb.wikimedia.org/wikipedia/en/thumb/6/65/NHL_Western_Conference.svg/960px-NHL_Western_Conference.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "rights_holder": "NHL"
+  }
+]

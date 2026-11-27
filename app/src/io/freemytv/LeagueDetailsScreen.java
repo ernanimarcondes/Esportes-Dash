@@ -15,7 +15,9 @@ final class LeagueDetailsScreen {
     private final String league;
     private final int accent,secondary,panelColor,borderColor,rowColor,selectedColor;
     private final Paint p=new Paint(Paint.ANTI_ALIAS_FLAG|Paint.FILTER_BITMAP_FLAG);
-    private final RectF[] nav=new RectF[6];
+    private final RectF[] nav;
+    private final NFLPlayoffsScreen playoffs;
+    private final LeaguePlayoffsScreen seriesPlayoffs;
     private final DayGamesRotation rotation=new DayGamesRotation();
     private final DayGamesRotation upcomingSummary=new DayGamesRotation(15000L),recentSummary=new DayGamesRotation(15000L);
     private final SimpleDateFormat clock=fmt("HH:mm"),date=fmt("EEE, dd 'de' MMMM"),day=fmt("EEE dd/MM"),hour=fmt("HH:mm"),dayWithYear=fmt("EEE dd/MM/yy"),year=fmt("yyyy");
@@ -33,7 +35,8 @@ final class LeagueDetailsScreen {
                 panelColor=PANEL;borderColor=BORDER;rowColor=ROW;selectedColor=0xFF202C3C;
         }
         try{Bitmap source=BitmapFactory.decodeStream(context.getAssets().open("sports/leagues/"+league+".png"));leagueOriginal=crop(source);}catch(Exception ignored){}
-        float width=(1824-5*18)/6;for(int i=0;i<nav.length;i++)nav[i]=new RectF(48+i*(width+18),128,48+i*(width+18)+width,184);
+        nav=new RectF[7];seriesPlayoffs=LeaguePlayoffs.supported(league)?new LeaguePlayoffsScreen(context,sports,league,normal,bold):null;playoffs=league.equals("nfl")?new NFLPlayoffsScreen(sports,normal,bold):null;if(playoffs!=null)playoffs.loadTrophy(context);
+        float width=(1824-(nav.length-1)*18f)/nav.length;for(int i=0;i<nav.length;i++)nav[i]=new RectF(48+i*(width+18),128,48+i*(width+18)+width,184);
         p.setSubpixelText(true);p.setDither(true);p.setHinting(Paint.HINTING_ON);
     }
     String league(){return league;}
@@ -54,13 +57,14 @@ final class LeagueDetailsScreen {
     }
     void draw(Canvas c){
         update();header(c);
-        String[] labels={"‹ Esportes Dash","Visão geral",LeaguePanelModel.conference(league,0),LeaguePanelModel.conference(league,1),"Jogos","Resultados"};
+        String[] labels=league.equals("nfl")?new String[]{"‹ Esportes Dash","Visão geral","AFC","NFC","Jogos","Resultados","Playoffs"}:new String[]{"‹ Esportes Dash","Visão geral",LeaguePanelModel.conference(league,0),LeaguePanelModel.conference(league,1),"Jogos","Resultados","Playoffs"};
         for(int i=0;i<nav.length;i++){
             fill(c,nav[i],i==page+1?selectedColor:panelColor,10);border(c,nav[i],i==focus?accent:borderColor,i==focus?4:1.5f,10);
             center(c,labels[i],nav[i].centerX(),163,24,TEXT,true);
         }
-        if(page==0)overview(c);else if(page==1||page==2)standings(c,page-1);else matches(c,page==4);
+        if(page==0)overview(c);else if(page==1||page==2)standings(c,page-1);else if(page==5){if(playoffs!=null)playoffs.draw(c);else if(seriesPlayoffs!=null)seriesPlayoffs.draw(c);}else matches(c,page==4);
         String note=league.equals("nhl")?"PTS: pontos · V–D–OT: vitórias, derrotas e derrotas na prorrogação/shootout":league.equals("nfl")?"V–D–E: vitórias, derrotas e empates":"V–D: vitórias e derrotas · horários de Brasília";
+        if(page==5)note="Horários de Brasília · projeções não representam vagas garantidas";
         text(c,note,48,1060,17,MUTED,false);
         right(c,"SETAS escolher seção · OK abrir · VOLTAR Esportes Dash",1872,1060,18,MUTED,false);
     }
@@ -71,9 +75,10 @@ final class LeagueDetailsScreen {
         }else text(c,league.toUpperCase(Locale.ROOT),48,78,56,accent,true);
         float headerX=league.equals("mlb")?234:174;
         String sport=league.equals("nba")?"BASQUETE":league.equals("nfl")?"FUTEBOL AMERICANO":league.equals("nhl")?"HÓQUEI NO GELO":"BEISEBOL";
-        text(c,sport,headerX,62,34,accent,true);
+        text(c,page==5?league.toUpperCase(Locale.ROOT)+" PLAYOFFS":sport,headerX,62,34,accent,true);
         List<SportsFeedParser.Table> tables=sports.tables(league);String season=tables.isEmpty()?"Consultando temporada":"Temporada "+tables.get(0).season;
-        if(LeaguePanelModel.perTeam(league)){String status=sports.leagueCalendarStatus(league);if(!status.isEmpty())season+=" · "+status;}
+        if(page!=5&&LeaguePanelModel.perTeam(league)){String status=sports.leagueCalendarStatus(league);if(!status.isEmpty())season+=" · "+status;}
+        if(page==5&&seriesPlayoffs!=null){LeaguePlayoffs.Snapshot snapshot=sports.leaguePlayoffs(league);season=snapshot==null?"Consultando temporada":"Temporada "+(league.equals("mlb")?String.valueOf(snapshot.year):(snapshot.year-1)+"–"+snapshot.year);}
         text(c,season,headerX,94,21,MUTED,false);
         right(c,clock.format(new Date()),1872,61,46,TEXT,false);right(c,date.format(new Date()),1872,94,19,MUTED,false);
     }
@@ -196,7 +201,7 @@ final class LeagueDetailsScreen {
     private void right(Canvas c,String value,float x,float y,float size,int color,boolean strong){p.setTypeface(strong?bold:normal);p.setTextSize(size);text(c,value,x-p.measureText(value),y,size,color,strong);}
     private void center(Canvas c,String value,float x,float y,float size,int color,boolean strong){p.setTypeface(strong?bold:normal);p.setTextSize(size);text(c,value,x-p.measureText(value)/2,y,size,color,strong);}
     private String fit(String value,float size,float width,boolean strong){p.setTypeface(strong?bold:normal);p.setTextSize(size);if(p.measureText(value)<=width)return value;int n=p.breakText(value,true,Math.max(0,width-p.measureText("…")),null);return value.substring(0,n)+"…";}
-    private boolean activate(){if(focus==0)return true;page=focus-1;resetRotations();return false;}
+    private boolean activate(){if(focus==0)return true;page=focus-1;resetRotations();if(page==5){if(playoffs!=null)sports.requestNFLPlayoffs();else sports.requestLeaguePlayoffs(league);}return false;}
     int onKey(KeyEvent e){
         int key=e.getKeyCode();if(key!=4&&(key<19||key>23)&&key!=66)return -1;if(e.getAction()!=KeyEvent.ACTION_DOWN)return 0;
         if(key==4)return 1;if(key==21||key==19)focus=Math.max(0,focus-1);else if(key==22||key==20)focus=Math.min(nav.length-1,focus+1);else if(activate())return 1;return 0;

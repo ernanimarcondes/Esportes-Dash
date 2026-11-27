@@ -1,5 +1,15 @@
 # Alterações
 
+## 1.6.0 — 2026-11-27
+
+- Nova aba Playoffs no final dos painéis NBA, NFL, NHL e MLB, preservando Visão geral, classificações, Jogos e Resultados.
+- Chaves próprias de cada liga, Play-In da NBA, folgas, séries e reseeding da NFL; consulta da temporada correta e progressão somente com resultados confirmados.
+- Panorama provisório antes da chave oficial, com cache local e consultas periódicas de cinco minutos na NFL; nas demais ligas, cinco minutos na pós-temporada e 15 minutos no panorama provisório.
+- NFL mantém Jogos e Resultados pelas rodadas oficiais competitivas e exclui o Pro Bowl.
+- Logos de conferências e troféus ilustrados a partir de artes oficiais, com enquadramento, alinhamento e áreas de legenda padronizados.
+- Documentação, quatro capturas dos playoffs e créditos atualizados; testes determinísticos das regras das quatro ligas.
+- APK público 1.6.0 com a assinatura persistente da distribuição pública anterior e checksum SHA-256, sem configurações pessoais.
+
 ## 1.5.0 — 2026-11-26
 
 - Galeria de capturas reais de NHL e MLB, classificações alinhadas, resultados e exemplo da troca automática dos resumos na NBA; Visão geral da NFL atualizada.

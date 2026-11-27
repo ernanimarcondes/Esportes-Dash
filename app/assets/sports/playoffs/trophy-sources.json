@@ -1,0 +1,27 @@
+[
+  {
+    "asset": "nba-trophy.png",
+    "vector_source": "nba-trophy.svg",
+    "source": "https://en.wikipedia.org/wiki/File:NBA_Finals_logo_(2022).svg",
+    "brand_reference": "https://www.nba.com/news/nba-finals-script-logo",
+    "rights_holder": "NBA",
+    "license": "NBA trademark artwork, not MIT. Identifying use in sports information; no affiliation or endorsement.",
+    "modification": "Vector adaptation: isolated official trophy ball/base/rim and gradients, removed Finals wordmark and NBA badge; restored body and net where wordmark knockouts interrupted the trophy. Rasterized at high resolution without generative image editing."
+  },
+  {
+    "asset": "nhl-trophy.png",
+    "vector_source": "nhl-trophy.svg",
+    "source": "https://en.wikipedia.org/wiki/File:2022_Stanley_Cup_playoffs_logo.svg",
+    "rights_holder": "NHL",
+    "license": "Official event trademark artwork, not MIT. No affiliation or endorsement.",
+    "modification": "Trophy isolated from official event identity; wordmark, year, event badge and background removed. Original vector trophy detail retained; rendered at 1400px height."
+  },
+  {
+    "asset": "mlb-trophy.png",
+    "vector_source": "mlb-trophy.svg",
+    "source": "https://en.wikipedia.org/wiki/File:2023_World_Series_logo.svg",
+    "rights_holder": "MLB",
+    "license": "Official event trademark artwork, not MIT. No affiliation or endorsement.",
+    "modification": "Trophy isolated from official event identity; wordmark, year, event badge and background removed. Original vector trophy detail retained; rendered at 1400px height."
+  }
+]

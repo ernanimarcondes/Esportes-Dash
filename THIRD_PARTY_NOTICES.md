@@ -36,3 +36,17 @@ Os exemplos mínimos de placares e resumos em `tools/fixtures` são usados somen
 ## Logos das ligas NBA, NFL, NHL e MLB
 
 Os logos originais das ligas em `app/assets/sports/leagues` são distribuídos publicamente pela CDN ESPN. URLs e titulares são registrados em `SOURCES.json`. As marcas pertencem à NBA, à NFL, à NHL e à MLB e não são relicenciadas pela licença MIT do código. O aplicativo preserva cores e proporções e apenas reduz as imagens para exibição.
+
+## Marca genérica do Super Bowl
+
+A marca em `app/assets/sports/nfl/super-bowl.png` pertence à NFL. Fonte: [arquivo Super Bowl logo.svg](https://en.wikipedia.org/wiki/File:Super_Bowl_logo.svg), consultado via Wikimedia; URL de download em `SOURCES.json`. O arquivo fonte foi preservado; a exibição recorta somente a taça, removendo a faixa textual, e reduz a imagem para a resolução da tela. Uso identificativo em informações esportivas, sem afiliação nem endosso; a marca não é relicenciada sob MIT.
+
+As marcas AFC e NFC em `app/assets/sports/nfl` pertencem à NFL. Referências dos vetores originais em `SOURCES.json`; os rasters são preservados e apenas reduzidos para exibição, sem afiliação ou endosso. Não são relicenciados sob MIT.
+
+## Playoffs de NBA, NHL e MLB — ilustrações dos troféus
+
+Fontes e créditos em `app/assets/sports/playoffs/trophy-sources.json`. A taça NBA é uma adaptação vetorial da arte oficial das Finais de 2022: bola, base, aro e gradientes preservados; texto e selo NBA removidos; corpo e rede restaurados nas regiões interrompidas pelo texto original. O vetor e a imagem de exibição estão em `nba-trophy.svg` e `nba-trophy.png`. A arte pertence à NBA e não é coberta pela licença MIT.
+
+As taças NHL e MLB foram isoladas das artes vetoriais oficiais dos playoffs Stanley Cup 2022 e World Series 2023. Textos, anos, molduras e marcas do evento foram removidos; detalhes vetoriais dos troféus preservados e rasterizados em alta resolução. Fontes em `trophy-sources.json`; as artes pertencem às respectivas ligas e não estão sob MIT.
+
+As marcas das ligas e conferências em `conference-sources.json` pertencem às respectivas entidades, sem afiliação ou endosso. As imagens são reduzidas apenas para exibição; os direitos e licenças dos assets são independentes da licença MIT do código.

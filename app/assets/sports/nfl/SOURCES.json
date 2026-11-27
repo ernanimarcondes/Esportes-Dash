@@ -1,0 +1,22 @@
+{
+  "asset": "super-bowl.png",
+  "source": "https://en.wikipedia.org/wiki/File:Super_Bowl_logo.svg",
+  "download": "https://thumb.wikimedia.org/wikipedia/en/thumb/1/16/Super_Bowl_logo.svg/1280px-Super_Bowl_logo.svg.png",
+  "rights_holder": "National Football League",
+  "usage": "Generic Super Bowl mark for identification in NFL sports information; no affiliation or endorsement. Not covered by MIT code license.",
+  "modification": "Source raster preserved; runtime crops only the trophy, excluding the wordmark, then reduces it for the physical display resolution.",
+  "conferences": [
+    {
+      "asset": "afc.png",
+      "source": "https://commons.wikimedia.org/wiki/File:American_Football_Conference_logo.svg",
+      "rights_holder": "National Football League",
+      "modification": "Unmodified raster of source vector; reduced only for display."
+    },
+    {
+      "asset": "nfc.png",
+      "source": "https://commons.wikimedia.org/wiki/File:National_Football_Conference_logo.svg",
+      "rights_holder": "National Football League",
+      "modification": "Unmodified raster of source vector; reduced only for display."
+    }
+  ]
+}

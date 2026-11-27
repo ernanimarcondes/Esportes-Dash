@@ -18,8 +18,8 @@ def main():
         candidate=Path(os.environ['JAVA_HOME'])/'bin'/(name+('.exe' if os.name=='nt' else '')) if os.environ.get('JAVA_HOME') else shutil.which(name)
         if not candidate or not Path(candidate).is_file():raise SystemExit('JDK 17+ required: '+name)
         return str(candidate)
-    sources=['SportsFeedParser','FootballGoals','MatchGoalsSummary','DayGames','RecentGames','DayGamesRotation','GoalLinesRotation','SportsRenderCadence','TeamLogoPolicy','StandingsRotation','LeaguePanelModel','NFLRounds']
-    checks=['DayGamesCheck','RecentGamesCheck','FootballGoalsCheck','MatchGoalsSummaryCheck','SportsRenderCadenceCheck','TeamLogoPolicyCheck','StandingsRotationCheck','LeaguePanelModelCheck','NFLRoundsCheck']
+    sources=['SportsFeedParser','FootballGoals','MatchGoalsSummary','DayGames','RecentGames','DayGamesRotation','GoalLinesRotation','SportsRenderCadence','TeamLogoPolicy','StandingsRotation','LeaguePanelModel','NFLRounds','NFLPlayoffs','LeaguePlayoffs']
+    checks=['DayGamesCheck','RecentGamesCheck','FootballGoalsCheck','MatchGoalsSummaryCheck','SportsRenderCadenceCheck','TeamLogoPolicyCheck','StandingsRotationCheck','LeaguePanelModelCheck','NFLRoundsCheck','NFLPlayoffsCheck','LeaguePlayoffsCheck']
     fixtures=ROOT/'tools/fixtures'
     arguments={'NFLRoundsCheck':[fixtures/'nfl-round-current.json',fixtures/'nfl-round-previous.json'],
                'FootballGoalsCheck':[fixtures/'soccer-goals.json'],

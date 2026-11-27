@@ -34,7 +34,7 @@ final class NFLRounds {
         for(int i=0;calendar!=null&&i<calendar.length();i++){
             JSONObject group=calendar.getJSONObject(i);int phase=group.optInt("value");JSONArray entries=group.optJSONArray("entries");
             for(int j=0;entries!=null&&j<entries.length();j++){
-                JSONObject entry=entries.getJSONObject(j);int number=entry.optInt("value");Ref ref=new Ref(year,phase,number,label(phase,number,entry.optString("label")));
+                JSONObject entry=entries.getJSONObject(j);if(phase==3&&NFLPlayoffs.stage(entry.optString("label"))<0)continue;int number=entry.optInt("value");Ref ref=new Ref(year,phase,number,label(phase,number,entry.optString("label")));
                 if(ref.same(current)){current=ref;previous=last;}last=ref;
             }
         }
